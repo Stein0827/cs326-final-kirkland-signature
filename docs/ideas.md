@@ -9,7 +9,7 @@ Team Overview:
 
 Innovative Idea: 
 Our idea is a Campus Event Map, it allows people to see what kind of events are happening around campus and where they are located. 
-Users can see what events are happening around campus and rsvp to them. In addition, they can log in to the site in order to create events of their own.
+Users can also log in to create events of their own or rsvp to existing events. 
 It is similar to social media sites such as Facebook, where people can post events to. It also has similar functionality to Snap Maps,
 where people can see where events are happening. The main idea is creating a live event map but focused on the UMass Campus. 
 
