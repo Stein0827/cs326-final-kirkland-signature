@@ -21,12 +21,14 @@ This is the finalized landing page we have come up with.
 
 * Sign-in Page:
 Wireframe:
-![sign-in page](images/sign-up.png)
+![sign-in page](images/wireframe_sign_up.png)
 
 This is a mockup for the  sign-in page, it will redirect people to the main map page after they sign-in.
 
 Screenshot:
-Put screenshot in here!
+![sign-in page](images/sign_up.png)
+
+This is the finalized sign-up page we have come up with.
 
 * Map Page:
 Wireframe:
@@ -40,7 +42,7 @@ Put screenshot in here!
 
 # Breakdown of Division of Labor
 - Rishabh:
-Researched on map APIs, worked on the main map page. Made wireframes
+Researched on map APIs, worked on the main map page. Made wireframes. Made Event Creator Page Map.
 
 - Paul:
 Made the landing page. Worked on wireframes
@@ -49,4 +51,4 @@ Made the landing page. Worked on wireframes
 Made the sign-up page. Worked on wireframes
 
 - Suyash:
-Made the milestone1.md file. Worked on wireframes
+Made the milestone1.md file. Worked on wireframes. Made Event Creator Page.
