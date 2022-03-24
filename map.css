@@ -4,6 +4,13 @@
 .wrapper {
   position: relative;
 }
+
+.font {
+  color: gray;
+  font-family: 'Nunito', sans-serif;
+  font-size: 50px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
   
 #map {
   background-color: #eaeaea;
@@ -30,4 +37,9 @@
 .mapboxgl-popup {
   max-width: 400px;
   font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.table_color {
+  background-color: darkred;
+  color: white; 
 }
