@@ -43,3 +43,21 @@
   background-color: darkred;
   color: white; 
 }
+
+.marker {
+  background-image: url("https://www.umassalumni.com/s/1640/images/gid2/editor/website/rd_2017_web_images/about/downloadable_pride/pou_-_white_w_maroon_mass_bg-maroon.png");
+  background-size: cover;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.mapboxgl-popup {
+  max-width: 200px;
+}
+
+.mapboxgl-popup-content {
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+}
