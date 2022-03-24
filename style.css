@@ -1,0 +1,28 @@
+/*
+*  position: relative gives a new position context
+*/
+.wrapper {
+    position: relative;
+  }
+  
+  #map {
+    background-color: #eaeaea;
+    height: 100%;
+  }
+  
+
+  #eventTable {
+    position: absolute;
+    height: 500px;
+    top: 10%;
+    right: 10%;
+    height: 20px;
+    padding: 10px 10px;
+    /* overflow: auto; */
+  }
+
+
+  .mapboxgl-popup {
+    max-width: 400px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
