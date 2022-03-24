@@ -1,5 +1,4 @@
 
-
 body {
 
     display: -ms-flexbox;
@@ -17,20 +16,18 @@ body {
 
 }
 html, body {
-
     height: 100%;
 
 }
 body {
-
     margin: 0;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-family: 'Nunito', bold, sans-serif;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #212529;
+    color: #fff;
     text-align: left;
-    background-color: #fff;
+    background-color: #881c1c;
 
 }
 *, ::after, ::before {
@@ -39,6 +36,9 @@ body {
 
 }
 
+h1 {
+    color: #fff;
+}
 
 html {
 
@@ -49,41 +49,67 @@ html {
 }
 
 svg{
-    color: gold;
+    color: #fff;
 }
 
 .website-logo{
-    color: gold;
+    color: #fff;
     font-size: 70px;
 }
 
-.form-signin .form-control {
-  position: relative;
-  box-sizing: border-box;
-  height: auto;
-  padding: 10px;
-  font-size: 16px;
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+} 
+
+.text-muted {
+    --bs-text-opacity: 1;
+    color: #fff !important;
+  }
+
+.form-floating > .form-control {
+  padding: 1rem .75rem;
+}
+.form-floating > .form-control, .form-floating > .form-select {
+  height: calc(3.5rem + 2px);
+  line-height: 1.25;
 }
 .form-control {
   display: block;
   width: 100%;
   padding: .375rem .75rem;
   font-size: 1rem;
+  font-weight: 400;
   line-height: 1.5;
-  color: #495057;
+  color: #212529;
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #ced4da;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: .25rem;
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-.form-control.email{
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
-}
+.form-floating > label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    padding: 1rem .75rem;
+    pointer-events: none;
+    color: #212529;
+    border: 1px solid transparent;
+    transform-origin: 0 0;
+    transition: opacity .1s ease-in-out,transform .1s ease-in-out;
+  }
 
-.form-control.password{
-    border-bottom-left-radius: .25rem;
-    border-bottom-right-radius: .25rem;
+button, input, optgroup, select, textarea {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
 }
-
+*, ::after, ::before {
+  box-sizing: border-box;
+}
