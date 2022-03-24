@@ -1,0 +1,26 @@
+.bg {
+    background-color: #881C1C;
+    overflow: hidden;
+}
+
+.label {
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 20px;
+}
+
+.input {
+    color: black;
+    font-family: 'Nunito', sans-serif;
+    width: 500px;
+}
+
+.row {
+    display: flex;
+}
+
+.column {
+    flex: 50%;
+    padding-left: 0px;
+    padding-right: 0px;
+}
