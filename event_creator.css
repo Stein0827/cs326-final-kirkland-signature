@@ -1,6 +1,6 @@
 .bg {
     background-color: #881C1C;
-    overflow: hidden;
+    overflow:hidden;
 }
 
 .label {
@@ -26,6 +26,7 @@
 }
 
 #map {
+    width:99%;
     background-color: #eaeaea;
-    height: 100%;
+    height: 99.9%;
 }
