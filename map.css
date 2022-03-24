@@ -17,12 +17,14 @@
 }
 
 .button-position {
-  z-index: 100;
+  float: right;
 }
 
 .menu {
-  height: 150px;
+  height: 100px;
   background-color: rgba(0, 0, 0, 0.1);
+  color: gray;
+  font-family: 'Nunito', sans-serif;
 }
 
 #map {
