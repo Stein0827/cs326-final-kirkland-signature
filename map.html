@@ -20,23 +20,11 @@
     <div class="padding text-center welcome_font">Event Map</div>
     <div class=".bg-danger.bg-gradient">
         <div>
-            <a class="btn btn-secondary btn-lg btn-block custom" href="sign-up.html">Sign-up/Login</a>
+            <a class="btn btn-secondary btn-lg btn-block custom" href="sign_up.html">Sign-up/Login</a>
         </div>
 
     <div class="wrapper">
         <div id="map"></div>
-        <script>
-            mapboxgl.accessToken = 'pk.eyJ1IjoicndtZWh0YSIsImEiOiJjbDEycmM0MDAwNGJiM2tvMGV5cDF4cXZmIn0.6eUqwB8FMxRQOVqH5ymQ4Q';
-        const map = new mapboxgl.Map({
-        container: 'map', // container ID
-        style: 'mapbox://styles/mapbox/streets-v11', // style URL
-        center: [-72.52628581400859,42.38891007248816], // starting position [lng, lat]
-        zoom: 14 // starting zoom
-        });
-            //setTimeout(() =>{
-            
-            //},10);
-        </script>
         <div id="eventTable">
             <div class="scrollingTable">
             <table class="table table-striped">
@@ -74,7 +62,7 @@
                 </tbody>
               </table>
             </div>
-              <a href="event-creator.html"><button type="button" class="btn btn-primary">Create an Event</button></a>
+              <a href="event_creator.html"><button type="button" class="btn btn-primary">Create an Event</button></a>
         </div>
       </div>
     </div>
