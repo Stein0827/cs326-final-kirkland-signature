@@ -1,0 +1,60 @@
+/*
+*  position: relative gives a new position context
+*/
+.wrapper {
+  position: relative;
+}
+
+.welcome-font {
+  color: gray;
+  font-family: 'Nunito', sans-serif;
+  font-size: 50px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.font {
+  font-family: 'Nunito', sans-serif;
+}
+
+.button-position {
+  z-index: 100;
+}
+
+.menu {
+  height: 150px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+#map {
+  background-color: #eaeaea;
+  height: 100%;
+}
+  
+
+#eventTable {
+  position: absolute;
+  height: 500px;
+  top: 10%;
+  right: 10%;
+  height: 20px;
+  padding: 10px 10px;
+  /* overflow: auto; */
+}
+
+.scrollingTable {
+  height: 15em;
+  width: 10em;
+  overflow-y: auto;
+}
+
+.mapboxgl-popup {
+  max-width: 400px;
+  font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.table_color {
+  background-color: darkred;
+  color: white; 
+}
+
+
