@@ -3,13 +3,10 @@ body, html {
 }
 
 .bg {
-    /* The image used */
     background-image: url("https://www.umassalumni.com/s/1640/images/gid2/editor/website/rd_2017_web_images/about/downloadable_pride/pou_-_white_w_maroon_mass_bg-maroon.png");
   
-    /* Full height */
     height: 100%;
   
-    /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
