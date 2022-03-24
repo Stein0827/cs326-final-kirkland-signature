@@ -10,10 +10,10 @@ map.on('style.load', function() {
     map.on('click', function(e) {
         var coordinates = e.lngLat;
 
-        // new mapboxgl.Popup()
-        // .setLngLat(coordinates)
-        // .setHTML('you clicked here: <br/>' + coordinates)
-        // .addTo(map);
+        new mapboxgl.Popup()
+        .setLngLat(coordinates)
+        .setHTML('This is the location you chose.')
+        .addTo(map);
     });
 });
 
