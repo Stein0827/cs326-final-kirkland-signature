@@ -1,10 +1,5 @@
 
 
-.text-center {
-
-    text-align: center !important;
-
-}
 body {
 
     display: -ms-flexbox;
@@ -79,8 +74,16 @@ svg{
   background-color: #fff;
   background-clip: padding-box;
   border: 1px solid #ced4da;
-  border-radius: .25rem;
-    border-bottom-right-radius: 0.25rem;
-    border-bottom-left-radius: 0.25rem;
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
+
+.form-control.email{
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
+.form-control.password{
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+
