@@ -24,3 +24,8 @@
     padding-left: 0px;
     padding-right: 0px;
 }
+
+#map {
+    background-color: #eaeaea;
+    height: 100%;
+}
