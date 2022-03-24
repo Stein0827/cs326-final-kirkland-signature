@@ -5,13 +5,26 @@
   position: relative;
 }
 
-.font {
+.welcome {
   color: gray;
   font-family: 'Nunito', sans-serif;
   font-size: 50px;
   background-color: rgba(0, 0, 0, 0.1);
 }
-  
+
+.font {
+  font-family: 'Nunito', sans-serif;
+}
+
+.button-position {
+  z-index: 100;
+}
+
+.menu {
+  height: 150px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
 #map {
   background-color: #eaeaea;
   height: 100%;
@@ -43,3 +56,5 @@
   background-color: darkred;
   color: white; 
 }
+
+
