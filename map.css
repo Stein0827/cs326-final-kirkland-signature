@@ -21,15 +21,23 @@
 }
 
 .menu {
-  height: 100px;
+  height: 50px;
   background-color: rgba(0, 0, 0, 0.1);
   color: gray;
   font-family: 'Nunito', sans-serif;
+  display: flex;
+  justify-content: space-between;
 }
 
 #map {
   background-color: #eaeaea;
   height: 100%;
+}
+
+.button-style {
+  background-color: #881C1C;
+  width: 13em;
+  height: 50pxz;
 }
   
 
@@ -37,15 +45,15 @@
   position: absolute;
   height: 500px;
   top: 10%;
-  right: 10%;
+  right: 1%;
   height: 20px;
   padding: 10px 10px;
   /* overflow: auto; */
 }
 
 .scrollingTable {
-  height: 15em;
-  width: 10em;
+  height: 20em;
+  width: 13em;
   overflow-y: auto;
 }
 
@@ -69,7 +77,7 @@
 }
 
 .table_color {
-  background-color: darkred;
+  background-color: #881C1C;
   color: white; 
 }
 
