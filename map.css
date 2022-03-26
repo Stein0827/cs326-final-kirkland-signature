@@ -32,6 +32,7 @@
 #map {
   background-color: #eaeaea;
   height: 100%;
+  width: 100%;
 }
 
 .button-style {
@@ -49,6 +50,10 @@
   height: 20px;
   padding: 10px 10px;
   /* overflow: auto; */
+}
+
+body {
+  overflow: hidden;
 }
 
 .scrollingTable {
