@@ -42,13 +42,13 @@ Put screenshot in here!
 
 # Breakdown of Division of Labor
 - Rishabh:
-Researched on map APIs, worked on the main map page. Made wireframes. Made Event Creator Page Map.
+Researched on map APIs, made the maps on the mail page and the event creator page. Made wireframes.
 
 - Paul:
-Made the landing page. Worked on wireframes
+Made the landing page. Worked on wireframes. Worked on main map page.
 
 - Alex:
-Made the sign-up page. Worked on wireframes
+Made the sign-up page. Worked on wireframes.
 
 - Suyash:
 Made the milestone1.md file. Worked on wireframes. Made Event Creator Page.
