@@ -8,7 +8,7 @@ zoom: 14 // starting zoom
 
 map.on('style.load', function() {   
     map.on('click', function(e) {
-        var coordinates = e.lngLat;
+        let coordinates = e.lngLat;
 
         new mapboxgl.Popup()
         .setLngLat(coordinates)
