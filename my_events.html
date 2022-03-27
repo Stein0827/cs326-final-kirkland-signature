@@ -1,61 +1,53 @@
-<html lang="en"><head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
-    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+<html lang="en">
 
-    <title>My Events</title>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
+  <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+  <title>My Events</title>
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <!-- Custom styles for this template -->
+  <link href="my_events.css" rel="stylesheet">
+</head>
 
-    <!-- Bootstrap core CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
-
-    <!-- Custom styles for this template -->
-    <link href="my_events.css" rel="stylesheet">
-  </head>
-
-  <body class="text-center" data-new-gr-c-s-check-loaded="8.896.0" data-gr-ext-installed="">
-    <form class="form-signin">      
-      <div class = "website-logo">
-        <svg xmlns="http://www.w3.org/2000/svg" width="74" height="74" fill="currentColor" class="bi bi-compass" viewBox="0 0 16 16">
-            <path d="M8 16.016a7.5 7.5 0 0 0 1.962-14.74A1 1 0 0 0 9 0H7a1 1 0 0 0-.962 1.276A7.5 7.5 0 0 0 8 16.016zm6.5-7.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
-            <path d="m6.94 7.44 4.95-2.83-2.83 4.95-4.949 2.83 2.828-4.95z"/>
-          </svg>
-        <heading>My Events</heading>
-      </div>
-      
-      <br>
-      <!-- <h1 class="h3 mb-3 font-weight-normal">My Events</h1> -->
-      <table>
-        <tr>
-            <th>Event Name</th>
-            <th>Event Description</th>
-            <th>Edit Event</th>
-        </tr>
-        <tr>
-            <td>event1</td>
-            <td>this is a great event</td>
-            <td><button class="btn btn-lg btn-primary btn-block" type="submit">edit</button></td>
-        </tr>
-        <tr>
-            <td>event2</td>
-            <td>this is a great event</td>
-            <td><button class="btn btn-lg btn-primary btn-block" type="submit">edit</button></td>
-        </tr>
-        <tr>
-            <td>event3</td>
-            <td>this is a great event</td>
-            <td><button class="btn btn-lg btn-primary btn-block" type="submit">edit</button></td>
-        </tr>
-        <tr>
-            <td>event4</td>
-            <td>this is a great event</td>
-            <td><button class="btn btn-lg btn-primary btn-block" type="submit">edit</button></td>
-        </tr>
-    </table>
-      <p class="mt-5 mb-3 text-muted">© EventMap 2022</p>
-    </form>
+<body class="bg p-5">
+  <div class="go-back">
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Return to the Events Page</button>
+  </div>
+  <div class="h1 label">My Events</div>
+  <br>
+  <table>
+    <tr>
+      <th class="label">Event Name</th>
+      <th class="label">Event Description</th>
+      <th class="label">Edit Event</th>
+    </tr>
+    <tr>
+      <td><input type="text" class="form-control input" id="event-name" value="Event 1" disabled></td>
+      <td><textarea name="event-details" class="form-control long-input" id="event-details" cols="1" rows="1" disabled>Event 1 Details</textarea></td>
+      <td><button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button></td>
+    </tr>
+    <tr>
+      <td><input type="text" class="form-control input" id="event-name" value="Event 2" disabled></td>
+      <td><textarea name="event-details" class="form-control long-input" id="event-details" cols="1" rows="1" disabled>Event 2 Details</textarea></td>
+      <td><button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button></td>
+    </tr>
+    <tr>
+      <td><input type="text" class="form-control input" id="event-name" value="Event 3" disabled></td>
+      <td><textarea name="event-details" class="form-control long-input" id="event-details" cols="1" rows="1" disabled>Event 3 Details</textarea></td>
+      <td><button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button></td>
+    </tr>
+    <tr>
+      <td><input type="text" class="form-control input" id="event-name" value="Event 4" disabled></td>
+      <td><textarea name="event-details" class="form-control long-input" id="event-details" cols="1" rows="1" disabled>Event 4 Details</textarea></td>
+      <td><button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button></td>
+    </tr>
+  </table>
 </body>
+
 </html>
