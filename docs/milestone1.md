@@ -10,12 +10,12 @@
 # Part 1: Wireframes
 * Landing Page:
 Wireframe:
-![landing page wireframe](images\wireframe_landing_page.png)
+![landing page wireframe](images/wireframe_landing_page.png)
 
 This is a mockup for the landing page for our website, which will allow you to reach the sign in page or continue to the main map page as a guest ("Viewer" user)
 
 Screenshot:
-![landing page](images\landing_page.png)
+![landing page](images/landing_page.png)
 
 This is the finalized landing page we have come up with.
 
