@@ -20,22 +20,6 @@
     width: 400px;
 }
 
-.row {
-    display: flex;
-}
-
-.column {
-    flex: 50%;
-    padding-left: 0px;
-    padding-right: 0px;
-}
-
-#map {
-    width:99%;
-    background-color: #eaeaea;
-    height: 99.9%;
-}
-
 td {
     padding: 10px;
 }
