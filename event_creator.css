@@ -1,6 +1,7 @@
 .bg {
     background-color: #881C1C;
     overflow:hidden;
+    height: 100%;
 }
 
 .label {
@@ -17,16 +18,33 @@
 
 .row {
     display: flex;
+    height: 100%;
 }
 
-.column {
+.column-left {
+    align-items: center;
+    justify-content: center;
+    flex: 50%;
+    padding-left: 6vw;
+    /* padding-right: 0px; */
+}
+.column-right {
+    display: inline-block;
+    position: relative;
     flex: 50%;
     padding-left: 0px;
     padding-right: 0px;
+    height: 100%;
 }
 
 #map {
     width:99%;
+    position: relative;
+    z-index: 100;
     background-color: #eaeaea;
-    height: 99.9%;
+    height: 100%;
+}
+
+html {
+    height: 100%;
 }
