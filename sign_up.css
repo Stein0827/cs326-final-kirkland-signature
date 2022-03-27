@@ -92,12 +92,3 @@ button, input, optgroup, select, textarea {
 *, ::after, ::before {
   box-sizing: border-box;
 }
-
-.container {
-  background: white;
-  position: relative;
-  padding: 1rem;
-  margin: 1rem -0.75rem 0;
-  border: solid #dee2e6;
-  border-width: 1px 0 0;
-}
