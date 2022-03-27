@@ -17,7 +17,7 @@ This is a mockup for the landing page for our website, which will allow you to r
 Screenshot:
 ![landing page](images/landing_page.png)
 
-This is the finalized landing page we have come up with.
+The image above is the finalized landing page we have come up with.
 
 * Sign-in Page:
 Wireframe:
@@ -28,11 +28,11 @@ This is a mockup for the sign-up page, it will redirect people to the main map p
 Screenshot:
 ![sign-in page](images/signup.png)
 
-This is the finalized sign-up page we have come up with.
+The image above is the finalized sign-up page we have come up with.
 
 ![sign-in page](images/login.png)
 
-Along with that, this is the finalized login page.
+Along with that, the image above is the finalized login page.
 
 * Map Page:
 Wireframe:
