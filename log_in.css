@@ -1,5 +1,8 @@
 
 body {
+
+    display: -ms-flexbox;
+    display: -webkit-box;
     display: flex;
     -ms-flex-align: center;
     -ms-flex-pack: center;
@@ -63,6 +66,13 @@ svg{
     color: #fff !important;
   }
 
+.form-floating > .form-control {
+  padding: 1rem .75rem;
+}
+.form-floating > .form-control, .form-floating > .form-select {
+  height: calc(3.5rem + 2px);
+  line-height: 1.25;
+}
 .form-control {
   display: block;
   width: 100%;
@@ -81,7 +91,18 @@ svg{
   transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
-
+.form-floating > label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    padding: 1rem .75rem;
+    pointer-events: none;
+    color: #212529;
+    border: 1px solid transparent;
+    transform-origin: 0 0;
+    transition: opacity .1s ease-in-out,transform .1s ease-in-out;
+  }
 
 button, input, optgroup, select, textarea {
   margin: 0;
@@ -91,13 +112,4 @@ button, input, optgroup, select, textarea {
 }
 *, ::after, ::before {
   box-sizing: border-box;
-}
-
-.container {
-  background: white;
-  position: relative;
-  padding: 1rem;
-  margin: 1rem -0.75rem 0;
-  border: solid #dee2e6;
-  border-width: 1px 0 0;
 }
