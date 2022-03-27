@@ -1,6 +1,7 @@
 .bg {
     background-color: #881C1C;
     overflow:hidden;
+    height: 100%;
 }
 
 .label {
@@ -17,6 +18,7 @@
 
 .row {
     display: flex;
+    height: 100%;
 }
 
 .column-left {
@@ -32,12 +34,17 @@
     flex: 50%;
     padding-left: 0px;
     padding-right: 0px;
+    height: 100%;
 }
 
 #map {
-    width:100%;
+    width:99%;
     position: relative;
     z-index: 100;
     background-color: #eaeaea;
+    height: 100%;
+}
+
+html {
     height: 100%;
 }
