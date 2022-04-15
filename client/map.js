@@ -56,6 +56,20 @@ for (const feature of geojson.features) {
 }
 
 
+// integrating counters.
+async function readEvents() {
+    const response = await fetch(`/event/dump`, {
+      method: 'GET',
+    });
+    const data = await response.json();
+    return data;
+}
+
+
+
+
+
+
 
 
 
