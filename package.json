@@ -1,0 +1,28 @@
+{
+  "name": "cs326-final-kirkland-signature",
+  "version": "1.0.0",
+  "description": "Kirkland Signature 326 Project",
+  "main": "server.js",
+  "type": "module",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stein0827/cs326-final-kirkland-signature.git"
+  },
+  "author": "Kirkland Signature",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Stein0827/cs326-final-kirkland-signature/issues"
+  },
+  "homepage": "https://github.com/Stein0827/cs326-final-kirkland-signature#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "morgan": "^1.10.0"
+  }
+}
