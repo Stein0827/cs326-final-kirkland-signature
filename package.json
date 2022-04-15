@@ -1,8 +1,8 @@
 {
   "name": "cs326-final-kirkland-signature",
   "version": "1.0.0",
-  "description": "",
-  "main": "database.js",
+  "description": "Kirkland Signature 326 Project",
+  "main": "server.js",
   "type": "module",
   "directories": {
     "doc": "docs"
@@ -15,7 +15,7 @@
     "type": "git",
     "url": "git+https://github.com/Stein0827/cs326-final-kirkland-signature.git"
   },
-  "author": "",
+  "author": "Kirkland Signature",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Stein0827/cs326-final-kirkland-signature/issues"
