@@ -30,9 +30,11 @@ Screenshot:
 
 The image above is the finalized sign-up page we have come up with.
 
+* Login Page:
+Screenshot:
 ![sign-in page](images/login.png)
 
-Along with that, the image above is the finalized login page.
+This is the finalized login page.
 
 * Map Page:
 Wireframe:
@@ -44,6 +46,18 @@ Screenshot:
 ![map page](images/map.png)
 
 This is the final map page we made.
+
+* Event Creator Page:
+Screenshot:
+![event page](images/make-event.png)
+
+This page will allow you to make new events or edit already existing events. After clicking on the save button, it will return the user to the main map page.
+
+* My Events Page:
+Screenshot:
+![event page](images/my-events.png)
+
+This page will allow you to see all your events and allows you to open the edit page for each event. Currently, you cannot access this page as the button to take you there is not present. This button will replace the current "sign-in/login" button after we implement signing in, as you should only see this button if you are a signed in user. 
 
 
 # Breakdown of Division of Labor
