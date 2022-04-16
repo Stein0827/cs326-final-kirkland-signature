@@ -2,22 +2,49 @@ import express from 'express';
 import logger from 'morgan';
 import { readFile, writeFile } from 'fs/promises';
 
-//let counters = {};
+//user object structure
+// let user = {
+//   id: "",
+//   user_name: "",
+//   user_email: "",
+//   password: "",
+//   events: {},
+//   attending: {},
+//   is_event: False
+// };
+
+//event object structure
+// let event = {
+//   host_id: "",
+//   host_name: "",
+//   id: "",
+//   event_name: "",
+//   event_desc: "",
+//   event_location: "",
+//   event_time: "",
+//   images: "",
+//   attendees: [],
+//   is_event: True
+// }
+
+let users = []
+
+let ids = []
 
 const JSONfile = 'users.json';
 
 async function reload(filename) {
   try {
     const data = await readFile(filename, { encoding: 'utf8' });
-    counters = JSON.parse(data);
+    users = JSON.parse(data);
   } catch (err) {
-    counters = {};
+    users = [];
   }
 }
 
-async function saveCounters() {
+async function saveUsers() {
   try {
-    const data = JSON.stringify(counters);
+    const data = JSON.stringify(users);
     await writeFile(JSONfile, data, { encoding: 'utf8' });
   } catch (err) {
     console.log(err);
@@ -28,25 +55,52 @@ function counterExists(name) {
   return name in counters;
 }
 
-async function createUser(response, name) {
-  if (name === undefined) {
+function generateId(){
+  return Math.floor(Math.random() * 10000)
+}
+
+//creates a new user
+async function createUser(response, name, email, password) {
+  if (name === undefined || email === undefined || password === undefined) {
     // 400 - Bad Request
-    response.status(400).json({ error: 'Counter name is required' });
+    response.status(400).json({ error: 'Missing fields' });
   } else {
     await reload(JSONfile);
-    counters[name] = 0;
-    await saveCounters();
+    //initialize new user
+    const new_user = {
+      user_id : generateId(),
+      user_name : name,
+      user_email : email,
+      password : password,
+      events : [],
+      is_event : false
+    };
+    await saveUsers();
     response.json({ name: name, value: 0 });
   }
 }
 
-async function readCounter(response, name) {
+//returns the associated user object
+async function getUser(response, name) {
   await reload(JSONfile);
   if (counterExists(name)) {
     response.json({ name: name, value: counters[name] });
   } else {
     // 404 - Not Found
     response.json({ error: `Counter '${name}' Not Found` });
+  }
+}
+
+//creates or adds a new event
+async function createEvent(response, name) {
+  await reload(JSONfile);
+  if (counterExists(name)) {
+    counters[name] += 1;
+    await saveCounters();
+    response.json({ name: name, value: counters[name] });
+  } else {
+    // 404 - Not Found
+    response.status(404).json({ error: `Counter '${name}' Not Found` });
   }
 }
 
@@ -88,40 +142,71 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/client', express.static('client'));
 
-app.post('/create', async (request, response) => {
-  const options = request.body;
-  createCounter(response, options.name);
-});
+//login
+
+//logout
 
 //create user
-app.post('/create', async (request, response) => {
+app.post('/newUser', async (request, response) => {
   const options = request.body;
-  createCounter(response, options.name);
+  //name, email, password
+  createUser(response, options.name, options.email, options.password);
 });
 
-app.get('/read', async (request, response) => {
+//return user
+app.get('/getUserbyId', async (request, response) => {
   const options = request.query;
-  readCounter(response, options.name);
+  getUser(response, options.user_id);
 });
 
-app.put('/update', async (request, response) => {
+//add event to user's profile
+app.put('/createEvent', async (request, response) => {
   const options = request.body;
-  updateCounter(response, options.name);
+  createEvent(response, options.user_id);
 });
 
-app.delete('/delete', async (request, response) => {
+//change an event
+app.put('/editEvent', async (request, response) => {
   const options = request.body;
-  deleteCounter(response, options.name);
+  updateEvent(response, options.user_id, options.event_id);
 });
 
-app.get('/dump', async (request, response) => {
+//delete an event
+app.delete('/deleteEvent', async (request, response) => {
   const options = request.body;
-  dumpCounters(response);
+  deleteEvent(response, options.user_id, options.event_id);
+  //let event = delete_data(eventid, true)
+  //let user = read_data(event.hostid, false)
+  //update user object -> user.events: delete events[eventid]
+  //update_date(user.user_id, user, false)
+
 });
 
-app.get('*', async (request, response) => {
-  response.status(404).send(`Not found: ${request.path}`);
+//read an event
+app.get('/getEventbyId', async (request, response) => {
+  const options = request.query;
+  getEvent(response, options.event_id);
 });
+
+//get all attendees
+app.get('/getAttendees', async (request, response) => {
+  const options = request.query;
+  getEventAttendees(response, options.user_id, options.event_id);
+});
+
+//RSVP to an event
+app.put('/attendEvent', async (request, response) => {
+  const options = request.body;
+  attendEvent(response, options.user_id, options.event_id);
+});
+
+//return
+app.get('/dumpEvents', async (request, response) => {
+  const options = request.body;
+  updateCounter(response, options.user_id);
+});
+
+
 
 // NEW
 app.listen(port, () => {
