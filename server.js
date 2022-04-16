@@ -32,17 +32,17 @@ function generateId(){
 }
 
 //creates a new user
-async function createUser(response, name, email, password) {
-  if (name === undefined || email === undefined || password === undefined) {
+async function createUser(response, user) {
+  if (user.user_name === undefined || user.user_email === undefined || user.password === undefined) {
     // 400 - Bad Request
     response.status(400).json({ error: 'Missing fields' });
   } else {
     //initialize new user
     const new_user = {
       user_id : generateId(),
-      user_name : name,
-      user_email : email,
-      password : password,
+      user_name : user.user_name,
+      user_email : user.user_email,
+      password : user.password,
       events : [],
       is_event : false
     };
@@ -54,7 +54,32 @@ async function createUser(response, name, email, password) {
 //returns the associated user object
 async function getUser(response, ID) {
   await reload(JSONfile);
-  let data = readData(ID, false);
+  let data = await readData(ID, false);
+  if (data === -1) {
+    // 404 - Not Found
+    response.status(404).json({ error: 'User ID not found' });
+  } else {
+    response.status(200).json(data);
+  }
+}
+
+async function updateUser(response, ID, user) {
+  if (user.user_email === undefined || user.user_name === undefined || user.password === undefined) {
+    // 400 - Bad Request
+    response.status(400).json({ error: 'Missing fields' });
+  } else {
+    let updatedUser = await readData(ID, false);
+    updatedUser.user_email = user.user_email;
+    updatedUser.user_name = user.user_name;
+    updatedUser.password = user.password;
+    await updateData(ID, updatedUser, false);
+    response.status(200).json(updatedUser);
+  }
+}
+
+async function deleteUser(response, ID) {
+  await reload(JSONfile);
+  let data = deleteData(ID, false);
   if (data === -1) {
     // 404 - Not Found
     response.status(404).json({ error: 'User ID not found' });
