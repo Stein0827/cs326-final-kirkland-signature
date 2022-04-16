@@ -6,7 +6,7 @@ async function login(email, password){
     try{
         const response = await fetch(`login`, {
             method: 'POST',
-            body: JSON.stringify({user_email: email, password: password, is_event: False}),
+            body: JSON.stringify({user_email: email, password: password, is_event: false}),
         });
     }
     catch{
