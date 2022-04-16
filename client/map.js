@@ -56,6 +56,49 @@ for (const feature of geojson.features) {
 }
 
 
+// integrating counters.
+async function readEvents() {
+    const response = await fetch(`/event/dump`, {
+      method: 'GET',
+    });
+    const data = await response.json();
+    return data;
+}
+
+function setEvents(events) {
+    let table = document.getElementById("map_event_table");
+    let table_content = `
+    <table class="table table-striped scrollingTable table_color font">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
+
+    for (let i = 0; i < events.length; i++) {
+        table_content += `
+        <tr>
+            <td>${events[i].event_id}</td>
+            <td>${events[i].event_name}</td>
+        </tr>`;
+    }
+    table_content += `
+        </tbody>
+    </table>`;
+    table.innerHTML = table_content;
+}
+
+const events = await readEvents();
+setEvents(events);
+
+
+
+
+
+
 
 
 

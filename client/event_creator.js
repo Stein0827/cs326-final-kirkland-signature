@@ -5,10 +5,10 @@ style: 'mapbox://styles/mapbox/streets-v11', // style URL
 center: [-72.52628581400859,42.38891007248816], // starting position [lng, lat]
 zoom: 14 // starting zoom
 });
-
+let coordinates = [-72.52628581400859,42.38891007248816];
 map.on('style.load', function() {   
     map.on('click', function(e) {
-        let coordinates = e.lngLat;
+        coordinates = e.lngLat;
 
         new mapboxgl.Popup()
         .setLngLat(coordinates)
@@ -23,3 +23,27 @@ map.addControl(
         mapboxgl: mapboxgl
     })
 );
+
+async function createEvent(name, time, desc){
+    try{
+        const response = await fetch(`client/user/User-ID/event/new`, {
+            method: 'PUT',
+            body: JSON.stringify({event_name: name, event_time: time, event_desc: desc, event_location: coordinates}),
+        });
+    }
+    catch{
+        console.log(err);
+    }
+}
+
+const save = document.getElementById("save"),
+    ename = document.getElementById("event-name"),
+    etime = document.getElementById("event-time"),
+    edetails = document.getElementById("event-details");
+save.addEventListener("click", async (e)=>{
+    const json = await createEvent(ename.value, etime.value, edetails.value);
+});
+
+// document.addEventListener('DOMContentLoaded', async function() {
+    // TODO: needs a user session
+// });
