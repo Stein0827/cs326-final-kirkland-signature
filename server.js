@@ -1,6 +1,6 @@
 import express from 'express';
 import logger from 'morgan';
-import { readFile, writeFile } from 'fs/promises';
+import {insertData, readData, updateData, deleteData} from './database.js';
 
 //user object structure
 // let user = {
@@ -27,34 +27,6 @@ import { readFile, writeFile } from 'fs/promises';
 //   is_event: True
 // }
 
-let users = []
-
-let ids = []
-
-const JSONfile = 'users.json';
-
-async function reload(filename) {
-  try {
-    const data = await readFile(filename, { encoding: 'utf8' });
-    users = JSON.parse(data);
-  } catch (err) {
-    users = [];
-  }
-}
-
-async function saveUsers() {
-  try {
-    const data = JSON.stringify(users);
-    await writeFile(JSONfile, data, { encoding: 'utf8' });
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-function counterExists(name) {
-  return name in counters;
-}
-
 function generateId(){
   return Math.floor(Math.random() * 10000)
 }
@@ -65,7 +37,6 @@ async function createUser(response, name, email, password) {
     // 400 - Bad Request
     response.status(400).json({ error: 'Missing fields' });
   } else {
-    await reload(JSONfile);
     //initialize new user
     const new_user = {
       user_id : generateId(),
@@ -75,19 +46,20 @@ async function createUser(response, name, email, password) {
       events : [],
       is_event : false
     };
-    await saveUsers();
-    response.json({ name: name, value: 0 });
+    await insertData(new_user);
+    response.status(200).json(new_user);
   }
 }
 
 //returns the associated user object
-async function getUser(response, name) {
+async function getUser(response, ID) {
   await reload(JSONfile);
-  if (counterExists(name)) {
-    response.json({ name: name, value: counters[name] });
-  } else {
+  let data = readData(ID, false);
+  if (data === -1) {
     // 404 - Not Found
-    response.json({ error: `Counter '${name}' Not Found` });
+    response.status(404).json({ error: 'User ID not found' });
+  } else {
+    response.status(200).json(data);
   }
 }
 
