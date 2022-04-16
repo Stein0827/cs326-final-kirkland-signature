@@ -1,31 +1,3 @@
-/* <table>
-<tr>
-  <th class="label">Event Name</th>
-  <th class="label">Event Description</th>
-  <th class="label">Edit Event</th>
-</tr>
-<tr>
-  <td><input type="text" class="form-control input" id="event-name" value="Event 1" disabled></td>
-  <td><textarea name="event-details" class="form-control long-input" id="event-details" cols="1" rows="1" disabled>Event 1 Details</textarea></td>
-  <td><button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button></td>
-</tr>
-<tr>
-  <td><input type="text" class="form-control input" id="event-name" value="Event 2" disabled></td>
-  <td><textarea name="event-details" class="form-control long-input" id="event-details" cols="1" rows="1" disabled>Event 2 Details</textarea></td>
-  <td><button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button></td>
-</tr>
-<tr>
-  <td><input type="text" class="form-control input" id="event-name" value="Event 3" disabled></td>
-  <td><textarea name="event-details" class="form-control long-input" id="event-details" cols="1" rows="1" disabled>Event 3 Details</textarea></td>
-  <td><button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button></td>
-</tr>
-<tr>
-  <td><input type="text" class="form-control input" id="event-name" value="Event 4" disabled></td>
-  <td><textarea name="event-details" class="form-control long-input" id="event-details" cols="1" rows="1" disabled>Event 4 Details</textarea></td>
-  <td><button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button></td>
-</tr>
-</table> */
-
 async function readMyEvents(user_id) {
     const response = await fetch(`/client/getUserByID?user_id=${user_id}`, {
       method: 'GET',
@@ -82,4 +54,5 @@ async function displayDiv(/*event_list*/) {
     table.innerHTML = table_content;
 }
 
+// will eventually have a parameter
 displayDiv();

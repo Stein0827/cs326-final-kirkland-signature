@@ -1,6 +1,5 @@
 import express from 'express';
 import logger from 'morgan';
-import { readFile, writeFile } from 'fs/promises';
 import {insertData, readData, updateData, deleteData} from './database.js';
 import { read } from 'fs';
 
@@ -59,13 +58,14 @@ async function createUser(response, name, email, password) {
 }
 
 //returns the associated user object
-async function getUser(response, name) {
+async function getUser(response, ID) {
   await reload(JSONfile);
-  if (counterExists(name)) {
-    response.json({ name: name, value: counters[name] });
-  } else {
+  let data = readData(ID, false);
+  if (data === -1) {
     // 404 - Not Found
-    response.json({ error: `Counter '${name}' Not Found` });
+    response.status(404).json({ error: 'User ID not found' });
+  } else {
+    response.status(200).json(data);
   }
 }
 
