@@ -6,7 +6,7 @@ const fname = document.getElementById("first-name"),
 
 async function login(name, email, password){
     try{
-        const response = await fetch(`/client/newUser`, {
+        const response = await fetch(`/newUser`, {
             method: 'POST',
             body: JSON.stringify({user_name: name, user_email: email, password: password, is_event: false}),
         });``
