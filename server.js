@@ -2,6 +2,7 @@ import express from 'express';
 import logger from 'morgan';
 import { readFile, writeFile } from 'fs/promises';
 import {insertData, readData, updateData, deleteData} from './database.js';
+import { read } from 'fs';
 
 //user object structure
 // let user = {
@@ -29,17 +30,17 @@ import {insertData, readData, updateData, deleteData} from './database.js';
 // }
 
 
-function counterExists(name) {
-  return name in counters;
+function generateId(){
+  return Math.floor(Math.random() * 10000);
 }
 
-function generateId(){
-  return Math.floor(Math.random() * 10000)
+function getHostName(id){
+  return readData(id, false).user_name;
 }
 
 //creates a new user
 async function createUser(response, name, email, password) {
-  if (name === undefined || email === undefined || password === undefined) {
+  if (arguments.length !== 4) {
     // 400 - Bad Request
     response.status(400).json({ error: 'Missing fields' });
   } else {
@@ -69,15 +70,25 @@ async function getUser(response, name) {
 }
 
 //creates or adds a new event
-async function createEvent(response, name) {
-  await reload(JSONfile);
-  if (counterExists(name)) {
-    counters[name] += 1;
-    await saveCounters();
-    response.json({ name: name, value: counters[name] });
+async function createEvent(response, hostId, eventName, desc, location, time) {
+  if (arguments.length !== 6) {
+    // 400 - Bad Request
+    response.status(400).json({ error: 'Missing fields' });
   } else {
-    // 404 - Not Found
-    response.status(404).json({ error: `Counter '${name}' Not Found` });
+    //initialize new user
+    const new_event = {
+      host_id : hostId,
+      host_name : getHostName(), 
+      event_id : generateId(),
+      event_name: eventName,
+      event_desc : desc,
+      event_location : location,
+      event_time : time, 
+      attendees : [],
+      is_event : true
+    };
+    await insertData(new_event);
+    response.status(200).json(new_event);
   }
 }
 
