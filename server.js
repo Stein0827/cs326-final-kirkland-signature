@@ -1,6 +1,7 @@
 import express from 'express';
 import logger from 'morgan';
 import {insertData, readData, updateData, deleteData} from './database.js';
+import { read } from 'fs';
 
 //user object structure
 // let user = {
@@ -27,22 +28,27 @@ import {insertData, readData, updateData, deleteData} from './database.js';
 //   is_event: True
 // }
 
+
 function generateId(){
-  return Math.floor(Math.random() * 10000)
+  return Math.floor(Math.random() * 10000);
+}
+
+function getHostName(id){
+  return readData(id, false).user_name;
 }
 
 //creates a new user
-async function createUser(response, name, email, password) {
-  if (name === undefined || email === undefined || password === undefined) {
+async function createUser(response, user) {
+  if (user.user_name === undefined || user.user_email === undefined || user.password === undefined) {
     // 400 - Bad Request
     response.status(400).json({ error: 'Missing fields' });
   } else {
     //initialize new user
     const new_user = {
       user_id : generateId(),
-      user_name : name,
-      user_email : email,
-      password : password,
+      user_name : user.user_name,
+      user_email : user.user_email,
+      password : user.password,
       events : [],
       is_event : false
     };
@@ -54,7 +60,32 @@ async function createUser(response, name, email, password) {
 //returns the associated user object
 async function getUser(response, ID) {
   await reload(JSONfile);
-  let data = readData(ID, false);
+  let data = await readData(ID, false);
+  if (data === -1) {
+    // 404 - Not Found
+    response.status(404).json({ error: 'User ID not found' });
+  } else {
+    response.status(200).json(data);
+  }
+}
+
+async function updateUser(response, ID, user) {
+  if (user.user_email === undefined || user.user_name === undefined || user.password === undefined) {
+    // 400 - Bad Request
+    response.status(400).json({ error: 'Missing fields' });
+  } else {
+    let updatedUser = await readData(ID, false);
+    updatedUser.user_email = user.user_email;
+    updatedUser.user_name = user.user_name;
+    updatedUser.password = user.password;
+    await updateData(ID, updatedUser, false);
+    response.status(200).json(updatedUser);
+  }
+}
+
+async function deleteUser(response, ID) {
+  await reload(JSONfile);
+  let data = deleteData(ID, false);
   if (data === -1) {
     // 404 - Not Found
     response.status(404).json({ error: 'User ID not found' });
@@ -64,15 +95,25 @@ async function getUser(response, ID) {
 }
 
 //creates or adds a new event
-async function createEvent(response, name) {
-  await reload(JSONfile);
-  if (counterExists(name)) {
-    counters[name] += 1;
-    await saveCounters();
-    response.json({ name: name, value: counters[name] });
+async function createEvent(response, hostId, eventName, desc, location, time) {
+  if (arguments.length !== 6) {
+    // 400 - Bad Request
+    response.status(400).json({ error: 'Missing fields' });
   } else {
-    // 404 - Not Found
-    response.status(404).json({ error: `Counter '${name}' Not Found` });
+    //initialize new user
+    const new_event = {
+      host_id : hostId,
+      host_name : getHostName(hostId), 
+      event_id : generateId(),
+      event_name: eventName,
+      event_desc : desc,
+      event_location : location,
+      event_time : time, 
+      attendees : [],
+      is_event : true
+    };
+    await insertData(new_event);
+    response.status(200).json(new_event);
   }
 }
 
