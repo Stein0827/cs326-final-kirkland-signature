@@ -27,8 +27,8 @@ map.addControl(
 async function createEvent(name, time, desc){
     try{
         const response = await fetch(`client/user/User-ID/event/new`, {
-            method: 'PUT',
-            body: JSON.stringify({event_name: name, event_time: time, event_desc: desc, event_location: coordinates}),
+            method: 'POST',
+            body: JSON.stringify({event_name: name, event_time: time, event_desc: desc, event_location: coordinates, is_event: true}),
         });
     }
     catch{

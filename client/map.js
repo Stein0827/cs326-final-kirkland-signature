@@ -91,7 +91,8 @@ function setEvents(events) {
     table.innerHTML = table_content;
 }
 
-const events = await readEvents();
+// const events = await readEvents();
+const events = [{event_id: 123, event_name: "bruh"}, {event_id: 123, event_name: "bruh"}, {event_id: 123, event_name: "bruh"},{event_id: 123, event_name: "bruh"},{event_id: 123, event_name: "bruh"},{event_id: 123, event_name: "bruh"}];
 setEvents(events);
 
 
