@@ -78,7 +78,7 @@ async function createEvent(response, hostId, eventName, desc, location, time) {
     //initialize new user
     const new_event = {
       host_id : hostId,
-      host_name : getHostName(), 
+      host_name : getHostName(hostId), 
       event_id : generateId(),
       event_name: eventName,
       event_desc : desc,
