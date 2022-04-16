@@ -1,7 +1,6 @@
 import express from 'express';
 import logger from 'morgan';
 import {insertData, readData, updateData, deleteData} from './database.js';
-import { read } from 'fs';
 
 //user object structure
 // let user = {
@@ -59,7 +58,6 @@ async function createUser(response, user) {
 
 //returns the associated user object
 async function getUser(response, ID) {
-  await reload(JSONfile);
   let data = await readData(ID, false);
   if (data === -1) {
     // 404 - Not Found
@@ -75,16 +73,20 @@ async function updateUser(response, ID, user) {
     response.status(400).json({ error: 'Missing fields' });
   } else {
     let updatedUser = await readData(ID, false);
-    updatedUser.user_email = user.user_email;
-    updatedUser.user_name = user.user_name;
-    updatedUser.password = user.password;
-    await updateData(ID, updatedUser, false);
-    response.status(200).json(updatedUser);
+    if(updatedUser === -1) {
+      // 404 - Not Found
+      response.status(404).json({ error: 'User ID not found' });
+    } else {
+      updatedUser.user_email = user.user_email;
+      updatedUser.user_name = user.user_name;
+      updatedUser.password = user.password;
+      await updateData(ID, updatedUser, false);
+      response.status(200).json(updatedUser);
+    }
   }
 }
 
 async function deleteUser(response, ID) {
-  await reload(JSONfile);
   let data = deleteData(ID, false);
   if (data === -1) {
     // 404 - Not Found
@@ -115,36 +117,6 @@ async function createEvent(response, hostId, eventName, desc, location, time) {
     await insertData(new_event);
     response.status(200).json(new_event);
   }
-}
-
-async function updateCounter(response, name) {
-  await reload(JSONfile);
-  if (counterExists(name)) {
-    counters[name] += 1;
-    await saveCounters();
-    response.json({ name: name, value: counters[name] });
-  } else {
-    // 404 - Not Found
-    response.status(404).json({ error: `Counter '${name}' Not Found` });
-  }
-}
-
-async function deleteCounter(response, name) {
-  await reload(JSONfile);
-  if (counterExists(name)) {
-    const count = counters[name];
-    delete counters[name];
-    await saveCounters();
-    response.json({ name: name, value: count });
-  } else {
-    // 404 - Not Found
-    response.status(404).json({ error: `Counter '${name}' Not Found` });
-  }
-}
-
-async function dumpCounters(response) {
-  await reload(JSONfile);
-  response.json(counters);
 }
 
 // NEW
