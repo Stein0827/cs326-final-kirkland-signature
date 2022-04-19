@@ -45,7 +45,7 @@ async function displayDiv(/*event_list*/) {
         <tr>
             <td><input type="text" class="form-control input" id="event-name" value=${event.event_name} disabled></td>
             <td><textarea name="event-details" class="form-control long-input" id="event-details" cols="1" rows="1" disabled>${event.event_desc}</textarea></td>
-            <td><button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button></td>
+            <td><a href="event_creator.html"><button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button></a></td>
         </tr>`;
     }
 
