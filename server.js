@@ -191,9 +191,9 @@ app.get('/dumpEvents', async (request, response) => {
   updateCounter(response, options.user_id);
 });
 
-
+app.use('/', express.static('client'));
 
 // NEW
 app.listen(port, () => {
-  console.log(`Server started on poart ${port}`);
+  console.log(`Server started on port ${port}`);
 });
