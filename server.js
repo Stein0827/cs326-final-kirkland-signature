@@ -119,6 +119,52 @@ async function createEvent(response, hostId, eventName, desc, location, time) {
   }
 }
 
+//returns the associated user object
+async function getEvent(response, ID) {
+  let data = await readData(ID, true);
+  if (data === -1) {
+    // 404 - Not Found
+    response.status(404).json({ error: 'Event ID not found' });
+  } else {
+    response.status(200).json(data);
+  }
+}
+
+
+async function updateEvent(response, ID, event) {
+  if (event.host_id === undefined || event.host_name === undefined || event.event_name === undefined || event.event_desc === undefined 
+    || event.event_location === undefined || event.event_time === undefined) {
+    // 400 - Bad Request
+    response.status(400).json({ error: 'Missing fields' });
+  } else {
+    let updatedEvent = await readData(ID, true);
+    if(updatedEvent === -1) {
+      // 404 - Not Found
+      response.status(404).json({ error: 'Event ID not found' });
+    } else {
+      updatedEvent.host_id = event.host_id;
+      updatedEvent.host_name = event.host_name;
+      updatedEvent.event_name = event.event_name;
+      updatedEvent.event_desc = event.desc;
+      updatedEvent.event_location = event.event_location;
+      updatedEvent.event_time = event.event_time;
+      updatedEvent.attendees = event.attendees;
+      await updateData(ID, updatedEvent, true);
+      response.status(200).json(updatedEvent);
+    }
+  }
+}
+
+async function deleteEvent(response, ID) {
+  let data = deleteData(ID, true);
+  if (data === -1) {
+    // 404 - Not Found
+    response.status(404).json({ error: 'Event ID not found' });
+  } else {
+    response.status(200).json(data);
+  }
+}
+
 // NEW
 const app = express();
 const port = 3000;
