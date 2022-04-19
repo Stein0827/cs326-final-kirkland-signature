@@ -175,7 +175,7 @@ app.use('/client', express.static('client'));
 app.post('/newUser', async (request, response) => {
   const options = request.body;
   //name, email, password
-  createUser(response, options.name, options.email, options.password);
+  createUser(response, options);
 });
 
 //return user
@@ -185,7 +185,7 @@ app.get('/getUserbyId', async (request, response) => {
 });
 
 //add event to user's profile
-app.put('/createEvent', async (request, response) => {
+app.post('/createEvent', async (request, response) => {
   const options = request.body;
   createEvent(response, options.user_id, 
           options.name, options.desc, options.location, options.time);
