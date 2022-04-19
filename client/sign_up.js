@@ -9,7 +9,7 @@ async function login(name, email, password){
         const response = await fetch(`/newUser`, {
             method: 'POST',
             body: JSON.stringify({user_name: name, user_email: email, password: password, is_event: false}),
-        });``
+        });
     }
     catch{
         console.log(err);
