@@ -4,12 +4,11 @@ import {insertData, readData, updateData, deleteData} from './database.js';
 
 //user object structure
 // let user = {
-//   id: "",
+//   user_id: "",
 //   user_name: "",
 //   user_email: "",
 //   password: "",
 //   events: {},
-//   attending: {},
 //   is_event: False
 // };
 
@@ -17,7 +16,7 @@ import {insertData, readData, updateData, deleteData} from './database.js';
 // let event = {
 //   host_id: "",
 //   host_name: "",
-//   id: "",
+//   event_id: "",
 //   event_name: "",
 //   event_desc: "",
 //   event_location: "",
@@ -67,31 +66,16 @@ async function getUser(response, ID) {
   }
 }
 
-async function updateUser(response, ID, user) {
-  if (user.user_email === undefined || user.user_name === undefined || user.password === undefined) {
-    // 400 - Bad Request
-    response.status(400).json({ error: 'Missing fields' });
-  } else {
-    let updatedUser = await readData(ID, false);
-    if(updatedUser === -1) {
-      // 404 - Not Found
-      response.status(404).json({ error: 'User ID not found' });
-    } else {
-      updatedUser.user_email = user.user_email;
-      updatedUser.user_name = user.user_name;
-      updatedUser.password = user.password;
-      await updateData(ID, updatedUser, false);
-      response.status(200).json(updatedUser);
-    }
-  }
-}
-
+//delete user object
 async function deleteUser(response, ID) {
   let data = deleteData(ID, false);
   if (data === -1) {
     // 404 - Not Found
     response.status(404).json({ error: 'User ID not found' });
   } else {
+    for(let event in data.events) {
+      deleteData(event.event_id, true);
+    }
     response.status(200).json(data);
   }
 }
@@ -131,9 +115,8 @@ async function getEvent(response, ID) {
 }
 
 
-async function updateEvent(response, ID, event) {
-  if (event.host_id === undefined || event.host_name === undefined || event.event_name === undefined || event.event_desc === undefined 
-    || event.event_location === undefined || event.event_time === undefined) {
+async function updateEvent(response, ID, name, desc, location, time, attendees) {
+  if (arguments.length !== 7) {
     // 400 - Bad Request
     response.status(400).json({ error: 'Missing fields' });
   } else {
@@ -142,17 +125,15 @@ async function updateEvent(response, ID, event) {
       // 404 - Not Found
       response.status(404).json({ error: 'Event ID not found' });
     } else {
-      updatedEvent.host_id = event.host_id;
-      updatedEvent.host_name = event.host_name;
-      updatedEvent.event_name = event.event_name;
-      updatedEvent.event_desc = event.desc;
-      updatedEvent.event_location = event.event_location;
-      updatedEvent.event_time = event.event_time;
+      updatedEvent.event_name = name;
+      updatedEvent.event_desc = desc;
+      updatedEvent.event_location = location;
+      updatedEvent.event_time = time;
       if (updatedEvent.attendees.length > 0) {
-        updatedEvent.attendees.push(event.attendees);
+        updatedEvent.attendees.push(attendees);
       }
       else {
-        updatedEvent.attendees = event.attendees;
+        updatedEvent.attendees = attendees;
       }
       await updateData(ID, updatedEvent, true);
       response.status(200).json(updatedEvent);
@@ -170,13 +151,29 @@ async function deleteEvent(response, ID) {
   }
 }
 
+async function attendEvent(response, user_id, event_id) {
+  let event = readData(event_id, true);
+  event.attendees.push(user_id);
+  updateEvent(response, event_id, event);
+}
+
+async function getEventAttendees(response, eventID){
+  let data = await readData(eventID, true);
+  if (data === -1) {
+    // 404 - Not Found
+    response.status(404).json({ error: 'Event ID not found' });
+  } else {
+    response.status(200).json(data[attendees]);
+  }
+}
+
 // NEW
 const app = express();
 const port = 3000;
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/client', express.static('client'));
+app.use('/', express.static('client'));
 
 //login
 
@@ -196,7 +193,7 @@ app.get('/getUserbyId', async (request, response) => {
 });
 
 //add event to user's profile
-app.put('/createEvent', async (request, response) => {
+app.post('/createEvent', async (request, response) => {
   const options = request.body;
   createEvent(response, options.user_id, 
           options.name, options.desc, options.location, options.time);
@@ -209,14 +206,15 @@ app.put('/editEvent', async (request, response) => {
           options.name, options.desc, options.location, options.time, options.attendees);
 });
 
+app.delete('/deleteUser', async (request, response) => {
+  const options = request.body;
+  deleteUser(response, options.user_id);
+});
+
 //delete an event
 app.delete('/deleteEvent', async (request, response) => {
   const options = request.body;
   deleteEvent(response, options.user_id, options.event_id);
-  //let event = delete_data(eventid, true)
-  //let user = read_data(event.hostid, false)
-  //update user object -> user.events: delete events[eventid]
-  //update_date(user.user_id, user, false)
 });
 
 //read an event
@@ -228,7 +226,7 @@ app.get('/getEventbyId', async (request, response) => {
 //get all attendees
 app.get('/getAttendees', async (request, response) => {
   const options = request.query;
-  getEventAttendees(response, options.user_id, options.event_id);
+  getEventAttendees(response, options.event_id);
 });
 
 //RSVP to an event
@@ -237,15 +235,6 @@ app.put('/attendEvent', async (request, response) => {
   attendEvent(response, options.user_id, options.event_id);
 });
 
-//return
-app.get('/dumpEvents', async (request, response) => {
-  const options = request.body;
-  updateCounter(response, options.user_id);
-});
-
-app.use('/', express.static('client'));
-
-// NEW
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
