@@ -67,25 +67,7 @@ async function getUser(response, ID) {
   }
 }
 
-async function updateUser(response, ID, user) {
-  if (user.user_email === undefined || user.user_name === undefined || user.password === undefined) {
-    // 400 - Bad Request
-    response.status(400).json({ error: 'Missing fields' });
-  } else {
-    let updatedUser = await readData(ID, false);
-    if(updatedUser === -1) {
-      // 404 - Not Found
-      response.status(404).json({ error: 'User ID not found' });
-    } else {
-      updatedUser.user_email = user.user_email;
-      updatedUser.user_name = user.user_name;
-      updatedUser.password = user.password;
-      await updateData(ID, updatedUser, false);
-      response.status(200).json(updatedUser);
-    }
-  }
-}
-
+//delete user object
 async function deleteUser(response, ID) {
   let data = deleteData(ID, false);
   if (data === -1) {
@@ -207,6 +189,11 @@ app.put('/editEvent', async (request, response) => {
   const options = request.body;
   updateEvent(response, options.event_id, 
           options.name, options.desc, options.location, options.time, options.attendees);
+});
+
+app.delete('/deleteUser', async (request, response) => {
+  const options = request.body;
+  deleteUser(response, options.user_id);
 });
 
 //delete an event
