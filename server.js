@@ -69,6 +69,19 @@ async function getUser(response, ID) {
   }
 }
 
+//returns the associated event object
+async function getUser(response, ID) {
+  await reload(JSONfile);
+  let data = readData(ID, true);
+  if (data === -1) {
+    // 404 - Not Found
+    response.status(404).json({ error: 'User ID not found' });
+  } else {
+    response.status(200).json(data);
+  }
+}
+
+
 //creates or adds a new event
 async function createEvent(response, hostId, eventName, desc, location, time) {
   if (arguments.length !== 6) {
@@ -90,6 +103,10 @@ async function createEvent(response, hostId, eventName, desc, location, time) {
     await insertData(new_event);
     response.status(200).json(new_event);
   }
+}
+
+async function updateEvent(response, ID){
+
 }
 
 async function updateCounter(response, name) {
@@ -150,19 +167,20 @@ app.get('/getUserbyId', async (request, response) => {
 //add event to user's profile
 app.put('/createEvent', async (request, response) => {
   const options = request.body;
-  createEvent(response, options.user_id);
+  createEvent(response, options.user_id, options.name,
+      options.desc, options.location, options.time);
 });
 
 //change an event
 app.put('/editEvent', async (request, response) => {
   const options = request.body;
-  updateEvent(response, options.user_id, options.event_id);
+  updateEvent(response, options.event_id);
 });
 
 //delete an event
 app.delete('/deleteEvent', async (request, response) => {
   const options = request.body;
-  deleteEvent(response, options.user_id, options.event_id);
+  deleteEvent(response, options.event_id);
   //let event = delete_data(eventid, true)
   //let user = read_data(event.hostid, false)
   //update user object -> user.events: delete events[eventid]
@@ -193,7 +211,6 @@ app.get('/dumpEvents', async (request, response) => {
   const options = request.body;
   updateCounter(response, options.user_id);
 });
-
 
 
 // NEW
