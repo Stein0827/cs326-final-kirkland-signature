@@ -113,9 +113,8 @@ async function getEvent(response, ID) {
 }
 
 
-async function updateEvent(response, ID, event) {
-  if (event.host_id === undefined || event.host_name === undefined || event.event_name === undefined || event.event_desc === undefined 
-    || event.event_location === undefined || event.event_time === undefined) {
+async function updateEvent(response, ID, name, desc, location, time, attendees) {
+  if (arguments.length !== 7) {
     // 400 - Bad Request
     response.status(400).json({ error: 'Missing fields' });
   } else {
@@ -124,17 +123,15 @@ async function updateEvent(response, ID, event) {
       // 404 - Not Found
       response.status(404).json({ error: 'Event ID not found' });
     } else {
-      updatedEvent.host_id = event.host_id;
-      updatedEvent.host_name = event.host_name;
-      updatedEvent.event_name = event.event_name;
-      updatedEvent.event_desc = event.desc;
-      updatedEvent.event_location = event.event_location;
-      updatedEvent.event_time = event.event_time;
+      updatedEvent.event_name = name;
+      updatedEvent.event_desc = desc;
+      updatedEvent.event_location = location;
+      updatedEvent.event_time = time;
       if (updatedEvent.attendees.length > 0) {
-        updatedEvent.attendees.push(event.attendees);
+        updatedEvent.attendees.push(attendees);
       }
       else {
-        updatedEvent.attendees = event.attendees;
+        updatedEvent.attendees = attendees;
       }
       await updateData(ID, updatedEvent, true);
       response.status(200).json(updatedEvent);
