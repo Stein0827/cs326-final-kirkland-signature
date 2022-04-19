@@ -4,6 +4,9 @@
   "description": "Kirkland Signature 326 Project",
   "main": "server.js",
   "type": "module",
+  "engines": {
+    "node": "16.11.0"
+  },
   "directories": {
     "doc": "docs"
   },
@@ -23,6 +26,11 @@
   "homepage": "https://github.com/Stein0827/cs326-final-kirkland-signature#readme",
   "dependencies": {
     "express": "^4.17.3",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "pg": "^8.7.3",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1"
   }
 }
