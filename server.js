@@ -4,12 +4,11 @@ import {insertData, readData, updateData, deleteData} from './database.js';
 
 //user object structure
 // let user = {
-//   id: "",
+//   user_id: "",
 //   user_name: "",
 //   user_email: "",
 //   password: "",
 //   events: {},
-//   attending: {},
 //   is_event: False
 // };
 
@@ -17,7 +16,7 @@ import {insertData, readData, updateData, deleteData} from './database.js';
 // let event = {
 //   host_id: "",
 //   host_name: "",
-//   id: "",
+//   event_id: "",
 //   event_name: "",
 //   event_desc: "",
 //   event_location: "",
@@ -74,6 +73,9 @@ async function deleteUser(response, ID) {
     // 404 - Not Found
     response.status(404).json({ error: 'User ID not found' });
   } else {
+    for(let event in data.events) {
+      deleteData(event.event_id, true);
+    }
     response.status(200).json(data);
   }
 }
@@ -149,6 +151,12 @@ async function deleteEvent(response, ID) {
   }
 }
 
+async function attendEvent(response, user_id, event_id) {
+  let event = readData(event_id, true);
+  event.attendees.push(user_id);
+  updateEvent(response, event_id, event);
+}
+
 async function getEventAttendees(response, eventID){
   let data = await readData(eventID, true);
   if (data === -1) {
@@ -165,7 +173,7 @@ const port = 3000;
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/client', express.static('client'));
+app.use('/', express.static('client'));
 
 //login
 
@@ -207,10 +215,6 @@ app.delete('/deleteUser', async (request, response) => {
 app.delete('/deleteEvent', async (request, response) => {
   const options = request.body;
   deleteEvent(response, options.user_id, options.event_id);
-  //let event = delete_data(eventid, true)
-  //let user = read_data(event.hostid, false)
-  //update user object -> user.events: delete events[eventid]
-  //update_date(user.user_id, user, false)
 });
 
 //read an event
@@ -231,15 +235,6 @@ app.put('/attendEvent', async (request, response) => {
   attendEvent(response, options.user_id, options.event_id);
 });
 
-//return
-app.get('/dumpEvents', async (request, response) => {
-  const options = request.body;
-  updateCounter(response, options.user_id);
-});
-
-app.use('/', express.static('client'));
-
-// NEW
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
