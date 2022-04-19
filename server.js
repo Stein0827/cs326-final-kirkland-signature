@@ -148,7 +148,12 @@ async function updateEvent(response, ID, event) {
       updatedEvent.event_desc = event.desc;
       updatedEvent.event_location = event.event_location;
       updatedEvent.event_time = event.event_time;
-      updatedEvent.attendees = event.attendees;
+      if (updatedEvent.attendees.length > 0) {
+        updatedEvent.attendees.push(event.attendees);
+      }
+      else {
+        updatedEvent.attendees = event.attendees;
+      }
       await updateData(ID, updatedEvent, true);
       response.status(200).json(updatedEvent);
     }
