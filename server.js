@@ -183,7 +183,7 @@ app.use('/', express.static('client'));
 app.post('/newUser', async (request, response) => {
   const options = request.body;
   //name, email, password
-  createUser(response, options.name, options.email, options.password);
+  createUser(response, options);
 });
 
 //return user
