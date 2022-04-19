@@ -214,7 +214,7 @@ app.delete('/deleteUser', async (request, response) => {
 //delete an event
 app.delete('/deleteEvent', async (request, response) => {
   const options = request.body;
-  deleteEvent(response, options.user_id, options.event_id);
+  deleteEvent(response, options.event_id);
 });
 
 //read an event
