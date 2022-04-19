@@ -119,6 +119,57 @@ async function createEvent(response, hostId, eventName, desc, location, time) {
   }
 }
 
+//returns the associated user object
+async function getEvent(response, ID) {
+  let data = await readData(ID, true);
+  if (data === -1) {
+    // 404 - Not Found
+    response.status(404).json({ error: 'Event ID not found' });
+  } else {
+    response.status(200).json(data);
+  }
+}
+
+
+async function updateEvent(response, ID, event) {
+  if (event.host_id === undefined || event.host_name === undefined || event.event_name === undefined || event.event_desc === undefined 
+    || event.event_location === undefined || event.event_time === undefined) {
+    // 400 - Bad Request
+    response.status(400).json({ error: 'Missing fields' });
+  } else {
+    let updatedEvent = await readData(ID, true);
+    if(updatedEvent === -1) {
+      // 404 - Not Found
+      response.status(404).json({ error: 'Event ID not found' });
+    } else {
+      updatedEvent.host_id = event.host_id;
+      updatedEvent.host_name = event.host_name;
+      updatedEvent.event_name = event.event_name;
+      updatedEvent.event_desc = event.desc;
+      updatedEvent.event_location = event.event_location;
+      updatedEvent.event_time = event.event_time;
+      if (updatedEvent.attendees.length > 0) {
+        updatedEvent.attendees.push(event.attendees);
+      }
+      else {
+        updatedEvent.attendees = event.attendees;
+      }
+      await updateData(ID, updatedEvent, true);
+      response.status(200).json(updatedEvent);
+    }
+  }
+}
+
+async function deleteEvent(response, ID) {
+  let data = deleteData(ID, true);
+  if (data === -1) {
+    // 404 - Not Found
+    response.status(404).json({ error: 'Event ID not found' });
+  } else {
+    response.status(200).json(data);
+  }
+}
+
 // NEW
 const app = express();
 const port = 3000;
@@ -147,13 +198,15 @@ app.get('/getUserbyId', async (request, response) => {
 //add event to user's profile
 app.put('/createEvent', async (request, response) => {
   const options = request.body;
-  createEvent(response, options.user_id);
+  createEvent(response, options.user_id, 
+          options.name, options.desc, options.location, options.time);
 });
 
 //change an event
 app.put('/editEvent', async (request, response) => {
   const options = request.body;
-  updateEvent(response, options.user_id, options.event_id);
+  updateEvent(response, options.event_id, 
+          options.name, options.desc, options.location, options.time, options.attendees);
 });
 
 //delete an event
@@ -164,7 +217,6 @@ app.delete('/deleteEvent', async (request, response) => {
   //let user = read_data(event.hostid, false)
   //update user object -> user.events: delete events[eventid]
   //update_date(user.user_id, user, false)
-
 });
 
 //read an event
