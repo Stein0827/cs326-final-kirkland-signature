@@ -149,6 +149,16 @@ async function deleteEvent(response, ID) {
   }
 }
 
+async function getEventAttendees(response, eventID){
+  let data = await readData(eventID, true);
+  if (data === -1) {
+    // 404 - Not Found
+    response.status(404).json({ error: 'Event ID not found' });
+  } else {
+    response.status(200).json(data[attendees]);
+  }
+}
+
 // NEW
 const app = express();
 const port = 3000;
@@ -212,7 +222,7 @@ app.get('/getEventbyId', async (request, response) => {
 //get all attendees
 app.get('/getAttendees', async (request, response) => {
   const options = request.query;
-  getEventAttendees(response, options.user_id, options.event_id);
+  getEventAttendees(response, options.event_id);
 });
 
 //RSVP to an event
