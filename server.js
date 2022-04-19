@@ -198,13 +198,15 @@ app.get('/getUserbyId', async (request, response) => {
 //add event to user's profile
 app.put('/createEvent', async (request, response) => {
   const options = request.body;
-  createEvent(response, options.user_id);
+  createEvent(response, options.user_id, 
+          options.name, options.desc, options.location, options.time);
 });
 
 //change an event
 app.put('/editEvent', async (request, response) => {
   const options = request.body;
-  updateEvent(response, options.user_id, options.event_id);
+  updateEvent(response, options.event_id, 
+          options.name, options.desc, options.location, options.time, options.attendees);
 });
 
 //delete an event
@@ -215,7 +217,6 @@ app.delete('/deleteEvent', async (request, response) => {
   //let user = read_data(event.hostid, false)
   //update user object -> user.events: delete events[eventid]
   //update_date(user.user_id, user, false)
-
 });
 
 //read an event
