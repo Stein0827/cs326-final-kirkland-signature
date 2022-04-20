@@ -10,16 +10,15 @@ async function readMyEvents() {
     const response = await fetch(`/dumpEvents`, {
       method: 'GET',
     });
-    const data = response.json();
+    const data = await response.json();
     return data;
 }
 
 // TODO: will do after we actually learn how to authenticate
 // const user = await readMyEvents()
 // TODO: uncomment parameter once server is done
-async function displayDiv(/*event_list*/) {
+async function displayDiv() {
 
-    // TODO uncomment once server is done
     // for (let id of event_list) {
     //     const response = await fetch(`/event?event_id=${id}`, {
     //         method: 'GET',
@@ -27,6 +26,7 @@ async function displayDiv(/*event_list*/) {
     //     const data = await response.json();
     //     events.push(data);
     // }
+
     let table = document.getElementById("my_event_table");
     let table_content = `
     <table>
@@ -39,7 +39,7 @@ async function displayDiv(/*event_list*/) {
     for (let event of events) {
         table_content += `
         <tr>
-            <td><input type="text" class="form-control input" id="event-name" value=${event.event_name} disabled></td>
+            <td><textarea name="event-details" class="form-control long-input" id="event-name" cols="1" rows="1" disabled>${event.event_name}</textarea></td>
             <td><textarea name="event-details" class="form-control long-input" id="event-details" cols="1" rows="1" disabled>${event.event_desc}</textarea></td>
             <td><button class="btn btn-lg btn-primary btn-block" id=${event.event_name} type="submit">Edit</button></td>
         </tr>`;
@@ -64,19 +64,8 @@ document.querySelectorAll('.btn').forEach(item => {
     })
 });
 
-// let events = [{
-//     host_id: "123",
-//     host_name: "",
-//     event_id: "",
-//     event_name: "what!!!",
-//     event_desc: "haha im sad",
-//     event_location: "",
-//     event_time: "",
-//     images: "",
-//     attendees: [],
-//     is_event: true
-//   }];
+let events = await readMyEvents();
 
 // will eventually have a parameter
-const events = await readMyEvents();
-displayDiv();
+// const events = await readMyEvents();
+await displayDiv();
