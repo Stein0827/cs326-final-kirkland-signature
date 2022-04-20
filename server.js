@@ -178,7 +178,7 @@ async function dumpEvents(response) {
 
 // NEW
 const app = express();
-const port = port = process.env.PORT || 80;
+const port = process.env.PORT || 80;
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
