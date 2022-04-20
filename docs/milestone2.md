@@ -1,13 +1,12 @@
 # Part 0: Project API Planning
 - API manual:
-![manual page 1](images/API%20details-1.jpg)
-![manual page 2](images/API%20details-2.jpg)
-![manual page 3](images/API%20details-3.jpg)
-![manual page 4](images/API%20details-4.jpg)
-![manual page 5](images/API%20details-5.jpg)
+![manual page 1](images/APIdetails-1.png)
+![manual page 2](images/APIdetails-2.png)
+![manual page 3](images/APIdetails-3.png)
 
 - End point details:
-![endpoint page 1](images/API%20details-6.jpg)
+![endpoint page 1](images/APIdetails-4.p
+ng)
 ![endpoint page 2](images/API%20details-7.jpg)
 
 # Part 2: Front-end Implementation
@@ -27,14 +26,16 @@ Map Page: A list of events that user can RSVP to (updates global list of events)
 
 
 # Part 3: Deployment
-The URL of your Heroku Application
+The URL of your Heroku Application:
+
+https://cs326-final-umap.herokuapp.com/
 
 # Breakdown of Division of Labor
 - Rishab:
     Front end implementation. Debugging with postman. API documentation. Worked on milestone2 document.
 
 - Paul:
-    Front end implementation. Fake data. Some CRUD functions in server.js. API documentation. Worked on milestone2 document.
+    Front end implementation. Fake data. Some CRUD functions in server.js. API documentation. Worked on milestone2 document. Deployed web app on Heroku
 
 - Alex:
     ExpressJS CRUD functions in server.js. API documentation. Worked on milestone2 document. Some front end implementation.
