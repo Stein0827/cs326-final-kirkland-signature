@@ -69,15 +69,16 @@ if (ename.innerHTML === "" && etime.innerHTML === "" && edetails.innerHTML === "
 
 save.addEventListener("click", async (e)=>{
     const json = await createEvent(ename.value, etime.value, edetails.value);
+    localStorage.removeItem("event");
 });
 
 
 create.addEventListener("click", async (e)=>{
     const json = await updateEvent(ename.value, etime.value, edetails.value);
+    localStorage.removeItem("event");
 });
 
 let curr_event = JSON.parse(localStorage.getItem("event"));
-console.log(curr_event);
 edetails.value = curr_event.event_desc;
 ename.value = curr_event.event_name;
 etime.value = curr_event.event_time;
