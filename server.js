@@ -1,6 +1,6 @@
 import express from 'express';
 import logger from 'morgan';
-import {insertData, readData, updateData, deleteData} from './database.js';
+import {insertData, readData, updateData, deleteData, dumpData} from './database.js';
 
 //user object structure
 // let user = {
@@ -68,10 +68,10 @@ async function getUser(response, ID) {
 
 //delete user object
 async function deleteUser(response, ID) {
-  let data = deleteData(ID, false);
+  let data = await deleteData(ID, false);
   if (data === -1) {
     // 404 - Not Found
-    response.status(404).json({ error: 'User ID not found' });
+    response.status(404).json({ error: "User ID not found" });
   } else {
     for(let event in data.events) {
       deleteData(event.event_id, true);
@@ -142,7 +142,7 @@ async function updateEvent(response, ID, name, desc, location, time, attendees) 
 }
 
 async function deleteEvent(response, ID) {
-  let data = deleteData(ID, true);
+  let data = await deleteData(ID, true);
   if (data === -1) {
     // 404 - Not Found
     response.status(404).json({ error: 'Event ID not found' });
@@ -152,9 +152,10 @@ async function deleteEvent(response, ID) {
 }
 
 async function attendEvent(response, user_id, event_id) {
-  let event = readData(event_id, true);
+  let event = await readData(event_id, true);
   event.attendees.push(user_id);
-  updateEvent(response, event_id, event);
+  await updateData(event_id, event, true);
+  response.status(200).json(event);
 }
 
 async function getEventAttendees(response, eventID){
@@ -163,8 +164,16 @@ async function getEventAttendees(response, eventID){
     // 404 - Not Found
     response.status(404).json({ error: 'Event ID not found' });
   } else {
-    response.status(200).json(data[attendees]);
+    response.status(200).json(data["attendees"]);
   }
+}
+
+async function dumpUsers(response) {
+  response.status(200).json(dumpData(false));
+}
+
+async function dumpEvents(response) {
+  response.status(200).json(dumpData(true));
 }
 
 // NEW
@@ -195,7 +204,7 @@ app.get('/getUserbyId', async (request, response) => {
 //add event to user's profile
 app.post('/createEvent', async (request, response) => {
   const options = request.body;
-  createEvent(response, options.user_id, 
+  createEvent(response, options.host_id, 
           options.name, options.desc, options.location, options.time);
 });
 
@@ -233,6 +242,16 @@ app.get('/getAttendees', async (request, response) => {
 app.put('/attendEvent', async (request, response) => {
   const options = request.body;
   attendEvent(response, options.user_id, options.event_id);
+});
+
+app.get('/dumpEvents', async (request, response) => {
+  const options = request.body;
+  dumpEvents(response);
+});
+
+app.get('/dumpUsers', async (request, response) => {
+  const options = request.body;
+  dumpUsers(response);
 });
 
 app.listen(port, () => {
