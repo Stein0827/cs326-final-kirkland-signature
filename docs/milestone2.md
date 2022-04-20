@@ -13,6 +13,14 @@
 # Part 2: Front-end Implementation
 At least one set of four screenshots of your client interface with descriptions
 
+![event creator page](images/make-event.png)
+Event Creator Page: Here the user can create, update, and delete an event object
+
+Sign Up Page: Creates a user object
+
+Map Page: 
+
+
 # Part 3: Deployment
 The URL of your Heroku Application
 
