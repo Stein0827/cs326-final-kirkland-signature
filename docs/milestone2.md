@@ -22,8 +22,8 @@ My Events page: Shows a list of user created events (Reads the events that a use
 ![sign up page](images/md2signup.png)
 Sign Up Page: Creates a user object
 
-
-Map Page: 
+![map page]()
+Map Page: A list of events that user can RSVP to (updates global list of events)
 
 
 # Part 3: Deployment
