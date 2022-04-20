@@ -52,19 +52,31 @@ async function updateEvent(name, time, desc){
 const save = document.getElementById("save"),
     ename = document.getElementById("event-name"),
     etime = document.getElementById("event-time"),
-    edetails = document.getElementById("event-details");
-
-const create = document.getElementById("create");
+    edetails = document.getElementById("event-details"),
+    save_link = document.getElementById("save-event-link"),
+    create_link = document.getElementById("create-event-link"),
+    create = document.getElementById("create");
 
 //disable buttons accordingly 
 if (ename.innerHTML === "" && etime.innerHTML === "" && edetails.innerHTML === ""){
     //disable edit button
-    save.disable = true;
-    create.disable = false;
+    // save.disable = true;
+    // create.disable = false;
+    save.prop('disabled', true);
+    create.prop('disabled', false);
+    //disable links
+    save_link.href = '';
+    create_link.href = 'map.html';
+
 } else {
     //disable create button
-    create.disable = true;
-    save.disable = false;
+    // create.disable = true;
+    // save.disable = false;
+    create.prop('disabled', true);
+    save.prop('disabled', false);
+    //disable link
+    create_link = '';
+    save_link = 'map.html';
 }
 
 save.addEventListener("click", async (e)=>{
