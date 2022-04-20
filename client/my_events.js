@@ -67,7 +67,7 @@ let events = [{
     host_name: "",
     event_id: "",
     event_name: "what!!!",
-    event_desc: "haha im sad",
+    event_desc: "haha im",
     event_location: "",
     event_time: "",
     images: "",
