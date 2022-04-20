@@ -18,12 +18,13 @@ The URL of your Heroku Application
 
 # Breakdown of Division of Labor
 - Rishab:
-
+    Front end implementation. Debugging with postman. API documentation. Worked on milestone2 document.
 
 - Paul:
-
+    Front end implementation. Fake data. Some CRUD functions in server.js. API documentation. Worked on milestone2 document.
 
 - Alex:
-
+    CRUD functions in server.js. API documentation. Worked on milestone2 document. Some front end implementation.
 
 - Suyash:
+    Database.js file. CRUD functions in server.js. API documentation. Worked on milestone2 document. Debugging with postman.
