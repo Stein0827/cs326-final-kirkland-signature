@@ -14,80 +14,46 @@ async function readMyEvents() {
     return data;
 }
 
-// TODO: will do after we actually learn how to authenticate
-// const user = await readMyEvents()
-// TODO: uncomment parameter once server is done
 async function displayDiv() {
-
-    // for (let id of event_list) {
-    //     const response = await fetch(`/event?event_id=${id}`, {
-    //         method: 'GET',
-    //     });
-    //     const data = await response.json();
-    //     events.push(data);
-    // }
-
-    let table = document.getElementById("my_event_table");
-    let table_content = `
-    <table>
-        <tr>
-            <th class="label">Event Name</th>
-            <th class="label">Event Description</th>
-            <th class="label">Edit Event</th>
-        </tr>`;
-
-    for (let event of events) {
-        table_content += `
-        <tr>
-            <td><textarea name="event-details" class="form-control long-input" id="event-name" cols="1" rows="1" disabled>${event.event_name}</textarea></td>
-            <td><textarea name="event-details" class="form-control long-input" id="event-details" cols="1" rows="1" disabled>${event.event_desc}</textarea></td>
-            <td><button class="btn btn-lg btn-primary btn-block" id=${event.event_name} type="submit">Edit</button></td>
-        </tr>`;
-    }
-
-    table_content += `
-    </table>`;
-    
-    table_content += `
-    <script>
-    document.querySelectorAll('.btn').forEach(item => {
-        item.addEventListener('click', event => {
-            console.log("im sad");
-            const event_name = item.id;
-            for (let event of events) {
-                if (event["event_name"] === event_name) {
-                    localStorage.setItem("event", JSON.stringify(event));
-                    console.log(localStorage.getItem("event"));
-                }
+    const table = document.getElementById('events_table');
+    let tBody = document.createElement("tbody");
+    for (let event of events){
+        let row = document.createElement("tr");
+        for (let i = 0; i < 3; i++){
+            let cell = document.createElement("td");
+            let cText = 0;
+            let ta = 0;
+            if (i === 0){
+                ta = document.createElement("textarea");
+                cText = document.createTextNode(event.event_name);
+                ta.classList.add("form-control", "long-input");
+                ta.appendChild(cText);
+                cell.appendChild(ta);
             }
-        })
-    });
-    </script>`;
-    table.innerHTML = table_content;
+            else if (i === 1) {
+                ta = document.createElement("textarea");
+                cText = document.createTextNode(event.event_desc);
+                ta.classList.add("form-control", "long-input");
+                ta.appendChild(cText);
+                cell.appendChild(ta);
+            }
+            else if (i === 2) {
+                cText = document.createElement("button");
+                cText.innerHTML = "Edit"
+                cText.addEventListener("click", function(e) {
+                    localStorage.setItem("event", JSON.stringify(event));
+                    window.location.href = "event_creator.html";   
+                });
+                cText.classList.add("btn", "btn-lg", "btn-primary", "btn-block");
+                cell.appendChild(cText);
+            }
+
+            row.appendChild(cell);
+        }
+        tBody.appendChild(row);
+    }
+    table.appendChild(tBody);
 }
 
-// document.querySelectorAll('.btn').forEach(item => {
-//     item.addEventListener('click', event => {
-//         const event_name = item.id;
-//         for (let event of events) {
-//             if (event["event_name"] === event_name) {
-//                 localStorage.setItem("event", JSON.stringify(event));
-//                 console.log(localStorage.getItem("event"));
-//             }
-//         }
-//     })
-// });
-
-
-
 let events = await readMyEvents();
-// document.getElementById(events[0].event_name).addEventListener('click', event => {
-//     console.log(":D");
-// });
-console.log(events[0].event_name);
-let something = document.getElementById("my_event_table");
-console.log(something);
-
-// will eventually have a parameter
-// const events = await readMyEvents();
 await displayDiv();
