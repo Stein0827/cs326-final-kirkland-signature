@@ -6,13 +6,13 @@
 //     return data;
 // }
 
-// async function readMyEvents() {
-//     const response = await fetch(`/dumpEvents`, {
-//       method: 'GET',
-//     });
-//     const data = await response.json();
-//     return data;
-// }
+async function readMyEvents() {
+    const response = await fetch(`/dumpEvents`, {
+      method: 'GET',
+    });
+    const data = response.json();
+    return data;
+}
 
 // TODO: will do after we actually learn how to authenticate
 // const user = await readMyEvents()
@@ -41,7 +41,7 @@ async function displayDiv(/*event_list*/) {
         <tr>
             <td><input type="text" class="form-control input" id="event-name" value=${event.event_name} disabled></td>
             <td><textarea name="event-details" class="form-control long-input" id="event-details" cols="1" rows="1" disabled>${event.event_desc}</textarea></td>
-            <td><a href="event_creator.html"><button class="btn btn-lg btn-primary btn-block" id=${event.event_name} type="submit">Edit</button></a></td>
+            <td><button class="btn btn-lg btn-primary btn-block" id=${event.event_name} type="submit">Edit</button></td>
         </tr>`;
     }
 
@@ -52,29 +52,31 @@ async function displayDiv(/*event_list*/) {
 
 document.querySelectorAll('.btn').forEach(item => {
     item.addEventListener('click', event => {
+        console.log("it works?");
         const event_name = item.id;
         for (let event of events) {
             if (event["event_name"] === event_name) {
+                console.log("it fucking works???");
                 localStorage.setItem("event", JSON.stringify(event));
-                window.location.href = "event_creator.html";
+                console.log(localStorage.getItem("event"));
             }
         }
     })
 });
 
-let events = [{
-    host_id: "123",
-    host_name: "",
-    event_id: "",
-    event_name: "what!!!",
-    event_desc: "haha im sad",
-    event_location: "",
-    event_time: "",
-    images: "",
-    attendees: [],
-    is_event: true
-  }];
+// let events = [{
+//     host_id: "123",
+//     host_name: "",
+//     event_id: "",
+//     event_name: "what!!!",
+//     event_desc: "haha im sad",
+//     event_location: "",
+//     event_time: "",
+//     images: "",
+//     attendees: [],
+//     is_event: true
+//   }];
 
 // will eventually have a parameter
-// const events = await readMyEvents();
+const events = await readMyEvents();
 displayDiv();

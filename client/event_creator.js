@@ -76,6 +76,14 @@ create.addEventListener("click", async (e)=>{
     const json = await updateEvent(ename.value, etime.value, edetails.value);
 });
 
+let curr_event = JSON.parse(localStorage.getItem("event"));
+console.log(curr_event);
+edetails.value = curr_event.event_desc;
+ename.value = curr_event.event_name;
+etime.value = curr_event.event_time;
+
+
+
 // document.addEventListener('DOMContentLoaded', async function() {
     // TODO: needs a user session
 // });
