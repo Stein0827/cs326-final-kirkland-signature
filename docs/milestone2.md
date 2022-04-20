@@ -5,8 +5,7 @@
 ![manual page 3](images/APIdetails-3.png)
 
 - End point details:
-![endpoint page 1](images/APIdetails-4.p
-ng)
+![endpoint page 1](images/APIdetails-4.png)
 ![endpoint page 2](images/API%20details-7.jpg)
 
 # Part 2: Front-end Implementation
@@ -21,7 +20,7 @@ My Events page: Shows a list of user created events (Reads the events that a use
 ![sign up page](images/md2signup.png)
 Sign Up Page: Creates a user object
 
-![map page]()
+![map page](images/map.png)
 Map Page: A list of events that user can RSVP to (updates global list of events)
 
 
