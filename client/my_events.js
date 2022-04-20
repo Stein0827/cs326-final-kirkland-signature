@@ -47,24 +47,46 @@ async function displayDiv() {
 
     table_content += `
     </table>`;
+    
+    table_content += `
+    <script>
+    document.querySelectorAll('.btn').forEach(item => {
+        item.addEventListener('click', event => {
+            console.log("im sad");
+            const event_name = item.id;
+            for (let event of events) {
+                if (event["event_name"] === event_name) {
+                    localStorage.setItem("event", JSON.stringify(event));
+                    console.log(localStorage.getItem("event"));
+                }
+            }
+        })
+    });
+    </script>`;
     table.innerHTML = table_content;
 }
 
-document.querySelectorAll('.btn').forEach(item => {
-    item.addEventListener('click', event => {
-        console.log("it works?");
-        const event_name = item.id;
-        for (let event of events) {
-            if (event["event_name"] === event_name) {
-                console.log("it fucking works???");
-                localStorage.setItem("event", JSON.stringify(event));
-                console.log(localStorage.getItem("event"));
-            }
-        }
-    })
-});
+// document.querySelectorAll('.btn').forEach(item => {
+//     item.addEventListener('click', event => {
+//         const event_name = item.id;
+//         for (let event of events) {
+//             if (event["event_name"] === event_name) {
+//                 localStorage.setItem("event", JSON.stringify(event));
+//                 console.log(localStorage.getItem("event"));
+//             }
+//         }
+//     })
+// });
+
+
 
 let events = await readMyEvents();
+// document.getElementById(events[0].event_name).addEventListener('click', event => {
+//     console.log(":D");
+// });
+console.log(events[0].event_name);
+let something = document.getElementById("my_event_table");
+console.log(something);
 
 // will eventually have a parameter
 // const events = await readMyEvents();
