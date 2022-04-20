@@ -13,10 +13,15 @@
 # Part 2: Front-end Implementation
 At least one set of four screenshots of your client interface with descriptions
 
-![event creator page](images/make-event.png)
+![event creator page](images/md2createEvent.png)
 Event Creator Page: Here the user can create, update, and delete an event object
 
+![my events page](images/md2my_events.png)
+My Events page: Shows a list of user created events (Reads the events that a user created)
+
+![sign up page](images/md2signup.png)
 Sign Up Page: Creates a user object
+
 
 Map Page: 
 
@@ -32,7 +37,7 @@ The URL of your Heroku Application
     Front end implementation. Fake data. Some CRUD functions in server.js. API documentation. Worked on milestone2 document.
 
 - Alex:
-    CRUD functions in server.js. API documentation. Worked on milestone2 document. Some front end implementation.
+    ExpressJS CRUD functions in server.js. API documentation. Worked on milestone2 document. Some front end implementation.
 
 - Suyash:
     Database.js file. CRUD functions in server.js. API documentation. Worked on milestone2 document. Debugging with postman.
