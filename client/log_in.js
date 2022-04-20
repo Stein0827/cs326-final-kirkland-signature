@@ -1,4 +1,4 @@
-const signIn = document.getElementById("signIN"),
+const signIn = document.getElementById("signIn"),
     email = document.getElementById("floatingInput"),
     password = document.getElementById("floatingPassword");
 
