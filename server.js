@@ -169,11 +169,11 @@ async function getEventAttendees(response, eventID){
 }
 
 async function dumpUsers(response) {
-  response.status(200).json(dumpData(false));
+  response.status(200).json(await dumpData(false));
 }
 
 async function dumpEvents(response) {
-  response.status(200).json(dumpData(true));
+  response.status(200).json(await dumpData(true));
 }
 
 // NEW
