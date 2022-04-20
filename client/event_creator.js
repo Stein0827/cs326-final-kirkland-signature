@@ -28,10 +28,23 @@ async function createEvent(name, time, desc){
     try{
         const response = await fetch(`createEvent`, {
             method: 'POST',
-            body: JSON.stringify({event_name: name, event_time: time, event_desc: desc, event_location: coordinates, is_event: true}),
+            body: JSON.stringify({event_name: name, event_time: time, event_desc: desc, event_location: coordinates, attendees: [], is_event: true}),
         });
     }
-    catch{
+    catch(err){
+        console.log(err);
+    }
+}
+
+async function updateEvent(name, time, desc){
+    try{
+        const response = await fetch('editEvent', {
+            method: 'PUT',
+            body: JSON.stringify({event_name: name, event_time: time, event_desc: desc, event_location: coordinates, attendees: attendees, is_event: true}),
+        });
+        const data = await response.json();
+        return data;
+    } catch(err) {
         console.log(err);
     }
 }
@@ -40,8 +53,27 @@ const save = document.getElementById("save"),
     ename = document.getElementById("event-name"),
     etime = document.getElementById("event-time"),
     edetails = document.getElementById("event-details");
+
+const create = document.getElementById("create");
+
+//disable buttons accordingly 
+if (ename.innerHTML === "" && etime.innerHTML === "" && edetails.innerHTML === ""){
+    //disable edit button
+    save.disable = true;
+    create.disable = false;
+} else {
+    //disable create button
+    create.disable = true;
+    save.disable = false;
+}
+
 save.addEventListener("click", async (e)=>{
     const json = await createEvent(ename.value, etime.value, edetails.value);
+});
+
+
+create.addEventListener("click", async (e)=>{
+    const json = await updateEvent(ename.value, etime.value, edetails.value);
 });
 
 // document.addEventListener('DOMContentLoaded', async function() {
