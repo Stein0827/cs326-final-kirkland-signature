@@ -8,7 +8,7 @@ async function reload(filename) {
     const data = await readFile(filename, { encoding: 'utf8' });
     localData = JSON.parse(data);
   } catch (err) {
-    localData = {};
+    localData = [];
   }
 }
 
@@ -25,20 +25,20 @@ async function insertData(JSONdata) {
     await reload(JSONfile);
     localData.push(JSONdata);
     await saveData();
-    return localData.findIndex(JSONdata);
+    return localData.indexOf(JSONdata);
 }
 
 async function readData(ID, isEvent) {
     await reload(JSONfile);
     if(isEvent) {
-        for(let entry in localData) {
-            if(entry.isEvent && entry.event_id === ID) {
+        for(let entry of localData) {
+            if(entry.is_event && entry.event_id === parseInt(ID)) {
                 return entry;
             }
         }
     } else {
-        for(let entry in localData) {
-            if(!entry.isEvent && entry.user_id === ID) {
+        for(let entry of localData) {
+            if(!entry.is_event && entry.user_id === parseInt(ID)) {
                 return entry;
             }
         }
@@ -49,16 +49,16 @@ async function readData(ID, isEvent) {
 async function updateData(ID, JSONdata, isEvent) {
     await reload(JSONfile);
     if(isEvent) {
-        for(let entry in localData) {
-            if(entry.isEvent && entry.event_id === ID) {
+        for(let entry of localData) {
+            if(entry.is_event && entry.event_id === parseInt(ID)) {
                 localData[localData.indexOf(entry)] = JSONdata;
                 await saveData();
                 return JSONdata;
             }
         }
     } else {
-        for(let entry in localData) {
-            if(!entry.isEvent && entry.user_id === ID) {
+        for(let entry of localData) {
+            if(!entry.is_event && entry.user_id === parseInt(ID)) {
                 localData[localData.indexOf(entry)] = JSONdata;
                 await saveData();
                 return JSONdata;
@@ -71,19 +71,19 @@ async function updateData(ID, JSONdata, isEvent) {
 async function deleteData(ID, isEvent) {
     await reload(JSONfile);
     if(isEvent) {
-        for(let entry in localData) {
-            if(entry.isEvent && entry.event_id === ID) {
+        for(let entry of localData) {
+            if(entry.is_event && entry.event_id === parseInt(ID)) {
                 let data = entry;
-                delete localData[localData.indexOf(entry)];
+                localData.splice(localData.indexOf(entry), 1);
                 await saveData();
                 return data;
             }
         }
     } else {
-        for(let entry in localData) {
-            if(!entry.isEvent && entry.user_id === ID) {
+        for(let entry of localData) {
+            if(!entry.is_event && entry.user_id === parseInt(ID)) {
                 let data = entry;
-                delete localData[localData.indexOf(entry)];
+                localData.splice(localData.indexOf(entry), 1);
                 await saveData();
                 return data;
             }
@@ -92,4 +92,23 @@ async function deleteData(ID, isEvent) {
     return -1;
 }
 
-export {insertData, readData, updateData, deleteData};
+async function dumpData(isEvent) {
+    await reload(JSONfile);
+    let data = [];
+    if(isEvent) {
+        for(let entry of localData) {
+            if(entry.is_event) {
+                data.push(entry);
+            }
+        }
+    } else {
+        for(let entry of localData) {
+            if(!entry.is_event) {
+                data.push(entry);
+            }
+        }
+    }
+    return data;
+}
+
+export {insertData, readData, updateData, deleteData, dumpData};
