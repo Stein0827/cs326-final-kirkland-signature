@@ -60,20 +60,16 @@ const save = document.getElementById("save"),
 //disable buttons accordingly 
 if (ename.innerHTML === "" && etime.innerHTML === "" && edetails.innerHTML === ""){
     //disable edit button
-    // save.disable = true;
-    // create.disable = false;
-    save.prop('disabled', true);
-    create.prop('disabled', false);
+    save.disabled = true;
+    create.disabled = false;
     //disable links
     save_link.href = '';
     create_link.href = 'map.html';
 
 } else {
     //disable create button
-    // create.disable = true;
-    // save.disable = false;
-    create.prop('disabled', true);
-    save.prop('disabled', false);
+    create.disabled = true;
+    save.disabled = false;
     //disable link
     create_link = '';
     save_link = 'map.html';
