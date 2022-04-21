@@ -1,6 +1,6 @@
 .bg {
     background-color: #881C1C;
-    overflow:hidden;
+    overflow-x:hidden;
     height: 100%;
 }
 
@@ -22,13 +22,16 @@
 }
 
 .column-left {
+    max-height: 100vh;
     align-items: center;
     justify-content: center;
     flex: 50%;
     padding-left: 6vw;
+    overflow-y: auto;
     /* padding-right: 0px; */
 }
 .column-right {
+    overflow-y: hidden;
     display: inline-block;
     position: relative;
     flex: 50%;
