@@ -7,6 +7,55 @@
 
 - End point details:
 
+**Event Object** - 7 fields: Host ID, Host Name, Event ID, Event Title, Description, Location, Time, Images, List of attendees  
+```
+//event object structure  
+let event = {  
+    host_id: "",  
+    host_name: "",
+    event_id: "",  
+    event_name: "",  
+    event_desc: "",  
+    event_location: "",  
+    event_time: "",  
+    images: "",  
+    attendees: [],  
+    is_event: true  
+}  
+```
+**User Object** - 6 fields: User ID, Name, UMass Email, Password, List of events created  
+```
+//user object structure
+let user = {
+    user_id: "",
+    user_name: "",
+    user_email: "",
+    password: "",
+    events: [], //array of event ids
+    is_event: false
+};
+```
+**Created** - Relationship between an event and a user, belongs to User. Contains event ID and User ID.  
+**RSVPed** - Relationship between an event and a user, belongs to Event. Contains event ID and User ID.  
+
+
+API Calls:  
+/login: allows user to login  
+/logout: log out user  
+/client/newUser: registering a new user  
+/client/getUserbyID: gets user profile(including all events created and attending)  
+/client/createEvent: creates a new event  
+/client/deleteEvent: deletes an event  
+/client/editEvent: updates an event  
+/client/getEventbyId: return all information about event  
+/client/getAttendees: show all attendees to an event  
+/client/attendEvent: marks this user as attending this event  
+/client/dumpEvents: returns all events for a user  
+ 
+
+
+
+
 ![endpoint page 1](images/APIdetails-4.png)
 ![endpoint page 2](images/API%20details-7.jpg)
 
@@ -20,7 +69,7 @@ This is the event creator page, where users can create new events, update events
 - My Events page:
 
 ![my events page](images/md2my_events.png)
-After we have implemented authorization, this page will be able to show all the events created by the particular user. This page showcases the Read operation.
+After we have implemented authorization, this page will be able to show all the events created by the particular user. Currently it just shows all the events stored in the JSON file. This page showcases the Read operation.
 
 - Sign Up Page:
 
@@ -40,13 +89,13 @@ https://cs326-final-umap.herokuapp.com/
 
 # Breakdown of Division of Labor
 - Rishab:
-    Front end implementation. Debugging with postman. API documentation. Worked on milestone2 document.
+Front end implementation. Debugging with postman. API documentation. Worked on milestone2 document.
 
 - Paul:
-    Front end implementation. Some CRUD functions in server.js. API documentation. Worked on milestone2 document. Deployed web app on Heroku
+Front end implementation. Some CRUD functions in server.js. API documentation. Worked on milestone2 document. Deployed web app on Heroku
 
 - Alex:
-    ExpressJS CRUD functions in server.js. API documentation. Worked on milestone2 document. Some front end implementation.
+ExpressJS CRUD functions in server.js. API documentation. Worked on milestone2 document. Some front end implementation.
 
 - Suyash:
-    Database.js file. CRUD functions in server.js. API documentation. Worked on milestone2 document. Debugging with postman.
+Database.js file. CRUD functions in server.js. API documentation. Worked on milestone2 document. Debugging with postman.
