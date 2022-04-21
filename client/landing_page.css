@@ -36,7 +36,8 @@ body, html {
 }
 
 .padding {
-    padding-top: 220px;
+    position: relative;
+    padding-top: 25vh;
 }
 
 .custom {
