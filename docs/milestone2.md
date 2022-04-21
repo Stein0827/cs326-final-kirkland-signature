@@ -2,8 +2,7 @@
 - API manual:
 
 ![manual page 1](images/APIdetails-1.png)
-![manual page 2](images/APIdetails-2.png)
-![manual page 3](images/APIdetails-3.png)
+![manual page 3](images/APIdetails-2.png)
 
 - End point details:
 
@@ -23,6 +22,8 @@ let event = {
     is_event: true  
 }  
 ```
+Event ID is a random number between 0 and 10,000 assigned to each event. This and the is_event=true boolean tag are what is used to uniquely identify an event.
+
 **User Object** - 6 fields: User ID, Name, UMass Email, Password, List of events created  
 ```
 //user object structure
@@ -35,6 +36,8 @@ let user = {
     is_event: false
 };
 ```
+User ID is a random number between 0 and 10,000 assigned to each User. This and the is_event=false boolean tag are what is used to uniquely identify a user.
+
 **Created** - Relationship between an event and a user, belongs to User. Contains event ID and User ID.  
 **RSVPed** - Relationship between an event and a user, belongs to Event. Contains event ID and User ID.  
 
@@ -42,22 +45,16 @@ let user = {
 API Calls:  
 /login: allows user to login  
 /logout: log out user  
-/client/newUser: registering a new user  
-/client/getUserbyID: gets user profile(including all events created and attending)  
-/client/createEvent: creates a new event  
-/client/deleteEvent: deletes an event  
-/client/editEvent: updates an event  
-/client/getEventbyId: return all information about event  
-/client/getAttendees: show all attendees to an event  
-/client/attendEvent: marks this user as attending this event  
-/client/dumpEvents: returns all events for a user  
- 
-
-
-
-
-![endpoint page 1](images/APIdetails-4.png)
-![endpoint page 2](images/API%20details-7.jpg)
+/newUser: registering a new user  
+/getUserbyID: gets user profile(including all events created and attending)  
+/createEvent: creates a new event  
+/editEvent: updates an event  
+/deleteUser: deletes a user  
+/deleteEvent: deletes an event  
+/getEventbyId: return all information about event  
+/getAttendees: show all attendees to an event  
+/attendEvent: marks this user as attending this event  
+/dumpEvents: returns all events for a user  
 
 # Part 2: Front-end Implementation
 
