@@ -22,6 +22,7 @@ let event = {
     is_event: true  
 }  
 ```
+Event ID is a random number between 0 and 10,000 assigned to each event. This and the is_event=true boolean tag are what is used to uniquely identify an event.
 
 **User Object** - 6 fields: User ID, Name, UMass Email, Password, List of events created  
 ```
@@ -35,6 +36,8 @@ let user = {
     is_event: false
 };
 ```
+User ID is a random number between 0 and 10,000 assigned to each User. This and the is_event=false boolean tag are what is used to uniquely identify a user.
+
 **Created** - Relationship between an event and a user, belongs to User. Contains event ID and User ID.  
 **RSVPed** - Relationship between an event and a user, belongs to Event. Contains event ID and User ID.  
 
