@@ -1,40 +1,49 @@
 # Part 0: Project API Planning
 - API manual:
-![manual page 1](images/API%20details-1.jpg)
-![manual page 2](images/API%20details-2.jpg)
-![manual page 3](images/API%20details-3.jpg)
-![manual page 4](images/API%20details-4.jpg)
-![manual page 5](images/API%20details-5.jpg)
+
+![manual page 1](images/APIdetails-1.png)
+![manual page 2](images/APIdetails-2.png)
+![manual page 3](images/APIdetails-3.png)
 
 - End point details:
-![endpoint page 1](images/API%20details-6.jpg)
+
+![endpoint page 1](images/APIdetails-4.png)
 ![endpoint page 2](images/API%20details-7.jpg)
 
 # Part 2: Front-end Implementation
-At least one set of four screenshots of your client interface with descriptions
+
+- Event Creator Page:
 
 ![event creator page](images/md2createEvent.png)
-Event Creator Page: Here the user can create, update, and delete an event object
+This is the event creator page, where users can create new events, update events previously created by them or delete their events. This page showcases Create, Update and Delete operations.
+
+- My Events page:
 
 ![my events page](images/md2my_events.png)
-My Events page: Shows a list of user created events (Reads the events that a user created)
+After we have implemented authorization, this page will be able to show all the events created by the particular user. This page showcases the Read operation.
+
+- Sign Up Page:
 
 ![sign up page](images/md2signup.png)
-Sign Up Page: Creates a user object
+This is the sign up page, where a new user can sign up and make their account (a new user can be created). This page showcases the Create operation.
 
-![map page]()
-Map Page: A list of events that user can RSVP to (updates global list of events)
+- Map Page:
+
+![map page](images/map.png)
+The main map page has a list of all events stored in the server, through which a user can find and RSVP for any event. This page showcases the Read operation.
 
 
 # Part 3: Deployment
-The URL of your Heroku Application
+Our website has been deployed to Heroku and can be accessed through the following link:
+https://cs326-final-umap.herokuapp.com/
+
 
 # Breakdown of Division of Labor
 - Rishab:
     Front end implementation. Debugging with postman. API documentation. Worked on milestone2 document.
 
 - Paul:
-    Front end implementation. Fake data. Some CRUD functions in server.js. API documentation. Worked on milestone2 document.
+    Front end implementation. Some CRUD functions in server.js. API documentation. Worked on milestone2 document. Deployed web app on Heroku
 
 - Alex:
     ExpressJS CRUD functions in server.js. API documentation. Worked on milestone2 document. Some front end implementation.
