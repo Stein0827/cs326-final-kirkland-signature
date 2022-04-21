@@ -249,10 +249,10 @@ app.get('/dumpEvents', async (request, response) => {
   dumpEvents(response);
 });
 
-app.get('/dumpUsers', async (request, response) => {
-  const options = request.body;
-  dumpUsers(response);
-});
+// app.get('/dumpUsers', async (request, response) => {
+//   const options = request.body;
+//   dumpUsers(response);
+// });
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
