@@ -35,6 +35,10 @@
   width: 100%;
 }
 
+.btn-primary{
+  background-color:#881C1C
+}
+
 .button-style {
   background-color: #881C1C;
   width: 13em;
