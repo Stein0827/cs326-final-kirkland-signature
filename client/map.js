@@ -83,6 +83,7 @@ function setEvents(events) {
         <tr>
             <td>${events[i].event_id}</td>
             <td>${events[i].event_name}</td>
+            <td>${events[i].event_time}</td>
             <td><button class="btn btn-sm btn-secondary btn-block" type="submit">RSVP</button></a></td>
         </tr>`;
     }
