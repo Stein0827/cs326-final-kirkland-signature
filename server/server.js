@@ -1,6 +1,22 @@
+import 'dotenv/config';
 import express from 'express';
+import expressSession from 'express-session';
 import logger from 'morgan';
 import {insertData, readData, updateData, deleteData, dumpData} from './database.js';
+import users from './users.js';
+import auth from './auth.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(dirname(__filename));
+const port = process.env.PORT || 80;
+const sessionConfig = {
+  // set this encryption key in Heroku config (never in GitHub)!
+  secret: process.env.SECRET || 'SECRET',
+  resave: false,
+  saveUninitialized: false,
+};
 
 //user object structure
 // let user = {
@@ -178,15 +194,53 @@ async function dumpEvents(response) {
 
 // NEW
 const app = express();
-const port = process.env.PORT || 80;
+app.use(expressSession(sessionConfig));
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use('/', express.static('client'));
+app.use(express.urlencoded({ extended: true }));
+app.use('/', express.static('../client'));
+auth.configure(app);
+
+function checkLoggedIn(req) {
+  return req.isAuthenticated();
+}
+
+function enforceLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+}
 
 //login
+app.get('/login', (req, res) =>
+  res.sendFile('client/log_in.html', { root: __dirname })
+);
+
+app.get('/map', (req, res) =>
+  res.sendFile('client/map.html', { root: __dirname })
+);
+
+app.get('/event-editor/:eventID', (req, res) =>
+  res.sendFile('client/event_creator.html', { root: __dirname })
+);
+
+app.get('/my-events/:userID', (req, res) =>
+  res.sendFile('client/my_events.html', { root: __dirname })
+);
+
+app.post('/login', auth.authenticate('local', {
+    successRedirect: '/map',
+    failureRedirect: '/login',
+  })
+);
 
 //logout
+app.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/login');
+});
 
 //create user
 app.post('/newUser', async (request, response) => {
@@ -204,6 +258,7 @@ app.get('/getUserbyId', async (request, response) => {
 //add event to user's profile
 app.post('/createEvent', async (request, response) => {
   const options = request.body;
+  request.redirect('/map');
   createEvent(response, options.host_id, 
           options.name, options.desc, options.location, options.time);
 });

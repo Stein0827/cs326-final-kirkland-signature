@@ -25,7 +25,9 @@
   
     <div class="wrapper menu">
       <h1>Welcome to UMaps</h1>
-      <a href="log_in.html"><button type="button" class="btn btn-primary button-position button-style">Sign-up/Login</button></a>
+      <!-- <a href="log_in.html"><button type="button" class="btn btn-primary button-position button-style">Sign-up/Login</button></a> -->
+      <button type="button" class="mx-2 my-1 btn btn-primary" onclick="location.href='log_in.html'" id="login-logout">Sign-up/Login</button>
+      <!-- <button type="button" class="mx-2 my-1 btn btn-primary" onclick="location.href='log_in.html'" id="login-logout" disabled="false">Logout</button> -->
     </div>
     
     <div class="wrapper">
@@ -33,8 +35,11 @@
         <div id="eventTable">
             <div class="scrollingTable" id="map_event_table"></div>
             <br>
-            <a href="my_events.html"><button type="button" class="btn btn-primary button-style font">My Events</button></a>
-            <a href="event_creator.html"><button type="button" class="btn btn-primary button-style font">Create an Event</button></a>    
+            <!-- change to visiblity:visible when user is authenticated -->
+            <div id="event-buttons" style="visibility:hidden">
+              <a href="my_events.html"><button type="button" class="mt-2 btn btn-primary button-style font">My Events</button></a>
+              <a href="event_creator.html"><button type="button" class="mt-2 btn btn-primary button-style font">Create an Event</button></a>    
+            </div>
         </div>
       </div>
     </div>
