@@ -7,6 +7,7 @@ import users from './users.js';
 import auth from './auth.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { setDefaultResultOrder } from 'dns';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
@@ -25,7 +26,7 @@ const sessionConfig = {
 //   user_email: "",
 //   password: "",
 //   events: {},
-//   is_event: False
+//   is_event: False //deprecated
 // };
 
 //event object structure
@@ -39,7 +40,7 @@ const sessionConfig = {
 //   event_time: "",
 //   images: "",
 //   attendees: [],
-//   is_event: True
+//   is_event: True //deprecated
 // }
 
 
@@ -52,24 +53,25 @@ function getHostName(id){
 }
 
 //creates a new user
-async function createUser(response, user) {
-  if (user.user_name === undefined || user.user_email === undefined || user.password === undefined) {
-    // 400 - Bad Request
-    response.status(400).json({ error: 'Missing fields' });
-  } else {
-    //initialize new user
-    const new_user = {
-      user_id : generateId(),
-      user_name : user.user_name,
-      user_email : user.user_email,
-      password : user.password,
-      events : [],
-      is_event : false
-    };
-    await insertData(new_user);
-    response.status(200).json(new_user);
-  }
-}
+// async function createUser(response, user) {
+//   if (user.user_name === undefined || user.user_email === undefined || user.password === undefined) {
+//     // 400 - Bad Request
+//     response.status(400).json({ error: 'Missing fields' });
+//   } else {
+//     //initialize new user
+//     const new_user = {
+//       user_id : generateId(),
+//       user_name : user.user_name,
+//       user_email : user.user_email,
+//       password : user.password,
+//       events : [],
+//       // is_event : false
+//     };
+//     await insertData(new_user);
+//     response.status(200).json(new_user);
+//   }
+// }
+
 
 //returns the associated user object
 async function getUser(response, ID) {
@@ -213,6 +215,9 @@ function enforceLoggedIn(req, res, next) {
   }
 }
 
+async initRoutes(){
+  const self = this;
+
 //login
 app.get('/login', (req, res) =>
   res.sendFile('client/log_in.html', { root: __dirname })
@@ -244,16 +249,28 @@ app.get('/logout', (req, res) => {
 
 //create user
 app.post('/newUser', async (request, response) => {
-  const options = request.body;
-  //name, email, password
-  createUser(response, options);
+  try {
+    const {name, email, password} = request.body;
+    const user = await self.db.createUser(name, email, password);
+    response.send(JSON.stringify(user));
+  } catch (err){
+    response.status(404).send(err);
+  }
 });
+
 
 //return user
 app.get('/getUserbyId', async (request, response) => {
-  const options = request.query;
-  getUser(response, options.user_id);
+  try {
+    const {id} = request.body;
+    const user = await self.db.readUser(id);
+    response.send(JSON.stringify(user));
+  } catch(err){
+    response.status(404).send(err);
+  }
 });
+
+
 
 //add event to user's profile
 app.post('/createEvent', async (request, response) => {
@@ -312,3 +329,21 @@ app.get('/dumpEvents', async (request, response) => {
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
+
+async initDb() {
+  this.db = new MapDatabase(this.dburl);
+  await this.db.connect();
+}
+
+async start() {
+  await this.initRoutes();
+  await this.initDb();
+  const port = process.env.PORT || 3000;
+  this.app.listen(port, () => {
+    console.log(`PeopleServer listening on port ${port}!`);
+  });
+}
+}
+
+const server = new PeopleServer(process.env.DATABASE_URL);
+server.start();
