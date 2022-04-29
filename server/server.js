@@ -227,13 +227,17 @@ app.get('/map', (req, res) =>
   res.sendFile('client/map.html', { root: __dirname })
 );
 
-app.get('/event-editor/:eventID', (req, res) =>
-  res.sendFile('client/event_creator.html', { root: __dirname })
+app.get('/register', (req, res) =>
+  res.sendFile('client/sign_up.html', { root: __dirname })
 );
 
-app.get('/my-events/:userID', (req, res) =>
+app.get('/event-editor', (req, res) =>
+  res.sendFile('client/event_creator.html', { root: __dirname })
+); // :eventID
+
+app.get('/my-events', (req, res) =>
   res.sendFile('client/my_events.html', { root: __dirname })
-);
+); // :userID
 
 app.post('/login', auth.authenticate('local', {
     successRedirect: '/map',

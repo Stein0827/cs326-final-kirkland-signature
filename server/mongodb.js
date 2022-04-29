@@ -49,8 +49,12 @@ export class MapDatabase {
   }
 
     // CREATE a user in the database.
-  async createEvent(id, name, age) {
-    const res = await this.events.insertOne({ _id: id, name, age });
+  async createEvent(event) {
+    let user = await this.readUser(event.host_id);
+    const res = await this.events.insertOne({host_id: event.host_id,  host_name : user.user_name, event_name: event.event_name, event_desc : event.event_desc,
+      event_location : event.event_location, event_time : event.event_time, attendees : event.attendees});
+    user.events.push(res);
+    await this.updateUser(user);
     // Note: the result received back from MongoDB does not contain the
     // entire document that was inserted into the database. Instead, it
     // only contains the _id of the document (and an acknowledged field).
@@ -80,10 +84,11 @@ export class MapDatabase {
 
 
   // UPDATE an event in the database.
-  async updateEvent(id, name, age) {
+  async updateEvent(event) {
     const res = await this.events.updateOne(
       { _id: id },
-      { $set: { name, age } }
+      { $set: {_id: id, host_id: event.host_id,  host_name : user.user_name, event_name: event.event_name, event_desc : event.event_desc,
+        event_location : event.event_location, event_time : event.event_time, attendees : event.attendees} }
     );
     return res;
   }
