@@ -26,7 +26,7 @@ map.addControl(
 
 async function createEvent(name, time, desc){
     try{
-        const response = await fetch(`createEvent`, {
+        const response = await fetch('createEvent', {
             method: 'POST',
             body: JSON.stringify({event_name: name, event_time: time, event_desc: desc, event_location: coordinates, attendees: [], is_event: true}),
         });
@@ -76,13 +76,13 @@ if (ename.innerHTML === "" && etime.innerHTML === "" && edetails.innerHTML === "
 }
 
 save.addEventListener("click", async (e)=>{
-    const json = await createEvent(ename.value, etime.value, edetails.value);
+    await createEvent(ename.value, etime.value, edetails.value);
     localStorage.removeItem("event");
 });
 
 
 create.addEventListener("click", async (e)=>{
-    const json = await updateEvent(ename.value, etime.value, edetails.value);
+    await updateEvent(ename.value, etime.value, edetails.value);
     localStorage.removeItem("event");
 });
 

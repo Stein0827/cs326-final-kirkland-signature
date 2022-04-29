@@ -4,7 +4,7 @@ const fname = document.getElementById("first-name"),
     password = document.getElementById("form-password"),
     signUp = document.getElementById("signUp");
 
-async function login(name, email, password){
+async function signup(name, email, password){
     try{
         const response = await fetch(`/newUser`, {
             method: 'POST',
@@ -18,6 +18,5 @@ async function login(name, email, password){
 
 signUp.addEventListener("click", async (e)=>{
     const name = fname.value + " " + lname.value;
-    const json = await signup(name, email.value, password.value);
+    await signup(name, email.value, password.value);
 });
-
