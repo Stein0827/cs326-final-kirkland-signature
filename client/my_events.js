@@ -42,7 +42,7 @@ async function displayDiv() {
                 cText.innerHTML = "Edit"
                 cText.addEventListener("click", function(e) {
                     localStorage.setItem("event", JSON.stringify(event));
-                    window.location.href = "event_creator.html";   
+                    window.location.href = "/event-editor";   
                 });
                 cText.classList.add("btn", "btn-lg", "btn-primary", "btn-block");
                 cell.appendChild(cText);
