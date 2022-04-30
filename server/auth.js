@@ -1,7 +1,11 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
+import {MongoClient} = require('mongodb');
 
-const MongoClient =``
+
+//refs: https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb-how-to-get-connected-to-your-database
+
+const uri = ""; //mongodb uri goes here
 
 const { Strategy } = passportLocal;
 
