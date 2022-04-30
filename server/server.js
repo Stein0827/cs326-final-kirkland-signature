@@ -223,7 +223,7 @@ function enforceLoggedIn(req, res, next) {
   }
 }
 
-async initRoutes(){
+async function initRoutes(){
   const self = this;
 
   //login
@@ -341,12 +341,12 @@ async initRoutes(){
     console.log(`Server started on port ${port}`);
   });
 
-  async initDb() {
+  async function initDb() {
     this.db = new MapDatabase(this.dburl);
     await this.db.connect();
   }
 
-  async start() {
+  async function start() {
     await this.initRoutes();
     await this.initDb();
     const port = process.env.PORT || 3000;
