@@ -7,6 +7,8 @@ import users from './users.js';
 import auth from './auth.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { setDefaultResultOrder } from 'dns';
+import { MapDatabase } from './mongodb.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
@@ -25,7 +27,7 @@ const sessionConfig = {
 //   user_email: "",
 //   password: "",
 //   events: {},
-//   is_event: False
+//   is_event: False //deprecated
 // };
 
 //event object structure
@@ -39,9 +41,16 @@ const sessionConfig = {
 //   event_time: "",
 //   images: "",
 //   attendees: [],
-//   is_event: True
+//   is_event: True //deprecated
 // }
 
+
+class MapServer {
+  constructor(dburl){
+    this.dburl = dburl;
+    this.app = express();
+  }
+}
 
 function generateId(){
   return Math.floor(Math.random() * 10000);
@@ -64,12 +73,13 @@ async function createUser(response, user) {
       user_email : user.user_email,
       password : user.password,
       events : [],
-      is_event : false
+      // is_event : false
     };
     await insertData(new_user);
     response.status(200).json(new_user);
   }
 }
+
 
 //returns the associated user object
 async function getUser(response, ID) {
@@ -213,106 +223,138 @@ function enforceLoggedIn(req, res, next) {
   }
 }
 
-//login
-app.get('/login', (req, res) =>
-  res.sendFile('client/log_in.html', { root: __dirname })
-);
+async initRoutes(){
+  const self = this;
 
-app.get('/map', (req, res) =>
-  res.sendFile('client/map.html', { root: __dirname })
-);
+  //login
+  app.get('/login', (req, res) =>
+    res.sendFile('client/log_in.html', { root: __dirname })
+  );
 
-app.get('/register', (req, res) =>
-  res.sendFile('client/sign_up.html', { root: __dirname })
-);
+  app.get('/map', (req, res) =>
+    res.sendFile('client/map.html', { root: __dirname })
+  );
 
-app.get('/event-editor', (req, res) =>
-  res.sendFile('client/event_creator.html', { root: __dirname })
-); // :eventID
+  app.get('/register', (req, res) =>
+    res.sendFile('client/sign_up.html', { root: __dirname })
+  );
 
-app.get('/my-events', (req, res) =>
-  res.sendFile('client/my_events.html', { root: __dirname })
-); // :userID
+  app.get('/event-editor', (req, res) =>
+    res.sendFile('client/event_creator.html', { root: __dirname })
+  ); // :eventID
 
-app.post('/login', auth.authenticate('local', {
-    successRedirect: '/map',
-    failureRedirect: '/login',
-  })
-);
+  app.get('/my-events', (req, res) =>
+    res.sendFile('client/my_events.html', { root: __dirname })
+  ); // :userID
 
-//logout
-app.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/login');
-});
+  app.post('/login', auth.authenticate('local', {
+      successRedirect: '/map',
+      failureRedirect: '/login',
+    })
+  );
 
-//create user
-app.post('/newUser', async (request, response) => {
-  const options = request.body;
-  //name, email, password
-  createUser(response, options);
-});
+  //logout
+  app.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/login');
+  });
 
-//return user
-app.get('/getUserbyId', async (request, response) => {
-  const options = request.query;
-  getUser(response, options.user_id);
-});
+  //create user
+  app.post('/newUser', async (request, response) => {
+    try {
+      const {name, email, password} = request.body;
+      const user = await self.db.createUser(name, email, password);
+      response.send(JSON.stringify(user));
+    } catch (err){
+      response.status(404).send(err);
+    }
+  });
 
-//add event to user's profile
-app.post('/createEvent', async (request, response) => {
-  const options = request.body;
-  request.redirect('/map');
-  createEvent(response, options.host_id, 
-          options.name, options.desc, options.location, options.time);
-});
 
-//change an event
-app.put('/editEvent', async (request, response) => {
-  const options = request.body;
-  updateEvent(response, options.event_id, 
-          options.name, options.desc, options.location, options.time, options.attendees);
-});
+  //return user
+  app.get('/getUserbyId', async (request, response) => {
+    try {
+      const {id} = request.body;
+      const user = await self.db.readUser(id);
+      response.send(JSON.stringify(user));
+    } catch(err){
+      response.status(404).send(err);
+    }
+  });
 
-app.delete('/deleteUser', async (request, response) => {
-  const options = request.body;
-  deleteUser(response, options.user_id);
-});
 
-//delete an event
-app.delete('/deleteEvent', async (request, response) => {
-  const options = request.body;
-  deleteEvent(response, options.event_id);
-});
+  //add event to user's profile
+  app.post('/createEvent', async (request, response) => {
+    const options = request.body;
+    request.redirect('/map');
+    createEvent(response, options.host_id, 
+            options.name, options.desc, options.location, options.time);
+  });
 
-//read an event
-app.get('/getEventbyId', async (request, response) => {
-  const options = request.query;
-  getEvent(response, options.event_id);
-});
+  //change an event
+  app.put('/editEvent', async (request, response) => {
+    const options = request.body;
+    updateEvent(response, options.event_id, 
+            options.name, options.desc, options.location, options.time, options.attendees);
+  });
 
-//get all attendees
-app.get('/getAttendees', async (request, response) => {
-  const options = request.query;
-  getEventAttendees(response, options.event_id);
-});
+  app.delete('/deleteUser', async (request, response) => {
+    const options = request.body;
+    deleteUser(response, options.user_id);
+  });
 
-//RSVP to an event
-app.put('/attendEvent', async (request, response) => {
-  const options = request.body;
-  attendEvent(response, options.user_id, options.event_id);
-});
+  //delete an event
+  app.delete('/deleteEvent', async (request, response) => {
+    const options = request.body;
+    deleteEvent(response, options.event_id);
+  });
 
-app.get('/dumpEvents', async (request, response) => {
-  const options = request.body;
-  dumpEvents(response);
-});
+  //read an event
+  app.get('/getEventbyId', async (request, response) => {
+    const options = request.query;
+    getEvent(response, options.event_id);
+  });
 
-// app.get('/dumpUsers', async (request, response) => {
-//   const options = request.body;
-//   dumpUsers(response);
-// });
+  //get all attendees
+  app.get('/getAttendees', async (request, response) => {
+    const options = request.query;
+    getEventAttendees(response, options.event_id);
+  });
 
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
-});
+  //RSVP to an event
+  app.put('/attendEvent', async (request, response) => {
+    const options = request.body;
+    attendEvent(response, options.user_id, options.event_id);
+  });
+
+  app.get('/dumpEvents', async (request, response) => {
+    const options = request.body;
+    dumpEvents(response);
+  });
+
+  // app.get('/dumpUsers', async (request, response) => {
+  //   const options = request.body;
+  //   dumpUsers(response);
+  // });
+
+  app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
+  });
+
+  async initDb() {
+    this.db = new MapDatabase(this.dburl);
+    await this.db.connect();
+  }
+
+  async start() {
+    await this.initRoutes();
+    await this.initDb();
+    const port = process.env.PORT || 3000;
+    this.app.listen(port, () => {
+      console.log(`MapServer listening on port ${port}!`);
+    });
+  }
+}
+
+const server = new MapServer(process.env.DATABASE_URL);
+server.start();
