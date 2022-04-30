@@ -61,24 +61,24 @@ function getHostName(id){
 }
 
 //creates a new user
-// async function createUser(response, user) {
-//   if (user.user_name === undefined || user.user_email === undefined || user.password === undefined) {
-//     // 400 - Bad Request
-//     response.status(400).json({ error: 'Missing fields' });
-//   } else {
-//     //initialize new user
-//     const new_user = {
-//       user_id : generateId(),
-//       user_name : user.user_name,
-//       user_email : user.user_email,
-//       password : user.password,
-//       events : [],
-//       // is_event : false
-//     };
-//     await insertData(new_user);
-//     response.status(200).json(new_user);
-//   }
-// }
+async function createUser(response, user) {
+  if (user.user_name === undefined || user.user_email === undefined || user.password === undefined) {
+    // 400 - Bad Request
+    response.status(400).json({ error: 'Missing fields' });
+  } else {
+    //initialize new user
+    const new_user = {
+      user_id : generateId(),
+      user_name : user.user_name,
+      user_email : user.user_email,
+      password : user.password,
+      events : [],
+      // is_event : false
+    };
+    await insertData(new_user);
+    response.status(200).json(new_user);
+  }
+}
 
 
 //returns the associated user object

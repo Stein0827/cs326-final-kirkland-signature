@@ -35,13 +35,13 @@ export class MapDatabase {
 
   // CREATE a user in the database.
   async createUser(name, email, password) {
-    const new_user = {
-      user_name : name,
-      user_email : email,
-      password : password,
-      events : []
-    };
-    const res = await this.users.insertOne(new_user);
+    // const new_user = {
+    //   user_name : name,
+    //   user_email : email,
+    //   password : password,
+    //   events : []
+    // };
+    const res = await this.users.insertOne({user_name: name, user_email: email, password: password, events: []});
     // Note: the result received back from MongoDB does not contain the
     // entire document that was inserted into the database. Instead, it
     // only contains the _id of the document (and an acknowledged field).
@@ -53,6 +53,7 @@ export class MapDatabase {
     let user = await this.readUser(event.host_id);
     const res = await this.events.insertOne({host_id: event.host_id,  host_name : user.user_name, event_name: event.event_name, event_desc : event.event_desc,
       event_location : event.event_location, event_time : event.event_time, attendees : event.attendees});
+    
     user.events.push(res);
     await this.updateUser(user);
     // Note: the result received back from MongoDB does not contain the
@@ -77,11 +78,10 @@ export class MapDatabase {
   async updateUser(id, name, age) {
     const res = await this.users.updateOne(
       { _id: id },
-      { $set: { name, age } }
+      { $set: {user_name:name, user_email:email, password:password} }
     );
     return res;
   }
-
 
   // UPDATE an event in the database.
   async updateEvent(event) {
