@@ -110,6 +110,8 @@ export class MapDatabase {
     const res = await this.events.deleteOne({ _id: id });
     return res;
   }
+
+
     
 
 //   // READ all people from the database.

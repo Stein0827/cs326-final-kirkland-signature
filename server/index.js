@@ -1,7 +1,8 @@
-import express, { response } from 'express';
+import express, { res } from 'express';
 import {MapDatabase} from './mongodb.js'
 
 //new file for mongodb routing 
+
 class MapServer {
   constructor(dburl) {
     this.dburl = dburl;
@@ -78,6 +79,7 @@ class MapServer {
       }
     });
 
+    //return an event
     this.app.get('/getEventbyId', async (req, res) => {
       try {
         const {id} = req.body;
@@ -110,6 +112,7 @@ class MapServer {
       }
     });
 
+    //delete a user
     this.app.delete('/deleteUser', async (req, res) => {
       try{
         const {id} = req.body;
@@ -120,6 +123,7 @@ class MapServer {
       }
     });
 
+    //delete an event
     this.app.delete('/deleteEvent', async (req, res) => {
       try{
         const {id} = req.body;
@@ -129,6 +133,32 @@ class MapServer {
         res.status(404).send(err);
       }
     });
+
+    //getAttendees
+    this.app.get('/getAttendees', async (req, res) => {
+      try {
+        const {id} = req.body;
+        const event = await self.db.readEvent(id);
+        res.send(JSON.stringify(event.attendees));
+      } catch(err){
+        res.status(404).send(err);
+      }
+    });
+    
+    //attendEvent
+    this.app.put('/editEvent', async (req, res) => {
+      try{
+        let event = req.body;
+        //implement function to get host id
+        event.attendees.push(host_id)
+        const data = await self.db.updateEvent(event);
+        res.send(JSON.stringify(data));
+      } catch(err){
+        res.status(404).send(err);
+      }
+    });
+
+    //dumpEvents
   }
 
   async initDb() {
