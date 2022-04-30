@@ -111,9 +111,7 @@ export class MapDatabase {
     return res;
   }
 
-
     
-
 //   // READ all people from the database.
 //   async readAllPeople() {
 //     const res = await this.collection.find({}).toArray();
