@@ -1,5 +1,5 @@
 import express, { res } from 'express';
-import {MapDatabase} from './mongodb.js'
+import {MapDatabase} from './mongodb.js';
 
 //new file for mongodb routing 
 

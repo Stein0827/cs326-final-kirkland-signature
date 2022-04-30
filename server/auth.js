@@ -1,7 +1,7 @@
-import passport from 'passport'
-import passportLocal from 'passport-local'
-//using .js file
-import users from './users.js'
+import passport from 'passport';
+import passportLocal from 'passport-local';
+
+const MongoClient =``
 
 const { Strategy } = passportLocal;
 
@@ -10,6 +10,7 @@ const { Strategy } = passportLocal;
 // password credentials from the client. The LocalStrategy object is used to
 // authenticate a user using a username and password.
 const strategy = new Strategy(async (username, password, done) => {
+  //call database
   if (!users.findUser(username)) {
     // no such user
     return done(null, false, { message: 'Wrong username' });
