@@ -1,6 +1,6 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import {MongoClient} = require('mongodb');
+import {MongoClient} from require('mongodb');
 
 
 //refs: https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb-how-to-get-connected-to-your-database
