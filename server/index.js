@@ -6,12 +6,12 @@ import passport from 'passport';
 const mongoose = require('mongoose');
 const User = require('./users');
 const Event = require('./events');
-const routes = require('./routes');
+const routes = require('./routes').default;
 
 
 const app = express();
 
-
+//connect to mongodb db
 mongoose.connect(
   "mongo db uri goes here",
   {

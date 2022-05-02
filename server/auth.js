@@ -2,10 +2,6 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 import { MapDatabase } from './mongodb.js';
 
-//refs: https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb-how-to-get-connected-to-your-database
-// https://www.mongodb.com/languages/javascript/mongodb-and-npm-tutorial
-// https://gist.github.com/FBosler/513a0f5f845fbf6e937ab768ed88e183#file-users-js
-
 
 const { Strategy } = passportLocal;
 
