@@ -14,18 +14,20 @@ export class MapDatabase {
     });
 
     // Get the database.
-    this.db = this.client.db('people');
+    this.users = this.client.db('users');
+    this.events = this.client.db('events');
 
     // Init the database.
     await this.init();
   }
 
   async init() {
-    this.users = this.db.collection('users');
-    this.events = this.db.collection('events');
-
-    //const count = await this.collection.countDocuments();
-
+    try {
+      this.users = this.db.createCollection('users');
+      this.events = this.db.createCollection('events');
+    } catch(err){
+      console.log(err);
+    }
   }
 
   // Close the pool.

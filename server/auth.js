@@ -1,13 +1,22 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import {MongoClient} from require('mongodb');
-
+import { MapDatabase } from './mongodb.js';
 
 //refs: https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb-how-to-get-connected-to-your-database
-
-const uri = ""; //mongodb uri goes here
+// https://www.mongodb.com/languages/javascript/mongodb-and-npm-tutorial
 
 const { Strategy } = passportLocal;
+
+// Convert user object to a unique identifier.
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+// Convert a unique identifier to a user object.
+passport.deserializeUser((uid, done) => {
+  done(null, uid);
+});
+
 
 // Passport Configuration
 // Create a new LocalStrategy object to handle authentication using username and
@@ -36,15 +45,6 @@ const strategy = new Strategy(async (username, password, done) => {
 // password. There are other strategies available, but this is the simplest.
 passport.use(strategy);
 
-// Convert user object to a unique identifier.
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-// Convert a unique identifier to a user object.
-passport.deserializeUser((uid, done) => {
-  done(null, uid);
-});
 
 export default {
   configure: (app) => {
@@ -56,3 +56,5 @@ export default {
     return passport.authenticate(domain, where);
   },
 };
+
+

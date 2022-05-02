@@ -1,17 +1,43 @@
-import express, { res } from 'express';
+import express from 'express';
 import {MapDatabase} from './mongodb.js';
+import auth from './auth.js';
+import passport from 'passport';
 
 //new file for mongodb routing 
+
+// const sessionConfig = {
+//   secret: process.env.SECRET || 'SECRET',
+//   resave: false,
+//   saveUninitialized: false,
+// };
+
+
 
 class MapServer {
   constructor(dburl) {
     this.dburl = dburl;
     this.app = express();
+    this.app.use('/', express.static('client'));
   }
 
   async initRoutes() {
     // Note: when using arrow functions, the "this" binding is lost.
     const self = this;
+
+    //Express session for passport
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({extended: false}));
+    this.app.use(session({
+        secret: process.env.SECRET || 'SECRET',
+        resave: false,
+        saveUninitialized: false,
+      })
+    );
+
+    this.app.use(passport.initialize());
+    this.app.use(passport.session());
+    this.app.use("/auth.js", auth);
+
 
     //login
     this.app.get('/login', (req, res) =>
@@ -158,7 +184,9 @@ class MapServer {
       }
     });
 
-    //dumpEvents
+    this.app.get('*', (req, res) => {
+        res.send('Error');
+    });
   }
 
   async initDb() {
@@ -171,10 +199,11 @@ class MapServer {
     await this.initDb();
     const port = process.env.PORT || 3000;
     this.app.listen(port, () => {
-      console.log(`PeopleServer listening on port ${port}!`);
+      console.log(`MapServer listening on port ${port}!`);
     });
   }
 }
 
 const server = new MapServer(process.env.DATABASE_URL);
 server.start();
+
