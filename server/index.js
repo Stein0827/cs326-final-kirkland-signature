@@ -2,6 +2,9 @@ import express from 'express';
 import {MapDatabase} from './mongodb.js';
 import auth from './auth.js';
 import passport from 'passport';
+//mongoose models
+import events from './events.js';
+import users from './users.js';
 
 //new file for mongodb routing 
 

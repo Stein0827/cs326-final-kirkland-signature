@@ -1,40 +1,10 @@
-//for testing purposes
+//mongoose schema model
+const mongoose = require('mongoose');
 
-class Users {
-    constructor() {
-      // default user
-      this.users = { emery: 'compsci326' };
-    }
-  
-    // Returns true iff the user exists.
-    findUser(username) {
-      if (!this.users[username]) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  
-    // Returns true iff the password is the one we have stored (in plaintext = bad
-    // but easy).
-    validatePassword(name, pwd) {
-      if (!this.findUser(name)) {
-        return false;
-      }
-      if (this.users[name] !== pwd) {
-        return false;
-      }
-      return true;
-    }
-  
-    // Add a user to the "database".
-    addUser(name, pwd) {
-      if (this.findUser(name)) {
-        return false;
-      }
-      this.users[name] = pwd;
-      return true;
-    }
-  }
-  
-  export default new Users();
+const userSchema = new mongoose.schema({
+  name: String,
+  email: String,
+  password: String,
+});
+
+module.exports = mongoose.model('users', userSchema);
