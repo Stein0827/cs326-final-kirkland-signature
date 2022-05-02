@@ -13,4 +13,4 @@ const eventSchema = new mongoose.schema({
     attendees: Array,
 });
 
-module.exports = mongoose.model('events', eventSchema);
+module.exports = Event = mongoose.model('events', eventSchema);
