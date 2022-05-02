@@ -22,13 +22,13 @@ passport.deserializeUser((uid, done) => {
 // Create a new LocalStrategy object to handle authentication using username and
 // password credentials from the client. The LocalStrategy object is used to
 // authenticate a user using a username and password.
-const strategy = new Strategy(async (username, password, done) => {
-  //call database
-  if (!users.findUser(username)) {
+const strategy = new Strategy(async (email, password, done) => {
+  //calling collections.find()
+  if (this.db.findUser(username).count() === 0) {
     // no such user
     return done(null, false, { message: 'Wrong username' });
   }
-  if (!users.validatePassword(username, password)) {
+  else if (this.db.validateLogin(email, password)) {
     // invalid password
     // should disable logins after N messages
     // delay return to rate-limit brute-force attacks
