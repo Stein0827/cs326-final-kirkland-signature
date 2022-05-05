@@ -1,15 +1,18 @@
 import express from 'express';
 import {MapDatabase} from './mongodb.js';
-import auth from './auth.js';
 import passport from 'passport';
-//mongoose models
-const mongoose = require('mongoose');
-const User = require('./users');
-const Event = require('./events');
-const routes = require('./routes').default;
+import routes from './routes';
+import mongoose from 'mongoose';
+import auth from './auth';
+
+import session from 'express-session';
+import MongoStore from 'connect-mongo'; 
 
 
 const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 
 //connect to mongodb db
 mongoose.connect(
@@ -21,10 +24,23 @@ mongoose.connect(
   }
 );
 
+
+app.use(
+  session({
+      secret: "secret",
+      resave: false,
+      saveUninitialized: true,
+      store: new MongoStore({ mongooseConnection: mongoose.connection })
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(routes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}!`);
 });
+
 
