@@ -1,3 +1,6 @@
+import mongoose from 'mongoose';
+import passport from 'passport';
+import jwt from 'jsonwebtoken';
 import express from 'express';
 import User from './users';
 import Event from './events';
@@ -29,7 +32,9 @@ router.post('/login', function(req, res) {
       user.comparePassword(req.body.password, function (err, isMatch) {
         if (isMatch && !err) {
           // if user is found and password is right create a token
-          var token = jwt.sign(user, config.secret);
+          var token = jwt.sign(user.toJSON(), config.secret, {
+            expiresIn: 604800 // 1 week
+          });
           // return the information including token as JSON
           res.json({success: true, token: 'JWT ' + token});
         } else {
@@ -41,6 +46,7 @@ router.post('/login', function(req, res) {
 });
 
 
+
 // router.get('/login', (req, res) =>
 //   res.sendFile('client/log_in.html', { root: __dirname })
 // );
@@ -49,18 +55,20 @@ router.get('/map', (req, res) =>
   res.sendFile('client/map.html', { root: __dirname })
 );
 
-router.post('/register', function(req, res) {
+router.post('/signup', function(req, res) {
   if (!req.body.email || !req.body.password) {
     res.json({success: false, msg: 'Please pass username and password.'});
   } else {
     var newUser = new User({
+      first_name: req.body.first_name,
+      last_name: req.body.last_name,
       username: req.body.email,
       password: req.body.password
     });
     // save the user
     newUser.save(function(err) {
       if (err) {
-        return res.json({success: false, msg: 'Username already exists.'});
+        return res.json({success: false, msg: 'User already exists.'});
       }
       res.json({success: true, msg: 'Successful created new user.'});
     });
@@ -86,9 +94,9 @@ router.post('/login', auth.authenticate('local', {
 );
 
 //logout
-router.get('/logout', (req, res) => {
+router.get('/signout', passport.authenticate('jwt', { session: false}), function(req, res) {
   req.logout();
-  res.redirect('/login');
+  res.json({success: true, msg: 'Sign out successfully.'});
 });
 
 //create user

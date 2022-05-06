@@ -8,12 +8,6 @@ import auth from './auth';
 import session from 'express-session';
 import MongoStore from 'connect-mongo'; 
 
-
-const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
-
 //connect to mongodb db
 mongoose.connect(
   "mongo db uri goes here",
@@ -23,6 +17,12 @@ mongoose.connect(
     useUnifiedTopology: true
   }
 );
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
+
 
 
 app.use(
@@ -37,6 +37,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(routes);
+
+app.use('/login')
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

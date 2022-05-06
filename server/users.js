@@ -1,8 +1,18 @@
 //mongoose schema model for users
-import { schema, model } from 'mongoose';
+import mongoose from 'mongoose';
+import bcrypt from 'bcrpyt';
+
+const schema = mongoose.Schema;
 
 const userSchema = new schema({
-  name: String,
+  first_name: {
+    type: String,
+    required: true
+  },
+  last_name: {
+    type: String, 
+    required: true
+  },
   email: {
     type: String,
     unique: true,
@@ -11,37 +21,38 @@ const userSchema = new schema({
   password: {
     type: String,
     required: true
-  }
+  },
 });
 
 //methods for schema
 userSchema.pre('save', function (next) {
   var user = this;
   if (this.isModified('password') || this.isNew) {
-      bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.genSalt(10, function (err, salt) {
+        if (err) {
+          return next(err);
+        }
+        bcrypt.hash(user.password, salt, null, function (err, hash) {
           if (err) {
-              return next(err);
+            return next(err);
           }
-          bcrypt.hash(user.password, salt, null, function (err, hash) {
-              if (err) {
-                  return next(err);
-              }
-              user.password = hash;
-              next();
-          });
+          user.password = hash;
+          next();
+        });
       });
   } else {
-      return next();
+    return next();
   }
 });
 
 userSchema.methods.comparePassword = function (passw, cb) {
   bcrypt.compare(passw, this.password, function (err, isMatch) {
-      if (err) {
-          return cb(err);
-      }
-      cb(null, isMatch);
+    if (err) {
+      return cb(err);
+    }
+    cb(null, isMatch);
   });
 };
 
-export default User = model('users', userSchema);
+
+module.exports = User = mongoose.model('users', userSchema);
