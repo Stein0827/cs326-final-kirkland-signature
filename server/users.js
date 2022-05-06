@@ -2,9 +2,9 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrpyt';
 
-const schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-const userSchema = new schema({
+const userSchema = new Schema({
   first_name: {
     type: String,
     required: true
@@ -54,5 +54,7 @@ userSchema.methods.comparePassword = function (passw, cb) {
   });
 };
 
+
+User.plugin(passportLocalMongoose);
 
 module.exports = User = mongoose.model('users', userSchema);

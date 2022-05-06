@@ -11,6 +11,8 @@ import Event from './events';
 // https://www.geeksforgeeks.org/how-to-make-mongoose-multiple-collections-using-node-js/
 // https://www.digitalocean.com/community/tutorials/nodejs-crud-operations-mongoose-mongodb-atlas
 // https://www.djamware.com/post/58eba06380aca72673af8500/node-express-mongoose-and-passportjs-rest-api-authentication
+// https://heynode.com/tutorial/authenticate-users-node-expressjs-and-passportjs/
+
 
 
 //expressjs routes using mongoose module
@@ -19,30 +21,10 @@ const router = express.Router();
 
 
 //login
-router.post('/login', function(req, res) {
-  User.findOne({
-    username: req.body.username
-  }, function(err, user) {
-    if (err) throw err;
-
-    if (!user) {
-      res.status(401).send({success: false, msg: 'Authentication failed. User not found.'});
-    } else {
-      // check if password matches
-      user.comparePassword(req.body.password, function (err, isMatch) {
-        if (isMatch && !err) {
-          // if user is found and password is right create a token
-          var token = jwt.sign(user.toJSON(), config.secret, {
-            expiresIn: 604800 // 1 week
-          });
-          // return the information including token as JSON
-          res.json({success: true, token: 'JWT ' + token});
-        } else {
-          res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
-        }
-      });
-    }
-  });
+app.post('/login', passport.authenticate('local', { failureRedirect: '/' }),  function(req, res) {
+	console.log(req.user)
+  //change to map
+	res.redirect('/...');
 });
 
 
@@ -55,24 +37,24 @@ router.get('/map', (req, res) =>
   res.sendFile('client/map.html', { root: __dirname })
 );
 
-router.post('/signup', function(req, res) {
-  if (!req.body.email || !req.body.password) {
-    res.json({success: false, msg: 'Please pass username and password.'});
-  } else {
-    var newUser = new User({
+router.post("/register", function(req, res){
+  // console.log(req.body.username);
+  // console.log(req.body.password);
+  User.register(new User({
       first_name: req.body.first_name,
       last_name: req.body.last_name,
-      username: req.body.email,
+      username: req.body.username, 
       password: req.body.password
+    }), function(err, user){
+    if(err){
+        console.log(err);
+        return res.render("register");
+    }
+    passport.authenticate("local")(req, res, function(){
+        //change to map
+        res.redirect("/secret");
     });
-    // save the user
-    newUser.save(function(err) {
-      if (err) {
-        return res.json({success: false, msg: 'User already exists.'});
-      }
-      res.json({success: true, msg: 'Successful created new user.'});
-    });
-  }
+  });
 });
 
 // router.get('/register', (req, res) =>

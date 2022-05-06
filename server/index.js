@@ -8,6 +8,19 @@ import auth from './auth';
 import session from 'express-session';
 import MongoStore from 'connect-mongo'; 
 
+const User = require('./users');
+const routes = require('./routes');
+
+const app = express();
+
+app.use(session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: true,
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
+  })
+);
+
 //connect to mongodb db
 mongoose.connect(
   "mongo db uri goes here",
@@ -18,27 +31,18 @@ mongoose.connect(
   }
 );
 
-const app = express();
-
-app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-
-
-
-app.use(
-  session({
-      secret: "secret",
-      resave: false,
-      saveUninitialized: true,
-      store: new MongoStore({ mongooseConnection: mongoose.connection })
-  })
-);
-
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(routes);
 
-app.use('/login')
+// Passport Local Strategy
+passport.use(User.createStrategy());
+
+// To use with sessions
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use('/api', routes)
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
