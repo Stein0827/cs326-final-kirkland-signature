@@ -2,6 +2,7 @@
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
+
 const eventSchema = new mongoose.schema({
     host_id: ObjectId,
     host_name: String,
@@ -12,5 +13,7 @@ const eventSchema = new mongoose.schema({
     // images: "",
     attendees: Array,
 });
+
+User.plugin(passportLocalMongoose);
 
 module.exports = Event = mongoose.model('events', eventSchema);
