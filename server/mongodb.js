@@ -14,18 +14,20 @@ export class MapDatabase {
     });
 
     // Get the database.
-    this.db = this.client.db('people');
+    this.users = this.client.db('users');
+    this.events = this.client.db('events');
 
     // Init the database.
     await this.init();
   }
 
   async init() {
-    this.users = this.db.collection('users');
-    this.events = this.db.collection('events');
-
-    //const count = await this.collection.countDocuments();
-
+    try {
+      this.users = this.db.createCollection('users');
+      this.events = this.db.createCollection('events');
+    } catch(err){
+      console.log(err);
+    }
   }
 
   // Close the pool.
@@ -51,8 +53,8 @@ export class MapDatabase {
     // CREATE a user in the database.
   async createEvent(event) {
     let user = await this.readUser(event.host_id);
-    const res = await this.events.insertOne({host_id: event.host_id,  host_name : user.user_name, event_name: event.event_name, event_desc : event.event_desc,
-      event_location : event.event_location, event_time : event.event_time, attendees : event.attendees});
+    const res = await this.events.insertOne({'_id': id, 'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
+    'event_location' : event.event_location, 'event_time' : event.event_time, 'attendees' : event.attendees});
     
     user.events.push(res);
     await this.updateUser(user);
@@ -64,13 +66,24 @@ export class MapDatabase {
 
   // READ a user from the database.
   async readUser(id) {
-    const res = await this.users.findOne({ _id: id });
+    const res = await this.users.findOne({ '_id': id });
+    return res;
+  }
+
+  // gets user by email
+  async findUserbyEmail(email) {
+    const res = await this.users.findOne({'email': email});
+    return res;
+  }
+
+  async validateLogin(email, password) {
+    const res = await this.users.findOne({'email': email, 'password': email});
     return res;
   }
 
   // READ an event from the database
   async readEvent(id) {
-    const res = await this.users.findOne({ _id: id });
+    const res = await this.users.findOne({ '_id': id });
     return res;
   }
 
@@ -78,7 +91,7 @@ export class MapDatabase {
   async updateUser(id, name, age) {
     const res = await this.users.updateOne(
       { _id: id },
-      { $set: {user_name:name, user_email:email, password:password} }
+      { $set: {'user_name':name, 'user_email':email, 'password':password} }
     );
     return res;
   }
@@ -87,8 +100,8 @@ export class MapDatabase {
   async updateEvent(event) {
     const res = await this.events.updateOne(
       { _id: id },
-      { $set: {_id: id, host_id: event.host_id,  host_name : user.user_name, event_name: event.event_name, event_desc : event.event_desc,
-        event_location : event.event_location, event_time : event.event_time, attendees : event.attendees} }
+      { $set: {'_id': id, 'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
+        'event_location' : event.event_location, 'event_time' : event.event_time, 'attendees' : event.attendees} }
     );
     return res;
   }

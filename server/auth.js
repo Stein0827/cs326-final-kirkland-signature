@@ -1,54 +1,50 @@
-import passport from 'passport';
-import passportLocal from 'passport-local';
+//import { secret } from '../config/database';
+import { sign } from 'jsonwebtoken';
 
-const MongoClient =``
+// Call User model
+import User, { findOne } from "../models/user";
 
-const { Strategy } = passportLocal;
+let exports = module.exports = {};
 
-// Passport Configuration
-// Create a new LocalStrategy object to handle authentication using username and
-// password credentials from the client. The LocalStrategy object is used to
-// authenticate a user using a username and password.
-const strategy = new Strategy(async (username, password, done) => {
-  //call database
-  if (!users.findUser(username)) {
-    // no such user
-    return done(null, false, { message: 'Wrong username' });
-  }
-  if (!users.validatePassword(username, password)) {
-    // invalid password
-    // should disable logins after N messages
-    // delay return to rate-limit brute-force attacks
-    await new Promise((r) => setTimeout(r, 2000)); // two second delay
-    return done(null, false, { message: 'Wrong password' });
-  }
-  // success!
-  // should create a user object here, associated with a unique identifier
-  return done(null, username);
-});
+export function signup(req, res) {
+    if (!req.body.username || !req.body.password) {
+        res.json({success: false, msg: 'Please pass username and password.'});
+    } else {
+        let newUser = new User({
+            username: req.body.username,
+            password: req.body.password
+        });
+        // save the user
+        newUser.save(function(err) {
+            if (err) {
+                return res.json({success: false, msg: 'Username already exists.'});
+            }
+            res.json({success: true, msg: 'Successful created new user.'});
+        });
+    }
+}
 
-// Configure passport to use the LocalStrategy object.
-// The LocalStrategy object is used to authenticate a user using a username and
-// password. There are other strategies available, but this is the simplest.
-passport.use(strategy);
+export function signin(req, res) {
 
-// Convert user object to a unique identifier.
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
+    findOne({
+        username: req.body.username
+    }, function(err, user) {
+        if (err) throw err;
 
-// Convert a unique identifier to a user object.
-passport.deserializeUser((uid, done) => {
-  done(null, uid);
-});
-
-export default {
-  configure: (app) => {
-    app.use(passport.initialize());
-    app.use(passport.session());
-  },
-
-  authenticate: (domain, where) => {
-    return passport.authenticate(domain, where);
-  },
-};
+        if (!user) {
+            res.status(401).send({success: false, msg: 'Authentication failed. User not found.'});
+        } else {
+            // check if password matches
+            user.comparePassword(req.body.password, function (err, isMatch) {
+                if (isMatch && !err) {
+                    // if user is found and password is right create a token
+                    let token = sign(user.toJSON(), secret);
+                    // return the information including token as JSON
+                    res.json({success: true, token: 'JWT ' + token});
+                } else {
+                    res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
+                }
+            });
+        }
+    });
+}

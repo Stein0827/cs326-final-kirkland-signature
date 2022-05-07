@@ -1,40 +1,60 @@
-//for testing purposes
+//mongoose schema model for users
+import mongoose from 'mongoose';
+import bcrypt from 'bcrpyt';
 
-class Users {
-    constructor() {
-      // default user
-      this.users = { emery: 'compsci326' };
-    }
-  
-    // Returns true iff the user exists.
-    findUser(username) {
-      if (!this.users[username]) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  
-    // Returns true iff the password is the one we have stored (in plaintext = bad
-    // but easy).
-    validatePassword(name, pwd) {
-      if (!this.findUser(name)) {
-        return false;
-      }
-      if (this.users[name] !== pwd) {
-        return false;
-      }
-      return true;
-    }
-  
-    // Add a user to the "database".
-    addUser(name, pwd) {
-      if (this.findUser(name)) {
-        return false;
-      }
-      this.users[name] = pwd;
-      return true;
-    }
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema({
+  first_name: {
+    type: String,
+    required: true
+  },
+  last_name: {
+    type: String, 
+    required: true
+  },
+  email: {
+    type: String,
+    unique: true,
+    required: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+});
+
+//methods for schema
+userSchema.pre('save', function (next) {
+  var user = this;
+  if (this.isModified('password') || this.isNew) {
+    bcrypt.genSalt(10, function (err, salt) {
+        if (err) {
+          return next(err);
+        }
+        bcrypt.hash(user.password, salt, null, function (err, hash) {
+          if (err) {
+            return next(err);
+          }
+          user.password = hash;
+          next();
+        });
+      });
+  } else {
+    return next();
   }
-  
-  export default new Users();
+});
+
+userSchema.methods.comparePassword = function (passw, cb) {
+  bcrypt.compare(passw, this.password, function (err, isMatch) {
+    if (err) {
+      return cb(err);
+    }
+    cb(null, isMatch);
+  });
+};
+
+
+User.plugin(passportLocalMongoose);
+
+module.exports = User = mongoose.model('users', userSchema);
