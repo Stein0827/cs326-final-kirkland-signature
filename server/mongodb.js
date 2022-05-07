@@ -51,6 +51,11 @@ export class MapDatabase {
     return res;
   }
 
+  // async testEvent(){
+  //   this.events.insertOne({ host_id: "123",  host_name : "user.user_name", event_name: "event.event_name", event_desc : 'event.event_ desc',
+  //   event_location : [-72.52628581400859,42.38891007248816], event_time : 'event.event_time', attendees : "event.attendees"});
+  // }
+
     // CREATE a user in the database.
   async createEvent(event) {
     let user = await this.readUser(event.host_id);
@@ -136,7 +141,7 @@ export class MapDatabase {
   }
 
   async dumpEvent() {
-    const res = await this.events.find();
+    const res = await this.events.find().toArray();
     return res;
   }
     

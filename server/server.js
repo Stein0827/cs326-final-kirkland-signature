@@ -304,8 +304,10 @@ class UMapServer {
       res.sendFile('client/log_in.html', { root: __dirname })
     );
 
-    this.app.get('/map', (req, res) =>
-      res.sendFile('client/map.html', { root: __dirname })
+    this.app.get('/map', (req, res) => {
+      // await self.db.testEvent();
+      res.sendFile('client/map.html', { root: __dirname });
+    }
     );
 
     this.app.get('/event-editor/:eventID', (req, res) =>
@@ -432,7 +434,7 @@ class UMapServer {
     
     this.app.get('/dumpEvents', async (req, res) => {
       try {
-        const evt = await self.db.dumpEvents();
+        const evt = await self.db.dumpEvent();
         res.send(JSON.stringify(evt));
       } catch (err) {
         res.status(500).send(err);
