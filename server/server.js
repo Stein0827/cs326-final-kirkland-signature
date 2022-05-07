@@ -2,8 +2,6 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { MapDatabase } from './mongodb.js';
-// TEMPORARY REMOVE LATER
-import { ObjectId } from 'mongodb';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
@@ -42,9 +40,7 @@ class UMapServer {
     );
 
     this.app.get('/map', async (req, res) => {
-      const id = await self.db.testEvent();
-      // const evt = await self.db.deleteEvent(id[0].insertedId);
-      // console.log(evt);
+      //const id = await self.db.testEvent();
       res.sendFile('client/map.html', { root: __dirname });
     }
     );
@@ -60,6 +56,7 @@ class UMapServer {
     this.app.get('/event-viewer', (req, res) =>
       res.sendFile('client/event_viewer.html', { root: __dirname })
     );
+
     // this.app.post('/login', auth.authenticate('local', {
     //     successRedirect: '/map',
     //     failureRedirect: '/login',
@@ -111,7 +108,6 @@ class UMapServer {
       try {
         const { event } = req.body;
         const evt = await self.db.updateEvent(event);
-        // res.send(JSON.stringify(user));
         res.send(JSON.stringify(evt));
       } catch (err) {
         res.status(500).send(err);
@@ -143,8 +139,6 @@ class UMapServer {
     this.app.get('/getEventbyId/:eventID', async (req, res) => {
       try {
         const id = req.params.eventID;
-        // console.log(id);
-        // const { id } = req.query;
         const event = await self.db.readEvent(id);
         res.send(JSON.stringify(event));
       } catch (err) {
