@@ -93,7 +93,35 @@ class UMapServer {
     this.app.get('/my-events/:userID', (req, res) =>
       res.sendFile('client/my_events.html', { root: __dirname })
     );
-       
+    
+    this.app.get('/event-viewer', (req, res) =>
+      res.sendFile('client/event_viewer.html', { root: __dirname })
+    );
+
+    // this.app.post('/login', auth.authenticate('local', {
+    //     successRedirect: '/map',
+    //     failureRedirect: '/login',
+    //   })
+    // );
+    
+    //logout
+    this.app.get('/logout', (req, res) => {
+      req.logout();
+      res.redirect('/login');
+    });
+    
+    //register a new user
+    this.app.post('/register', async (req, res) => {
+      try {
+        const { name, email, password } = req.body;
+        const user = await self.db.createUser(name, email, password);
+        // res.send(JSON.stringify(user));
+        res.status(200);
+      } catch (err) {
+        res.status(500).send(err);
+      }
+    });
+    
     //return user
     this.app.get('/getUserbyId', async (req, res) => {
       try {
@@ -121,8 +149,7 @@ class UMapServer {
       try {
         const { event } = req.body;
         const evt = await self.db.updateEvent(event);
-        // res.send(JSON.stringify(user));
-        res.status(200).send(JSON.stringify(evt));
+        res.send(JSON.stringify(evt));
       } catch (err) {
         res.status(500).send(err);
       }
@@ -150,11 +177,11 @@ class UMapServer {
     });
     
     //read an event
-    this.app.get('/getEventbyId', async (req, res) => {
+    this.app.get('/getEventbyId/:eventID', async (req, res) => {
       try {
-        const { id } = req.body;
-        const event = await self.db.updateEvent(id);
-        res.status(200).send(JSON.stringify(event));
+        const id = req.params.eventID;
+        const event = await self.db.readEvent(id);
+        res.send(JSON.stringify(event));
       } catch (err) {
         res.status(500).send(err);
       }
