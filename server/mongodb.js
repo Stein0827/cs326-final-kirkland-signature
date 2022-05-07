@@ -105,6 +105,16 @@ export class MapDatabase {
     return res;
   }
 
+  async updateRSVP(event, user_id) {
+    event.attendees.push(user_id)
+    const res = await this.events.updateOne(
+      { _id: id },
+      { $set: {'_id': id, 'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
+        'event_location' : event.event_location, 'event_time' : event.event_time, 'attendees' : event.attendees} }
+    );
+    return res;
+  }
+
   // DELETE a user from the database.
   async deleteUser(id) {
     // Note: the result received back from MongoDB does not contain the
@@ -120,6 +130,11 @@ export class MapDatabase {
     // entire document that was deleted from the database. Instead, it
     // only contains the 'deletedCount' (and an acknowledged field).
     const res = await this.events.deleteOne({ _id: id });
+    return res;
+  }
+
+  async dumpEvent() {
+    const res = await this.events.find();
     return res;
   }
     
