@@ -1,4 +1,3 @@
-console.log("help");
 async function readEvent(id) {
     const response = await fetch(`/getEventbyID/`+id, {
       method: 'GET'
