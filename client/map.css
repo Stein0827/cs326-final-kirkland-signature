@@ -16,6 +16,10 @@
   font-family: 'Nunito', sans-serif;
 }
 
+.font-small {
+  font-size: small;
+}
+
 .button-position {
   float: right;
 }
@@ -89,6 +93,11 @@ body {
 .table_color {
   background-color: #881C1C;
   color: white; 
+}
+
+.btn-small {
+  height: 1em;
+  width: 2em;
 }
 
 
