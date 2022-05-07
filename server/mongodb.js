@@ -37,14 +37,15 @@ export class MapDatabase {
   }
 
   // CREATE a user in the database.
-  async createUser(name, email, password) {
+  async createUser(first_name, last_name, email, password) {
     // const new_user = {
     //   user_name : name,
     //   user_email : email,
     //   password : password,
     //   events : []
     // };
-    const res = await this.users.insertOne({user_name: name, user_email: email, password: password, events: []});
+    //const res = await this.users.insertOne({user_name: name, user_email: email, password: password, events: []});
+    const res = await this.users.insertOne({first_name: first_name, last_name: last_name, user_email: email, password: password, events: []});
     // Note: the result received back from MongoDB does not contain the
     // entire document that was inserted into the database. Instead, it
     // only contains the _id of the document (and an acknowledged field).
