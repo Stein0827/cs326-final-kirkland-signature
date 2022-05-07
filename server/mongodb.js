@@ -13,8 +13,10 @@ export class MapDatabase {
     });
 
     // Get the database.
-    this.users = this.client.db('users');
-    this.events = this.client.db('events');
+    // this.users = this.client.db('users');
+    // this.events = this.client.db('events');
+
+    this.db = this.client.db('UMAP database');
 
     // Init the database.
     await this.init();
@@ -22,8 +24,8 @@ export class MapDatabase {
 
   async init() {
     try {
-      this.users = this.db.createCollection('users');
-      this.events = this.db.createCollection('events');
+      this.users = this.db.collection('users');
+      this.events = this.db.collection('events');
     } catch(err){
       console.log(err);
     }
