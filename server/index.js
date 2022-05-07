@@ -3,12 +3,11 @@ import passport from 'passport';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import routes from './routes';
-import session from 'express-session';
+import routes from './routes.js';
+import User from './users.js';
 //import MongoStore from 'connect-mongo'; 
 
-const User = require('./users');
-const routes = require('./routes');
+//const User = require('./users.js');
 
 const app = express();
 

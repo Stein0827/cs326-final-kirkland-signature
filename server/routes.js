@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import passport from 'passport';
 import express from 'express';
-import User from './users';
-import Event from './events';
+import User from './users.js';
+//import Event from './events.js';
 import connectEnsureLogin from 'connect-ensure-login';
 
 //refs: https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb-how-to-get-connected-to-your-database
@@ -73,6 +73,15 @@ router.post('/login', auth.authenticate('local', {
   failureRedirect: '/login',
   })
 );
+
+//session ID example
+router.get('/dashboard', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  res.send(`Hello ${req.user.username}. Your session ID is ${req.sessionID} 
+   and your session expires in ${req.session.cookie.maxAge} 
+   milliseconds.<br><br>
+   <a href="/logout">Log Out</a><br><br>
+   <a href="/secret">Members Only</a>`);
+});
 
 //logout
 router.get('/signout', passport.authenticate('jwt', { session: false}), function(req, res) {

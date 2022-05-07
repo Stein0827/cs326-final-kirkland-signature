@@ -1,9 +1,11 @@
 //mongoose event schema
-const { ObjectId } = require('mongodb');
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 
-const eventSchema = new mongoose.schema({
+const Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId
+
+const eventSchema = new Schema({
     host_id: ObjectId,
     host_name: String,
     event_name: String,
@@ -11,9 +13,8 @@ const eventSchema = new mongoose.schema({
     event_location: String,
     event_time: Date,
     // images: "",
-    attendees: Array,
+    attendees: Array
 });
 
-User.plugin(passportLocalMongoose);
+module.exports = mongoose.model('Event', eventSchema);
 
-module.exports = Event = mongoose.model('events', eventSchema);
