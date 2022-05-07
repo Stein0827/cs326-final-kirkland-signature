@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 import passport from 'passport';
-import jwt from 'jsonwebtoken';
 import express from 'express';
-import User from './users';
-import Event from './events';
+import User from './users.js';
+//import Event from './events.js';
+import connectEnsureLogin from 'connect-ensure-login';
 
 //refs: https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb-how-to-get-connected-to-your-database
 // https://www.mongodb.com/languages/javascript/mongodb-and-npm-tutorial
@@ -21,12 +21,11 @@ const router = express.Router();
 
 
 //login
-app.post('/login', passport.authenticate('local', { failureRedirect: '/' }),  function(req, res) {
+router.post('/login', passport.authenticate('local', { failureRedirect: '/' }),  function(req, res) {
 	console.log(req.user)
   //change to map
 	res.redirect('/...');
 });
-
 
 
 // router.get('/login', (req, res) =>
@@ -75,10 +74,24 @@ router.post('/login', auth.authenticate('local', {
   })
 );
 
+//session ID example
+router.get('/dashboard', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  res.send(`Hello ${req.user.username}. Your session ID is ${req.sessionID} 
+   and your session expires in ${req.session.cookie.maxAge} 
+   milliseconds.<br><br>
+   <a href="/logout">Log Out</a><br><br>
+   <a href="/secret">Members Only</a>`);
+});
+
 //logout
 router.get('/signout', passport.authenticate('jwt', { session: false}), function(req, res) {
   req.logout();
   res.json({success: true, msg: 'Sign out successfully.'});
+});
+
+//example of how to access secret pages
+router.get('/secret', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  res.sendFile(__dirname + '/static/secret-page.html');
 });
 
 //create user
