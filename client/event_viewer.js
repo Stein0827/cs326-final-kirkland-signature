@@ -8,10 +8,10 @@ async function readEvent(id) {
 }
 
 let curr_event = JSON.parse(localStorage.getItem("details"));
-// console.log(curr_event);
-// console.log(typeof(curr_event));
+
 let data = await readEvent(curr_event);
-console.log(data);
+data = data[0];
+
 mapboxgl.accessToken = 'pk.eyJ1IjoicndtZWh0YSIsImEiOiJjbDEycmM0MDAwNGJiM2tvMGV5cDF4cXZmIn0.6eUqwB8FMxRQOVqH5ymQ4Q';
 const map = new mapboxgl.Map({
 container: 'map', // container ID
