@@ -4,7 +4,7 @@ import express from 'express';
 import { User } from './users.js';
 //import Event from './events.js';
 import connectEnsureLogin from 'connect-ensure-login';
-import { MapDatabase } from './mongodb.js';
+//import { MapDatabase } from './mongodb.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
@@ -20,7 +20,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
 
 //expressjs routes using mongoose module
-
 const router = express.Router();
 
 
