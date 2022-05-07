@@ -56,10 +56,12 @@ export class MapDatabase {
     return res;
   }
 
-  // async testEvent(){
-  //   this.events.insertOne({ host_id: "123",  host_name : "user.user_name", event_name: "event.event_name", event_desc : 'event.event_ desc',
-  //   event_location : [-72.52628581400859,42.38891007248816], event_time : 'event.event_time', attendees : "event.attendees"});
-  // }
+  async testEvent(){
+    const user = await this.createUser("BOB", "BOB@BOB.com", "BOB");
+    const res = await this.events.insertOne({ host_id: user.insertedId,  host_name : "user.user_name", event_name: "THIS WILL BE DELETED", event_desc : 'event.event_ desc',
+    event_location : [-72.52628581400859,42.38891007248816], event_time : 'event.event_time', attendees : "event.attendees"});
+    return [res, user];
+  }
 
     // CREATE a user in the database.
   async createEvent(event) {
@@ -117,19 +119,20 @@ export class MapDatabase {
   }
 
   // UPDATE a user in the database
-  async updateUser(id, name, age) {
+  async updateUser(user) {
     const res = await this.users.updateOne(
-      { _id: ObjectId(id) },
-      { $set: {'user_name':name, 'user_email':email, 'password':password} }
+      { _id: user._id },
+      { $set: {'user_name':user.name, 'user_email':user.email, 'password':user.password} }
     );
     return res;
   }
 
   // UPDATE an event in the database.
   async updateEvent(event) {
+    const user = await this.readUser(event.host_id);
     const res = await this.events.updateOne(
-      { _id: ObjectId(id) },
-      { $set: {'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
+      { _id: event._id },
+      { $set: {'host_id': event.host_id,  'host_name' : user[0].user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
         'event_location' : event.event_location, 'event_time' : event.event_time, 'attendees' : event.attendees} }
     );
     return res;
@@ -138,8 +141,8 @@ export class MapDatabase {
   async updateRSVP(event, user_id) {
     event.attendees.push(user_id)
     const res = await this.events.updateOne(
-      { _id: ObjectId(id) },
-      { $set: {'_id': ObjectId(id), 'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
+      { _id: ObjectId(event.id) },
+      { $set: {'_id': ObjectId(event.id), 'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
         'event_location' : event.event_location, 'event_time' : event.event_time, 'attendees' : event.attendees} }
     );
     return res;
@@ -150,7 +153,7 @@ export class MapDatabase {
     // Note: the result received back from MongoDB does not contain the
     // entire document that was deleted from the database. Instead, it
     // only contains the 'deletedCount' (and an acknowledged field).
-    const res = await this.users.deleteOne({ _id: ObjectId(id) }).toArray();
+    const res = await this.users.deleteOne({ _id: id });
     return res;
   }
 
@@ -159,7 +162,7 @@ export class MapDatabase {
     // Note: the result received back from MongoDB does not contain the
     // entire document that was deleted from the database. Instead, it
     // only contains the 'deletedCount' (and an acknowledged field).
-    const res = await this.events.deleteOne({ _id: ObjectId(id) }).toArray();
+    const res = await this.events.deleteOne({ _id: id });
     return res;
   }
 
