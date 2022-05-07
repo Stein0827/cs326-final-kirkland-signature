@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import passport from 'passport';
 import express from 'express';
-import User from './users';
-import Event from './events';
+import User from './users.js';
+//import Event from './events.js';
 import connectEnsureLogin from 'connect-ensure-login';
 
 //refs: https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb-how-to-get-connected-to-your-database
@@ -74,6 +74,15 @@ router.post('/login', auth.authenticate('local', {
   })
 );
 
+//session ID example
+router.get('/dashboard', connectEnsureLogin.ensureLoggedIn(), (req, res) => {
+  res.send(`Hello ${req.user.username}. Your session ID is ${req.sessionID} 
+   and your session expires in ${req.session.cookie.maxAge} 
+   milliseconds.<br><br>
+   <a href="/logout">Log Out</a><br><br>
+   <a href="/secret">Members Only</a>`);
+});
+
 //logout
 router.get('/signout', passport.authenticate('jwt', { session: false}), function(req, res) {
   req.logout();
@@ -131,9 +140,7 @@ router.get('/getEventbyId', async (req, res) => {
 
 //change an event
 router.put('/editUser', async (req, res) => {
-
   await User.findByIdAndUpdate(req.params.id, req.body);
-
   (err, user) => {
     if (err) return res.status(500).send(err);
     return res.send(user);
@@ -142,9 +149,7 @@ router.put('/editUser', async (req, res) => {
 
 //change an event
 router.put('/editEvent', async (req, res) => {
-
   await Event.findByIdAndUpdate(req.params.id, req.body);
-
   (err, event) => {
     if (err) return res.status(500).send(err);
     return res.send(event);
@@ -154,7 +159,6 @@ router.put('/editEvent', async (req, res) => {
 //delete a user
 router.delete('/deleteUser', async (req, res) => {
   await User.findByIdAndDelete(req.params.id, req.body);
-
   (err, user) => {
     if (err) return res.status(500).send(err);
     return res.send(user);

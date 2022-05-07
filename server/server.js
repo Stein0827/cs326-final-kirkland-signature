@@ -4,7 +4,7 @@ import expressSession from 'express-session';
 import logger from 'morgan';
 import {insertData, readData, updateData, deleteData, dumpData} from './database.js';
 import users from './users.js';
-import auth from './auth.js';
+import auth from './auth.js'
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
