@@ -2,6 +2,8 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { MapDatabase } from './mongodb.js';
+// TEMPORARY REMOVE LATER
+import { ObjectId } from 'mongodb';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
@@ -39,8 +41,10 @@ class UMapServer {
       res.sendFile('client/log_in.html', { root: __dirname })
     );
 
-    this.app.get('/map', (req, res) => {
-      // await self.db.testEvent();
+    this.app.get('/map', async (req, res) => {
+      const id = await self.db.testEvent();
+      const evt = await self.db.deleteEvent(id[0].insertedId);
+      console.log(evt);
       res.sendFile('client/map.html', { root: __dirname });
     }
     );
