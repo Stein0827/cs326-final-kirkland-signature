@@ -1,6 +1,6 @@
 //mongoose schema model for users
 import mongoose from 'mongoose';
-import passportLocalMongoose from 'passport-local-mongoose';
+//import passportLocalMongoose from 'passport-local-mongoose';
 
 const Schema = mongoose.Schema;
 
@@ -24,6 +24,6 @@ const userSchema = new Schema({
   },
 });
 
-User.plugin(passportLocalMongoose);
+//User.plugin(passportLocalMongoose);
 
-module.exports = mongoose.model('User', userSchema);
+export const User = mongoose.model('User', userSchema);

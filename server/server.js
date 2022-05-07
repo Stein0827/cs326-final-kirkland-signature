@@ -6,8 +6,8 @@ import { dirname } from 'path';
 import passport from 'passport';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import routes from './routes.js';
-import User from './users.js';
+import {routes} from './routes.js';
+import  {User} from './users.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
