@@ -174,13 +174,12 @@ app.use(expressSession(sessionConfig));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/', express.static('../client'));
+app.use('/', express.static('./client'));
 
 mongoose.connect(
-  "mongo db uri goes here",
+  "mongodb+srv://UMap:YkDlq6WGWezfWagM@cluster0.pbgzv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
-    useFindAndModify: false,
     useUnifiedTopology: true
   }
 );
