@@ -1,4 +1,4 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 
 export class MapDatabase {
   constructor(dburl) {
@@ -59,7 +59,7 @@ export class MapDatabase {
     // CREATE a user in the database.
   async createEvent(event) {
     let user = await this.readUser(event.host_id);
-    const res = await this.events.insertOne({'_id': id, 'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
+    const res = await this.events.insertOne({'_id': ObjectId(id), 'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
     'event_location' : event.event_location, 'event_time' : event.event_time, 'attendees' : event.attendees});
     
     user.events.push(res);
@@ -72,31 +72,43 @@ export class MapDatabase {
 
   // READ a user from the database.
   async readUser(id) {
-    const res = await this.users.findOne({ '_id': id });
+    const res = await this.users.find({ '_id': ObjectId(id) }).toArray();
     return res;
   }
 
   // gets user by email
   async findUserbyEmail(email) {
-    const res = await this.users.findOne({'email': email});
-    return res;
+    try {
+      const res = await this.users.findOne({'email': email});
+      return res
+    } catch(err){
+      console.log(err);
+      return false;
+    }
   }
 
+  // finds user by password and email
   async validateLogin(email, password) {
-    const res = await this.users.findOne({'email': email, 'password': email});
-    return res;
+    try {
+      const res = await this.users.findOne({'email': email, 'password': email});
+      return res;
+    } catch(err){
+      console.log(err);
+      return false;
+    }
+    
   }
 
   // READ an event from the database
   async readEvent(id) {
-    const res = await this.users.findOne({ '_id': id });
+    const res = await this.events.find({ '_id': ObjectId(id) }).toArray();
     return res;
   }
 
   // UPDATE a user in the database
   async updateUser(id, name, age) {
     const res = await this.users.updateOne(
-      { _id: id },
+      { _id: ObjectId(id) },
       { $set: {'user_name':name, 'user_email':email, 'password':password} }
     );
     return res;
@@ -105,8 +117,8 @@ export class MapDatabase {
   // UPDATE an event in the database.
   async updateEvent(event) {
     const res = await this.events.updateOne(
-      { _id: id },
-      { $set: {'_id': id, 'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
+      { _id: ObjectId(id) },
+      { $set: {'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
         'event_location' : event.event_location, 'event_time' : event.event_time, 'attendees' : event.attendees} }
     );
     return res;
@@ -115,8 +127,8 @@ export class MapDatabase {
   async updateRSVP(event, user_id) {
     event.attendees.push(user_id)
     const res = await this.events.updateOne(
-      { _id: id },
-      { $set: {'_id': id, 'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
+      { _id: ObjectId(id) },
+      { $set: {'_id': ObjectId(id), 'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
         'event_location' : event.event_location, 'event_time' : event.event_time, 'attendees' : event.attendees} }
     );
     return res;
@@ -127,7 +139,7 @@ export class MapDatabase {
     // Note: the result received back from MongoDB does not contain the
     // entire document that was deleted from the database. Instead, it
     // only contains the 'deletedCount' (and an acknowledged field).
-    const res = await this.users.deleteOne({ _id: id });
+    const res = await this.users.deleteOne({ _id: ObjectId(id) }).toArray();
     return res;
   }
 
@@ -136,7 +148,7 @@ export class MapDatabase {
     // Note: the result received back from MongoDB does not contain the
     // entire document that was deleted from the database. Instead, it
     // only contains the 'deletedCount' (and an acknowledged field).
-    const res = await this.events.deleteOne({ _id: id });
+    const res = await this.events.deleteOne({ _id: ObjectId(id) }).toArray();
     return res;
   }
 

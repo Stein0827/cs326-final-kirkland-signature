@@ -97,7 +97,7 @@ async function setEvents(events) {
                     console.log(event);
                     localStorage.removeItem("details");
                     localStorage.setItem("details", JSON.stringify(event._id));
-                    window.location.href = "/event-viewer/"+event._id;   
+                    window.location.href = "/event-viewer";   
                 });
                 cText.classList.add("btn", "btn-sm", "btn-secondary", "btn-block", "font-small");
                 cell.appendChild(cText);
