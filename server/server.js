@@ -1,17 +1,11 @@
 import express from 'express';
-import expressSession from 'express-session';
-import logger from 'morgan';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import passport from 'passport';
-import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
-import  {User} from './users.js';
 import { MapDatabase } from './mongodb.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
-const port = process.env.PORT || 80;
+//const port = process.env.PORT || 80;
 const sessionConfig = {
   // set this encryption key in Heroku config (never in GitHub)!
   secret: process.env.SECRET || 'SECRET',
@@ -177,13 +171,7 @@ const sessionConfig = {
 // app.use(express.urlencoded({ extended: false }));
 // app.use('/', express.static('./client'));
 
-// mongoose.connect(
-//   "mongodb+srv://UMap:YkDlq6WGWezfWagM@cluster0.pbgzv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-//   {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true
-//   }
-// );
+
 
 // function checkLoggedIn(req) {
 //   return req.isAuthenticated();
@@ -293,16 +281,16 @@ const sessionConfig = {
 //   dumpUsers(response);
 // });
 
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server started on port ${port}`);
+// });
 
 
 
 
 class UMapServer {
   constructor() {
-    this.dburi = process.env.MONGODB_URI;
+    this.dburi = process.env.MONGODB_URI || "mongodb+srv://UMap:YkDlq6WGWezfWagM@cluster0.pbgzv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
     this.app = express();
     this.app.use('/', express.static('/client'));
   }
@@ -310,7 +298,7 @@ class UMapServer {
   async initRoutes() {
     const self = this;
 
-    this.app.post('/newUser')
+    this.app.post('/newUser');
 
     this.app.get('/login', (req, res) =>
       res.sendFile('client/log_in.html', { root: __dirname })
@@ -328,11 +316,11 @@ class UMapServer {
       res.sendFile('client/my_events.html', { root: __dirname })
     );
     
-    app.post('/login', auth.authenticate('local', {
-        successRedirect: '/map',
-        failureRedirect: '/login',
-      })
-    );
+    // this.app.post('/login', auth.authenticate('local', {
+    //     successRedirect: '/map',
+    //     failureRedirect: '/login',
+    //   })
+    // );
     
     //logout
     this.app.get('/logout', (req, res) => {
@@ -444,7 +432,7 @@ class UMapServer {
     
     this.app.get('/dumpEvents', async (request, response) => {
       try {
-        const evt = await self.db.dumpEvents(event);
+        const evt = await self.db.dumpEvents();
         res.send(JSON.stringify(evt));
       } catch (err) {
         res.status(500).send(err);
@@ -453,16 +441,19 @@ class UMapServer {
   }
 
   async initDB() {
-    this.db = new MapDatabase(this.dburl);
+    this.db = new MapDatabase(this.dburi);
     await this.db.connect();
   }
 
   async start() {
     await this.initRoutes();
-    await this.initDb();
+    await this.initDB();
     const port = process.env.PORT || 8080;
     this.app.listen(port, () => {
-      console.log(`PeopleServer listening on port ${port}!`);
+      console.log(`Server listening on port ${port}!`);
     });
   }
 }
+
+const server = new UMapServer();
+server.start();
