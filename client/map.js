@@ -65,33 +65,65 @@ async function readEvents() {
     return data;
 }
 
-function setEvents(events) {
-    let table = document.getElementById("map_event_table");
-    let table_content = `
-    <table class="table table-striped scrollingTable table_color font">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-            </tr>
-        </thead>
-        <tbody>
-    `;
+async function setEvents(events) {
+    const table = document.getElementById('map_event_table');
+    table.classList.add("table", "table-striped", "scrollingTable", "table_color", "font");
+    let tHead = document.createElement("thead");
+    let tBody = document.createElement("tbody");
+    let titleRow = document.createElement("tr");
+    let nameTA = document.createElement("th");
+    nameTA.innerHTML = "Name";
+    // let descTA = document.createElement("th");
+    // descTA.innerHTML = "Description";
+    let timeTA = document.createElement("th");
+    timeTA.innerHTML = "Time";
+    titleRow.appendChild(nameTA);
+    // titleRow.appendChild(descTA);
+    titleRow.appendChild(timeTA);
+    tHead.appendChild(titleRow);
+    table.appendChild(tHead);
+    for (let event of events){
+        let row = document.createElement("tr");
+        for (let i = 0; i < 3; i++){
+            let cell = document.createElement("td");
+            cell.classList.add("font-small");
+            let cText = 0;
+            let ta = 0;
+            if (i === 0){
+                // ta = document.createElement("textarea");
+                // cText = document.createTextNode(event.event_name);
+                // ta.classList.add("form-control", "long-input", "font-small");
+                // ta.appendChild(cText);
+                // cell.appendChild(ta);
+                cell.innerHTML = event.event_name;
+            }
+            else if (i === 1) {
+                // ta = document.createElement("textarea");
+                // cText = document.createTextNode(event.event_time);
+                // ta.classList.add("form-control", "long-input", "font-small");
+                // ta.appendChild(cText);
+                // cell.appendChild(ta);
+                cell.innerHTML = event.event_time;
+            }
+            else if (i === 2) {
+                cText = document.createElement("button");
+                cText.innerHTML = "Details"
+                cText.addEventListener("click", function(e) {
+                    localStorage.setItem("details", JSON.stringify(event.event_id));
+                    window.location.href = "/event-viewer";   
+                });
+                cText.classList.add("btn", "btn-sm", "btn-secondary", "btn-block", "font-small");
+                cell.appendChild(cText);
+            }
 
-    for (let i = 0; i < events.length; i++) {
-        table_content += `
-        <tr>
-            <td>${events[i].event_id}</td>
-            <td>${events[i].event_name}</td>
-            <td>${events[i].event_time}</td>
-            <td><button class="btn btn-sm btn-secondary btn-block" type="submit">RSVP</button></a></td>
-        </tr>`;
+            row.appendChild(cell);
+        }
+        tBody.appendChild(row);
     }
-    table_content += `
-        </tbody>
-    </table>`;
-    table.innerHTML = table_content;
+    table.appendChild(tBody);
 }
+
+
 
 const data = await readEvents();
 setEvents(data);
