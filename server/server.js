@@ -1,12 +1,13 @@
-import 'dotenv/config';
 import express from 'express';
 import expressSession from 'express-session';
 import logger from 'morgan';
-import {insertData, readData, updateData, deleteData, dumpData} from './database.js';
-import users from './users.js';
-import auth from './auth.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import passport from 'passport';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import routes from './routes.js';
+import User from './users.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
@@ -16,32 +17,8 @@ const sessionConfig = {
   secret: process.env.SECRET || 'SECRET',
   resave: false,
   saveUninitialized: false,
+  cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
 };
-
-//user object structure
-// let user = {
-//   user_id: "",
-//   user_name: "",
-//   user_email: "",
-//   password: "",
-//   events: {},
-//   is_event: False
-// };
-
-//event object structure
-// let event = {
-//   host_id: "",
-//   host_name: "",
-//   event_id: "",
-//   event_name: "",
-//   event_desc: "",
-//   event_location: "",
-//   event_time: "",
-//   images: "",
-//   attendees: [],
-//   is_event: True
-// }
-
 
 function generateId(){
   return Math.floor(Math.random() * 10000);
@@ -197,9 +174,28 @@ const app = express();
 app.use(expressSession(sessionConfig));
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
 app.use('/', express.static('../client'));
 auth.configure(app);
+
+mongoose.connect(
+  "mongo db uri goes here",
+  {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
+  }
+);
+
+// Passport Local Strategy
+passport.use(User.createStrategy());
+
+// To use with sessions
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+app.use('/api', routes);
 
 function checkLoggedIn(req) {
   return req.isAuthenticated();
@@ -283,7 +279,7 @@ app.delete('/deleteEvent', async (request, response) => {
 
 //read an event
 app.get('/getEventbyId', async (request, response) => {
-  const options = request.query;
+  const options = request.body;
   getEvent(response, options.event_id);
 });
 

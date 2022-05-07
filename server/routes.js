@@ -4,6 +4,9 @@ import express from 'express';
 import User from './users.js';
 //import Event from './events.js';
 import connectEnsureLogin from 'connect-ensure-login';
+import { MapDatabase } from './mongodb.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 //refs: https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb-how-to-get-connected-to-your-database
 // https://www.mongodb.com/languages/javascript/mongodb-and-npm-tutorial
@@ -13,7 +16,8 @@ import connectEnsureLogin from 'connect-ensure-login';
 // https://www.djamware.com/post/58eba06380aca72673af8500/node-express-mongoose-and-passportjs-rest-api-authentication
 // https://heynode.com/tutorial/authenticate-users-node-expressjs-and-passportjs/
 
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(dirname(__filename));
 
 //expressjs routes using mongoose module
 
