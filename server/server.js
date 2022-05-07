@@ -6,21 +6,12 @@ import { MapDatabase } from './mongodb.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
 
-// const sessionConfig = {
-//   // set this encryption key in Heroku config (never in GitHub)!
-//   secret: process.env.SECRET || 'SECRET',
-//   resave: false,
-//   saveUninitialized: false,
-//   cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
-// };
-
-// function generateId(){
-//   return Math.floor(Math.random() * 10000);
-// }
-
-// function getHostName(id){
-//   return readData(id, false).user_name;
-// }
+const sessionConfig = {
+  // set this encryption key in Heroku config (never in GitHub)!
+  secret: process.env.SECRET || 'SECRET',
+  resave: false,
+  saveUninitialized: false,
+};
 
 class UMapServer {
   constructor() {
@@ -30,10 +21,19 @@ class UMapServer {
     this.app.use('/', express.static('./client'));
   }
 
+  //check if we are logged in
+  checkLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+      // If we are authenticated, run the next route.
+      next();
+    } else {
+      // Otherwise, redirect to the login page.
+      res.redirect('/login');
+    }
+  }
+
   async initRoutes() {
     const self = this;
-
-    //this.app.post('/newUser');
 
     this.app.get('/login', (req, res) =>
       res.sendFile('client/log_in.html', { root: __dirname })
