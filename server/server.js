@@ -19,6 +19,7 @@ class UMapServer {
     this.dburi = process.env.MONGODB_URI || "mongodb+srv://UMap:YkDlq6WGWezfWagM@cluster0.pbgzv.mongodb.net/UMAP-database?retryWrites=true&w=majority";
     this.app = express();
     this.app.use(express.json());
+    this.app.use(express.urlencoded());
     this.app.use('/', express.static('./client'));
   }
 
@@ -65,15 +66,10 @@ class UMapServer {
     this.app.post('/register', async (req, res) => {
       try {
         const { first_name, last_name, email, password } = req.body;
-        //const name = first_name + '_' + last_name;
         const user = await self.db.createUser(first_name, last_name, email, password);
-        //res.status(200).send(JSON.stringify(user));
-        console.log(user);
-        alert('Registered Successfully!');
         res.redirect('/login'); // go back to login page
       } catch (err) {
         console.log(err);
-        res.status(500).send(err);
         //res.redirect('/register'); //stay on register page
       }
     });
