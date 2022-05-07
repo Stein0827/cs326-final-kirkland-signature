@@ -290,22 +290,24 @@ const sessionConfig = {
 
 class UMapServer {
   constructor() {
-    this.dburi = process.env.MONGODB_URI || "mongodb+srv://UMap:YkDlq6WGWezfWagM@cluster0.pbgzv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+    this.dburi = process.env.MONGODB_URI || "mongodb+srv://UMap:YkDlq6WGWezfWagM@cluster0.pbgzv.mongodb.net/UMAP-database?retryWrites=true&w=majority";
     this.app = express();
-    this.app.use('/', express.static('/client'));
+    this.app.use('/', express.static('./client'));
   }
 
   async initRoutes() {
     const self = this;
 
-    this.app.post('/newUser');
+    //this.app.post('/newUser');
 
     this.app.get('/login', (req, res) =>
       res.sendFile('client/log_in.html', { root: __dirname })
     );
 
-    this.app.get('/map', (req, res) =>
-      res.sendFile('client/map.html', { root: __dirname })
+    this.app.get('/map', (req, res) => {
+      // await self.db.testEvent();
+      res.sendFile('client/map.html', { root: __dirname });
+    }
     );
 
     this.app.get('/event-editor/:eventID', (req, res) =>
@@ -328,10 +330,10 @@ class UMapServer {
       res.redirect('/login');
     });
     
-    //create user
-    this.app.post('/newUser', async (request, response) => {
+    //register a new user
+    this.app.post('/register', async (req, res) => {
       try {
-        const { name, email, password } = req.query;
+        const { name, email, password } = req.body;
         const user = await self.db.createUser(name, email, password);
         // res.send(JSON.stringify(user));
         res.status(200);
@@ -341,9 +343,9 @@ class UMapServer {
     });
     
     //return user
-    this.app.get('/getUserbyId', async (request, response) => {
+    this.app.get('/getUserbyId', async (req, res) => {
       try {
-        const { id } = req.query;
+        const { id } = req.body;
         const user = await self.db.readUser(id);
         res.send(JSON.stringify(user));
       } catch (err) {
@@ -352,7 +354,7 @@ class UMapServer {
     });
     
     //add event to user's profile
-    this.app.post('/createEvent', async (request, response) => {
+    this.app.post('/createEvent', async (req, res) => {
       try {
         const { event } = req.body;
         const evt = await self.db.createUser(event);
@@ -363,7 +365,7 @@ class UMapServer {
     });
     
     //change an event
-    this.app.put('/editEvent', async (request, response) => {
+    this.app.put('/editEvent', async (req, res) => {
       try {
         const { event } = req.body;
         const evt = await self.db.updateEvent(event);
@@ -374,9 +376,9 @@ class UMapServer {
       }
     });
     
-    this.app.delete('/deleteUser', async (request, response) => {
+    this.app.delete('/deleteUser', async (req, res) => {
       try {
-        const { id } = req.query;
+        const { id } = req.body;
         const user = await self.db.deleteUser(id);
         res.send(JSON.stringify(person));
       } catch (err) {
@@ -385,9 +387,9 @@ class UMapServer {
     });
     
     //delete an event
-    this.app.delete('/deleteEvent', async (request, response) => {
+    this.app.delete('/deleteEvent', async (req, res) => {
       try {
-        const { id } = req.query;
+        const { id } = req.body;
         const person = await self.db.deletePerson(id);
         res.send(JSON.stringify(person));
       } catch (err) {
@@ -396,9 +398,9 @@ class UMapServer {
     });
     
     //read an event
-    this.app.get('/getEventbyId', async (request, response) => {
+    this.app.get('/getEventbyId', async (req, res) => {
       try {
-        const { id } = req.query;
+        const { id } = req.body;
         const event = await self.db.updateEvent(id);
         res.send(JSON.stringify(event));
       } catch (err) {
@@ -407,9 +409,9 @@ class UMapServer {
     });
     
     //get all attendees
-    this.app.get('/getAttendees', async (request, response) => {
+    this.app.get('/getAttendees', async (req, res) => {
       try {
-        const { id } = req.query;
+        const { id } = req.body;
         let temp = await self.db.readEvent(id);
         temp = JSON.stringify(temp);
         const attendees = temp.attendees;
@@ -430,9 +432,9 @@ class UMapServer {
       }
     });
     
-    this.app.get('/dumpEvents', async (request, response) => {
+    this.app.get('/dumpEvents', async (req, res) => {
       try {
-        const evt = await self.db.dumpEvents();
+        const evt = await self.db.dumpEvent();
         res.send(JSON.stringify(evt));
       } catch (err) {
         res.status(500).send(err);

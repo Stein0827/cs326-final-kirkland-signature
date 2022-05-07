@@ -109,12 +109,13 @@ async function setEvents(events) {
 }
 
 
-
+const geojson = {features: []};
 const data = await readEvents();
+console.log(data);
 setEvents(data);
 setMarkers(data);
 
-const geojson = {features: []};
+
 async function setMarkers(events){
     for(let event of events){
         let temp = {};
