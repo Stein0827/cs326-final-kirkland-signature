@@ -292,7 +292,7 @@ class UMapServer {
   constructor() {
     this.dburi = process.env.MONGODB_URI || "mongodb+srv://UMap:YkDlq6WGWezfWagM@cluster0.pbgzv.mongodb.net/UMAP-database?retryWrites=true&w=majority";
     this.app = express();
-    this.app.use('/', express.static('/client'));
+    this.app.use('/', express.static('./client'));
   }
 
   async initRoutes() {
