@@ -318,6 +318,9 @@ class UMapServer {
       res.sendFile('client/my_events.html', { root: __dirname })
     );
     
+    this.app.get('/event-viewer/:eventID', (req, res) =>
+      res.sendFile('client/event_viewer.html', { root: __dirname })
+    );
     // this.app.post('/login', auth.authenticate('local', {
     //     successRedirect: '/map',
     //     failureRedirect: '/login',
