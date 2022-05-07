@@ -1,16 +1,14 @@
 async function readEvent(id) {
-    const response = await fetch(`/getEventbyID/`+id, {
-      method: 'GET'
-    //   query: {event_id: id}
+    const response = await fetch(`/getEventbyID`, {
+      method: 'GET',
+      body: {event_id: id}
     });
     const data = await response.json();
     return data;
 }
 
 let curr_event = JSON.parse(localStorage.getItem("details"));
-
-let data = await readEvent(curr_event);
-data = data[0];
+let data = readEvent(curr_event);
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicndtZWh0YSIsImEiOiJjbDEycmM0MDAwNGJiM2tvMGV5cDF4cXZmIn0.6eUqwB8FMxRQOVqH5ymQ4Q';
 const map = new mapboxgl.Map({
