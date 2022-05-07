@@ -140,9 +140,7 @@ router.get('/getEventbyId', async (req, res) => {
 
 //change an event
 router.put('/editUser', async (req, res) => {
-
   await User.findByIdAndUpdate(req.params.id, req.body);
-
   (err, user) => {
     if (err) return res.status(500).send(err);
     return res.send(user);
@@ -151,9 +149,7 @@ router.put('/editUser', async (req, res) => {
 
 //change an event
 router.put('/editEvent', async (req, res) => {
-
   await Event.findByIdAndUpdate(req.params.id, req.body);
-
   (err, event) => {
     if (err) return res.status(500).send(err);
     return res.send(event);
@@ -163,7 +159,6 @@ router.put('/editEvent', async (req, res) => {
 //delete a user
 router.delete('/deleteUser', async (req, res) => {
   await User.findByIdAndDelete(req.params.id, req.body);
-
   (err, user) => {
     if (err) return res.status(500).send(err);
     return res.send(user);

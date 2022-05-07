@@ -1,5 +1,5 @@
 import { readFile, writeFile } from 'fs/promises';
-
+//local database
 const JSONfile = 'data.json';
 let localData = [];
 
