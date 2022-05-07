@@ -7,6 +7,7 @@ import passport from 'passport';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import  {User} from './users.js';
+import { MapDatabase } from './mongodb.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
@@ -448,6 +449,20 @@ class UMapServer {
       } catch (err) {
         res.status(500).send(err);
       }
+    });
+  }
+
+  async initDB() {
+    this.db = new MapDatabase(this.dburl);
+    await this.db.connect();
+  }
+
+  async start() {
+    await this.initRoutes();
+    await this.initDb();
+    const port = process.env.PORT || 8080;
+    this.app.listen(port, () => {
+      console.log(`PeopleServer listening on port ${port}!`);
     });
   }
 }
