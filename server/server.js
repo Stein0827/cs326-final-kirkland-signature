@@ -43,8 +43,8 @@ class UMapServer {
 
     this.app.get('/map', async (req, res) => {
       const id = await self.db.testEvent();
-      const evt = await self.db.deleteEvent(id[0].insertedId);
-      console.log(evt);
+      // const evt = await self.db.deleteEvent(id[0].insertedId);
+      // console.log(evt);
       res.sendFile('client/map.html', { root: __dirname });
     }
     );
