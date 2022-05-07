@@ -1,4 +1,5 @@
 import express from 'express';
+import expressSession from 'express-session';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { MapDatabase } from './mongodb.js';
@@ -7,20 +8,26 @@ import auth from './auth.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
 
-const sessionConfig = {
-  // set this encryption key in Heroku config (never in GitHub)!
-  secret: process.env.SECRET || 'SECRET',
-  resave: false,
-  saveUninitialized: false,
-};
 
 class UMapServer {
   constructor() {
     this.dburi = process.env.MONGODB_URI || "mongodb+srv://UMap:YkDlq6WGWezfWagM@cluster0.pbgzv.mongodb.net/UMAP-database?retryWrites=true&w=majority";
+
     this.app = express();
+
+    const sessionConfig = {
+      // set this encryption key in Heroku config (never in GitHub)!
+      secret: process.env.SECRET || 'SECRET',
+      resave: false,
+      saveUninitialized: false,
+    };
+
+    //setup session 
+    this.app.use(expressSession(sessionConfig));
     this.app.use(express.json());
-    this.app.use(express.urlencoded());
+    this.app.use(express.urlencoded({extended: false}));
     this.app.use('/', express.static('./client'));
+    auth.configure(this.app);
   }
 
   //check if we are logged in
@@ -86,10 +93,7 @@ class UMapServer {
     this.app.get('/my-events/:userID', (req, res) =>
       res.sendFile('client/my_events.html', { root: __dirname })
     );
-    
- 
-
-    
+       
     //return user
     this.app.get('/getUserbyId', async (req, res) => {
       try {
