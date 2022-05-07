@@ -4,6 +4,7 @@ import express from 'express';
 import User from './users.js';
 //import Event from './events.js';
 import connectEnsureLogin from 'connect-ensure-login';
+import { MapDatabase } from './mongodb.js';
 
 //refs: https://www.mongodb.com/blog/post/quick-start-nodejs-mongodb-how-to-get-connected-to-your-database
 // https://www.mongodb.com/languages/javascript/mongodb-and-npm-tutorial
