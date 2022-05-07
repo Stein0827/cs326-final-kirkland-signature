@@ -331,7 +331,7 @@ class UMapServer {
     //register a new user
     this.app.post('/register', async (req, res) => {
       try {
-        const { name, email, password } = req.query;
+        const { name, email, password } = req.body;
         const user = await self.db.createUser(name, email, password);
         // res.send(JSON.stringify(user));
         res.status(200);
@@ -343,7 +343,7 @@ class UMapServer {
     //return user
     this.app.get('/getUserbyId', async (req, res) => {
       try {
-        const { id } = req.query;
+        const { id } = req.body;
         const user = await self.db.readUser(id);
         res.send(JSON.stringify(user));
       } catch (err) {
@@ -376,7 +376,7 @@ class UMapServer {
     
     this.app.delete('/deleteUser', async (req, res) => {
       try {
-        const { id } = req.query;
+        const { id } = req.body;
         const user = await self.db.deleteUser(id);
         res.send(JSON.stringify(person));
       } catch (err) {
@@ -387,7 +387,7 @@ class UMapServer {
     //delete an event
     this.app.delete('/deleteEvent', async (req, res) => {
       try {
-        const { id } = req.query;
+        const { id } = req.body;
         const person = await self.db.deletePerson(id);
         res.send(JSON.stringify(person));
       } catch (err) {
@@ -398,7 +398,7 @@ class UMapServer {
     //read an event
     this.app.get('/getEventbyId', async (req, res) => {
       try {
-        const { id } = req.query;
+        const { id } = req.body;
         const event = await self.db.updateEvent(id);
         res.send(JSON.stringify(event));
       } catch (err) {
@@ -409,7 +409,7 @@ class UMapServer {
     //get all attendees
     this.app.get('/getAttendees', async (req, res) => {
       try {
-        const { id } = req.query;
+        const { id } = req.body;
         let temp = await self.db.readEvent(id);
         temp = JSON.stringify(temp);
         const attendees = temp.attendees;
