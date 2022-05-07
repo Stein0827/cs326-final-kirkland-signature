@@ -6,8 +6,7 @@ import { dirname } from 'path';
 import passport from 'passport';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-import routes from './routes.js';
-import User from './users.js';
+import  {User} from './users.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
@@ -174,28 +173,16 @@ const app = express();
 app.use(expressSession(sessionConfig));
 app.use(logger('dev'));
 app.use(express.json());
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
-app.use('/', express.static('../client'));
-auth.configure(app);
+app.use('/', express.static('./client'));
 
 mongoose.connect(
-  "mongo db uri goes here",
+  "mongodb+srv://UMap:YkDlq6WGWezfWagM@cluster0.pbgzv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
-    useFindAndModify: false,
     useUnifiedTopology: true
   }
 );
-
-// Passport Local Strategy
-passport.use(User.createStrategy());
-
-// To use with sessions
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-app.use('/api', routes);
 
 function checkLoggedIn(req) {
   return req.isAuthenticated();
@@ -226,11 +213,11 @@ app.get('/my-events/:userID', (req, res) =>
   res.sendFile('client/my_events.html', { root: __dirname })
 );
 
-app.post('/login', auth.authenticate('local', {
-    successRedirect: '/map',
-    failureRedirect: '/login',
-  })
-);
+// app.post('/login', auth.authenticate('local', {
+//     successRedirect: '/map',
+//     failureRedirect: '/login',
+//   })
+// );
 
 //logout
 app.get('/logout', (req, res) => {

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import passport from 'passport';
 import express from 'express';
-import User from './users.js';
+import { User } from './users.js';
 //import Event from './events.js';
 import connectEnsureLogin from 'connect-ensure-login';
 import { MapDatabase } from './mongodb.js';

@@ -12,8 +12,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "node --inspect-brk index.js",
-    "start": "node server/index.js"
+    "debug": "node --inspect-brk server/server.js",
+    "start": "node server/server.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
   "dependencies": {
     "connect-ensure-login": "^0.1.1",
     "dotenv": "^16.0.0",
+    "export": "^0.1.337",
     "express": "^4.17.3",
     "express-session": "^1.17.2",
     "mongodb": "^4.5.0",
