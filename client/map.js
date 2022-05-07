@@ -94,7 +94,9 @@ async function setEvents(events) {
                 cText = document.createElement("button");
                 cText.innerHTML = "Details"
                 cText.addEventListener("click", function(e) {
-                    localStorage.setItem("details", JSON.stringify(event.event_id));
+                    console.log(event);
+                    localStorage.removeItem("details");
+                    localStorage.setItem("details", JSON.stringify(event._id));
                     window.location.href = "/event-viewer";   
                 });
                 cText.classList.add("btn", "btn-sm", "btn-secondary", "btn-block", "font-small");

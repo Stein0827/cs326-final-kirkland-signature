@@ -17,6 +17,7 @@ class UMapServer {
   constructor() {
     this.dburi = process.env.MONGODB_URI || "mongodb+srv://UMap:YkDlq6WGWezfWagM@cluster0.pbgzv.mongodb.net/UMAP-database?retryWrites=true&w=majority";
     this.app = express();
+    // app.use(logger('dev'));
     this.app.use('/', express.static('./client'));
   }
 
@@ -52,6 +53,9 @@ class UMapServer {
       res.sendFile('client/my_events.html', { root: __dirname })
     );
     
+    this.app.get('/event-viewer', (req, res) =>
+      res.sendFile('client/event_viewer.html', { root: __dirname })
+    );
     // this.app.post('/login', auth.authenticate('local', {
     //     successRedirect: '/map',
     //     failureRedirect: '/login',
@@ -132,10 +136,12 @@ class UMapServer {
     });
     
     //read an event
-    this.app.get('/getEventbyId', async (req, res) => {
+    this.app.get('/getEventbyId/:eventID', async (req, res) => {
       try {
-        const { id } = req.body;
-        const event = await self.db.updateEvent(id);
+        const id = req.params.eventID;
+        // console.log(id);
+        // const { id } = req.query;
+        const event = await self.db.readEvent(id);
         res.send(JSON.stringify(event));
       } catch (err) {
         res.status(500).send(err);
