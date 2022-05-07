@@ -1,15 +1,13 @@
 import express from 'express';
-import {MapDatabase} from './mongodb.js';
 import passport from 'passport';
-import routes from './routes';
-import mongoose from 'mongoose';
-import auth from './auth';
-
 import session from 'express-session';
-import MongoStore from 'connect-mongo'; 
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import routes from './routes.js';
+import User from './users.js';
+//import MongoStore from 'connect-mongo'; 
 
-const User = require('./users');
-const routes = require('./routes');
+//const User = require('./users.js');
 
 const app = express();
 
@@ -17,7 +15,8 @@ app.use(session({
     secret: "secret",
     resave: false,
     saveUninitialized: true,
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
+    cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
+    //store: new MongoStore({ mongooseConnection: mongoose.connection })
   })
 );
 
@@ -31,7 +30,7 @@ mongoose.connect(
   }
 );
 
-app.use(express.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -42,7 +41,7 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use('/api', routes)
+app.use('/api', routes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
