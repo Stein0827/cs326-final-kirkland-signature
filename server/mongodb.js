@@ -16,7 +16,7 @@ export class MapDatabase {
     // this.users = this.client.db('users');
     // this.events = this.client.db('events');
 
-    this.db = this.client.db('UMAP database');
+    this.db = this.client.db('UMAP-database');
 
     // Init the database.
     await this.init();
