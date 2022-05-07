@@ -44,6 +44,11 @@ export class MapDatabase {
     //   password : password,
     //   events : []
     // };
+    let collision = await this.users.find({'email': email}).toArray();
+    if (collision.length > 0) {
+      res.status(304).send('user exists!');
+      return false;
+    }
     const res = await this.users.insertOne({user_name: name, user_email: email, password: password, events: []});
     // Note: the result received back from MongoDB does not contain the
     // entire document that was inserted into the database. Instead, it
@@ -58,7 +63,13 @@ export class MapDatabase {
 
     // CREATE a user in the database.
   async createEvent(event) {
+
     let user = await this.readUser(event.host_id);
+    let collision = await this.events.find({'event_name': event.event_name}).toArray();
+    if (collision.length > 0) {
+      res.status(304).send('event already created');
+      return false;
+    }
     const res = await this.events.insertOne({'_id': ObjectId(id), 'host_id': event.host_id,  'host_name' : user.user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
     'event_location' : event.event_location, 'event_time' : event.event_time, 'attendees' : event.attendees});
     
