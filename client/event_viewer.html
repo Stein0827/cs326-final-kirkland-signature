@@ -9,8 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-    <link href="event_creator.css" rel="stylesheet">
-    <script type="module" src="event_creator.js" defer></script>
+    <link href="event_viewer.css" rel="stylesheet">
+    <script type="module" src="event_viewer.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
@@ -38,16 +38,14 @@
                     <label for="event-time" class="form-label label">Event Time:</label>
                     <input type="datetime-local" class="form-control input" id="event-time">
                 </div>
-                <div class="mb-3">
+                <!-- <div class="mb-3">
                     <label for="event-image" class="form-label label">Event Image:</label>
                     <input type="file" class="form-control input" id="event-image" aria-describedby="imageHelp">
                     <div class="form-text" id="imageHelp">This is optional!</div>
-                </div>
+                </div> -->
                 <div class="mb-3">
 
-                    <button type="button" class="btn btn-primary" onclick="location.href = '/map';" id="save" disabled="false">Save Event Details</button>
-                    <button type="button" class="btn btn-primary" onclick="location.href = '/map';" id="create" disabled="false">Create Event</button>
-                    <button type="button" class="btn btn-secondary" onclick="location.href = '/map';" id="dlt">Delete Event</button>
+                    <button type="button" class="btn btn-primary" onclick="location.href = '/map';" id="rsvp">RSVP</button>
                     <button type="button" class="btn btn-secondary" onclick="location.href = '/map';" id="cancel">Cancel</button>
                 </div>
             </form>
