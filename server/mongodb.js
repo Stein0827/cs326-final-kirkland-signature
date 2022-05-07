@@ -89,7 +89,7 @@ export class MapDatabase {
 
   // READ an event from the database
   async readEvent(id) {
-    const res = await this.users.findOne({ '_id': id });
+    const res = await this.events.find({ '_id': ObjectId(id) });
     return res;
   }
 
