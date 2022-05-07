@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import express from 'express';
 import expressSession from 'express-session';
 import logger from 'morgan';
