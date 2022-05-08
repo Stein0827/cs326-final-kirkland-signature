@@ -1,15 +1,15 @@
-# team name - Kirkland Signature
+# Team Name - Kirkland Signature
 
 ## UMap
 ## Spring 2022
 ## Overview:
 We created a live event map for the UMass Amherst campus. It allows users to create, find, and rsvp to events that are displayed on the map. The website currently allows users to sign in or view it as guests. If they are a guest they can only view existing events. If they are signed in, they can view, create, and rsvp to events. In addition they can edit or delete events that they have created.
-## team members
-Rishab - rwmehta
-Suyash - Suyash-Deshmukh
-Alex - qiu-alex
-Paul - Stein0827
-## user iterface
+## Team Members
+Rishab Mehta - rwmehta
+Suyash Deshmukh - Suyash-Deshmukh
+Alex Qiu - qiu-alex
+Paul Shi - Stein0827
+## User Iterface
 
 
 | UI View | Description  |  Images |
