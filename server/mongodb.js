@@ -51,16 +51,14 @@ export class MapDatabase {
 
     // CREATE a user in the database.
   async createEvent(event, host_id) {
-
     let user = await this.readUser(host_id);
     let collision = await this.events.find({'event_name': event.event_name}).toArray();
     if (collision.length > 0) {
       return false;
     }
-    const res = await this.events.insertOne({'host_id': host_id,  'host_name' : user[0].user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
-    'event_location' : event.event_location, 'event_time' : event.event_time, 'attendees' : event.attendees});
-    
-    user[0].events.push(res);
+    const res = await this.events.insertOne({host_id: host_id,  host_name : user.user_name, event_name: event.event_name, event_desc : event.event_desc,
+    event_location : event.event_location, event_time : event.event_time, attendees : event.attendees});
+    user.events.push(res);
     await this.updateUser(user);
     return res;
   }
