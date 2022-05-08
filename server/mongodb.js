@@ -35,9 +35,9 @@ export class MapDatabase {
   // CREATE a user in the database.
   async createUser(name, email, password) {
     let collision = await this.users.find({'user_email': email}).toArray();
-    if (collision.length > 0) {
-      return false;
-    }
+    // if (collision.length > 0) {
+    //   return false;
+    // }
     const res = await this.users.insertOne({user_name: name, user_email: email, password: password, events: []});
     return res;
   }
@@ -73,12 +73,12 @@ export class MapDatabase {
 
   // gets user by email
   async findUserbyEmail(email) {
-    const res = await this.users.findOne({'email': email});
-    return res;
+    const res = await this.users.find({'user_email': email}).toArray();
+    return res[0];
   }
 
   async findUserCount(email){
-    const res = await this.users.find({'email': email}).count();
+    const res = await this.users.find({'user_email': email}).count();
     if (res > 0){
       return true;
     } else {
@@ -88,7 +88,7 @@ export class MapDatabase {
 
   // finds user by password and email
   async validateLogin(email, password) {
-      const res = await this.users.find({'email': email, 'password': email}).count();
+      const res = await this.users.find({'user_email': email, 'password': email}).count();
       if (res > 0){
         return true;
       } else {

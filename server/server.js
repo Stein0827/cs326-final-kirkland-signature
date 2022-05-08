@@ -18,15 +18,15 @@ class UMapServer {
     const sessionConfig = {
       // set this encryption key in Heroku config (never in GitHub)!
       secret: process.env.SECRET || 'SECRET',
-      resave: false,
-      saveUninitialized: false,
+      // resave: false,
+      // saveUninitialized: false,
       cookie: {maxAge: 60000}
     };
 
     //setup session 
     this.app.use(expressSession(sessionConfig));
     this.app.use(express.json());
-    this.app.use(express.urlencoded({extended: false}));
+    this.app.use(express.urlencoded({extended: true}));
     this.app.use('/', express.static('./client'));
     this.app.use(cookieParser());
     // this.app.use(passport.initialize());
@@ -53,7 +53,6 @@ class UMapServer {
 
     // // Handle post data from the login.html form.
     this.app.post('/login', async function(req, res){
-      console.log(JSON.stringify(req.body));
       const {email, password} = req.body;
       //const count = await self.db.findUserbyEmail(req.email).count();
       //const pw_count = await self.db.validateLogin(req.email, req.password).count();
@@ -64,8 +63,10 @@ class UMapServer {
         console.log('check your password');
         res.redirect('/login');
       } else {
-        user = await self.db.findUserbyEmail(email);
-        req.session.user = user.name.toJSON();
+        let user = await self.db.findUserbyEmail(email);
+        console.log(user);
+        req.session.user = user.user_name;
+        console.log(req.session.user);
         res.redirect('/map');
       }
     });
@@ -86,15 +87,16 @@ class UMapServer {
     //register a new user
     this.app.post('/register', async (req, res) => {
         const { first_name, last_name, email, password } = req.body;
+        const name = first_name + ' ' + last_name;
         //if user with same email already exists
-        const count = await self.db.findUserbyEmail(email).count();
-        if (count > 0){
+        if (!await self.db.createUser(name, email, password)){
           console.log("User with same email already exists");
           res.redirect('/sign_up');
         } else {
-          const name = first_name + ' ' + last_name;
           const user = await self.db.createUser(name, email, password);
-          req.session.user = user.name.toJSON(); 
+          console.log(user);
+          req.session.user = await self.db.readUser(user.insertedId).user_name;
+          console.log(req.session.user); 
           res.redirect('/map'); 
         }
     

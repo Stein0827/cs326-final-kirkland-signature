@@ -7,7 +7,7 @@
 //     try{
 //         const response = await fetch('/login', {
 //             method: 'POST',
-//             body: JSON.stringify({user_email: email, password: password, is_event: false}),
+//             body: JSON.stringify({user_email: email, password: password}),
 //         });
 //     }
 //     catch{
