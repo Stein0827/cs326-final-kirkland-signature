@@ -1,15 +1,15 @@
-# team name - Kirkland Signature
+# Team Name - Kirkland Signature
 
 ## UMap
 ## Spring 2022
 ## Overview:
 We created a live event map for the UMass Amherst campus. It allows users to create, find, and rsvp to events that are displayed on the map. The website currently allows users to sign in or view it as guests. If they are a guest they can only view existing events. If they are signed in, they can view, create, and rsvp to events. In addition they can edit or delete events that they have created.
-## team members
-Rishab - rwmehta
-Suyash - Suyash-Deshmukh
-Alex - qiu-alex
-Paul - Stein0827
-## user iterface
+## Team Members
+Rishab Mehta - rwmehta
+Suyash Deshmukh - Suyash-Deshmukh
+Alex Qiu - qiu-alex
+Paul Shi - Stein0827
+## User Iterface
 
 
 | UI View | Description  |  Images |
@@ -50,8 +50,57 @@ Paul - Stein0827
 | /getAttendees | returns a list of attendees of a given event.                                                                                                     |
 | /attendEvent  | RSVP to an event.                                                                                                                                 |
 ## Authentication/Authorization
+
+We are working on authentication. Only signed in users are allowed to create, rsvp, delete, and edit events.
+
 ## Division of Labor
+
+### Milestone 1
+- Rishab:
+Researched on map APIs, made the maps on the main page and the event creator page. Made wireframes. Worked on the my-events page.
+
+- Paul:
+Made the landing page. Worked on wireframes. Worked on the main map page.
+
+- Alex:
+Made the sign-up and login pages. Worked on wireframes.
+
+- Suyash:
+Made the milestone1.md file. Worked on wireframes. Made Event Creator Page. Worked on the my-events page.
+
+### Milestone 2
+- Rishab:
+Front end implementation. Debugging with postman. API documentation. Worked on milestone2 document.
+
+- Paul:
+Front end implementation. Some CRUD functions in server.js. API documentation. Worked on milestone2 document. Deployed web app on Heroku
+
+- Alex:
+ExpressJS CRUD functions in server.js. API documentation. Worked on milestone2 document. Some front end implementation.
+
+- Suyash:
+Database.js file. CRUD functions in server.js. API documentation. Worked on milestone2 document. Debugging with postman.
+
+### Milestone 3
+
+- Rishab: 
+Worked on authentication and the CRUD functions of MongoDB integration, worked on front end integration, worked on documentation. Debugging.
+
+
+- Paul: 
+Worked on documentation and CRUD functions of MongoDB integration, worked on documentation. Debugging.
+
+
+- Alex: 
+Worked on authentication and CRUD functions of MongoDB integration. Debugging.
+
+
+- Suyash: 
+Worked on authentication and CRUD functions of MongoDB integration, worked on documentation. Debugging.
+
 ## Conclusion
 
 Our website has been deployed to Heroku and can be accessed through the following link:
 https://cs326-final-umap.herokuapp.com/
+
+We enjoyed working together, and found that it was very useful to be in person. It allowed us to both implement and debug much faster then we would have otherwise been able to. We learnt a lot about map APIs and Express. This was our introduction to Bootstrap and Node.js. We gained a lot of experience with backend implementation and MongoDB integration. We encountered grave difficulties when attempting to implement authentication. We spent an approximate 30 hours on authentication were not able to make it functional so we could not include it in our final release. We would have liked to know how difficult connecting to a database and authentication would be before starting the project so we could have planned out our last milestone better. Overall, it was an interesting project to work on, and we believe it is a useful web app.

@@ -2,32 +2,31 @@
 
 We used MongoDB for database.
 
-**Event Object** - 8 fields: Host ID, Host Name, Event ID, Event Title, Description, Location, Time, List of attendees  
+**Event Document** - 8 fields: Host ID, Host Name, Event ID, Event Title, Description, Location, Time, List of attendees  
 ```
-//event object structure  
-let event = {  
-    host_id: "",  
-    host_name: "",
-    event_id: "",  
-    event_name: "",  
-    event_desc: "",  
-    event_location: "",  
-    event_time: "",   
-    attendees: [],
+//event document
+{
+    _id: <ObjectId>  
+    host_id: <ObjectId>,  
+    host_name: String,  
+    event_name: String,  
+    event_desc: String,  
+    event_location: Array,  // Array of size 2, holds float data members, points to coordinates on map
+    event_time: Date,   
+    attendees: Array,
 }  
 ```
 Event ID is generated via MongoDB.
 
-**User Object** - 6 fields: User ID, first name, last name, UMass Email, Password, List of events created  
+**User Object** - 5 fields: User ID, User Name, UMass Email, Password, List of events created  
 ```
 //user object structure
 let user = {
-    user_id: "",
-    first_name: "",
-    last_name: "",
-    user_email: "",
-    password: "",
-    events: [], //array of event ids
+    _id: <ObjectId>,
+    user_name: String,
+    user_email: Email,
+    password: String,
+    events: Array, //array of event ids they made
 };
 ```
 User ID is generated via MongODB.
