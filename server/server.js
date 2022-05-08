@@ -55,16 +55,17 @@ class UMapServer {
     this.app.post('/login', async function(req, res){
       const {email, password} = req.body;
       console.log(req.body);
-      if (await self.db.findUserCount(email)){
+      if (!(await self.db.findUserCount(email))){
         console.log('wrong email');
         res.redirect('/login');
-      } else if (await self.db.validateLogin(email, password)){
+      } else if (!(await self.db.validateLogin(email, password))){
         console.log('check your password');
         res.redirect('/login');
       } else {
         let user = await self.db.findUserbyEmail(email);
-        req.session.user = await self.db.readUser(user._id).user_name;
-        console.log(req.session.user);
+        req.session.user_name = (await self.db.readUser(user._id)).user_name;
+        req.session.user_id = user._id;
+        console.log(req.session);
         res.redirect('/map');
       }
     });
@@ -87,7 +88,7 @@ class UMapServer {
         const { first_name, last_name, email, password } = req.body;
         const name = first_name + ' ' + last_name;
         //if user with same email already exists
-        if (!await self.db.createUser(name, email, password)){
+        if (!(await self.db.createUser(name, email, password))){
           console.log("User with same email already exists");
           res.redirect('/sign_up');
         } else {
