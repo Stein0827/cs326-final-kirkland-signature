@@ -24,6 +24,7 @@
   "homepage": "https://github.com/Stein0827/cs326-final-kirkland-signature/docs/milestone2.md",
   "dependencies": {
     "connect-ensure-login": "^0.1.1",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
     "export": "^0.1.337",
     "express": "^4.17.3",

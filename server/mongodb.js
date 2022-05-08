@@ -73,25 +73,27 @@ export class MapDatabase {
 
   // gets user by email
   async findUserbyEmail(email) {
-    try {
-      const res = await this.users.findOne({'email': email});
-      return res
-    } catch(err){
-      console.log(err);
+    const res = await this.users.findOne({'email': email});
+    return res;
+  }
+
+  async findUserCount(email){
+    const res = await this.users.find({'email': email}).count();
+    if (res > 0){
+      return true;
+    } else {
       return false;
     }
   }
 
   // finds user by password and email
   async validateLogin(email, password) {
-    try {
-      const res = await this.users.findOne({'email': email, 'password': email});
-      return res;
-    } catch(err){
-      console.log(err);
-      return false;
-    }
-    
+      const res = await this.users.find({'email': email, 'password': email}).count();
+      if (res > 0){
+        return true;
+      } else {
+        return false;
+      }
   }
 
   // READ an event from the database

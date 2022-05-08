@@ -3,7 +3,7 @@ import expressSession from 'express-session';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { MapDatabase } from './mongodb.js';
-import auth from './auth.js';
+import cookieParser from 'cookie-parser';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
@@ -20,6 +20,7 @@ class UMapServer {
       secret: process.env.SECRET || 'SECRET',
       resave: false,
       saveUninitialized: false,
+      cookie: {maxAge: 60000}
     };
 
     //setup session 
@@ -27,12 +28,14 @@ class UMapServer {
     this.app.use(express.json());
     this.app.use(express.urlencoded({extended: false}));
     this.app.use('/', express.static('./client'));
-    auth.configure(this.app);
+    this.app.use(cookieParser());
+    // this.app.use(passport.initialize());
+    // this.app.use(passport.session());
   }
 
   //check if we are logged in
   checkLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
+    if (req.session.user()) {
       // If we are authenticated, run the next route.
       next();
     } else {
@@ -48,21 +51,32 @@ class UMapServer {
       res.sendFile('client/log_in.html', { root: __dirname })
     );
 
-    // Handle post data from the login.html form.
-    this.app.post(
-      '/login',
-      auth.authenticate('local', {
-        // use username/password authentication
-        successRedirect: '/map', // when we login, go to /private
-        failureRedirect: '/login', // otherwise, back to login
-      })
-    );
+    // // Handle post data from the login.html form.
+    this.app.post('/login', async function(req, res){
+      console.log(JSON.stringify(req.body));
+      const {email, password} = req.body;
+      //const count = await self.db.findUserbyEmail(req.email).count();
+      //const pw_count = await self.db.validateLogin(req.email, req.password).count();
+      if (await self.db.findUserCount(email)){
+        console.log('wrong email');
+        res.redirect('/login');
+      } else if (await self.db.validateLogin(email, password)){
+        console.log('check your password');
+        res.redirect('/login');
+      } else {
+        user = await self.db.findUserbyEmail(email);
+        req.session.user = user.name.toJSON();
+        res.redirect('/map');
+      }
+    });
 
     // Handle logging out (takes us back to the login page).
-    this.app.get('/logout', (req, res) => {
-      req.logout(); // Logs us out!
-      res.redirect('/login'); // back to login
-    });
+    this.app.get('/logout', function(req, res){
+      req.session.destroy(function(){
+         console.log("user logged out.")
+      });
+      res.redirect('/login');
+   });
     
     //go to register landing page
     this.app.get('/register', (req, res) =>
@@ -71,14 +85,19 @@ class UMapServer {
 
     //register a new user
     this.app.post('/register', async (req, res) => {
-      try {
         const { first_name, last_name, email, password } = req.body;
-        const user = await self.db.createUser(first_name, last_name, email, password);
-        res.redirect('/login'); // go back to login page
-      } catch (err) {
-        console.log(err);
-        //res.redirect('/register'); //stay on register page
-      }
+        //if user with same email already exists
+        const count = await self.db.findUserbyEmail(email).count();
+        if (count > 0){
+          console.log("User with same email already exists");
+          res.redirect('/sign_up');
+        } else {
+          const name = first_name + ' ' + last_name;
+          const user = await self.db.createUser(name, email, password);
+          req.session.user = user.name.toJSON(); 
+          res.redirect('/map'); 
+        }
+    
     });
 
     this.app.get('/map', (req, res) => {
@@ -98,30 +117,7 @@ class UMapServer {
       res.sendFile('client/event_viewer.html', { root: __dirname })
     );
 
-    // this.app.post('/login', auth.authenticate('local', {
-    //     successRedirect: '/map',
-    //     failureRedirect: '/login',
-    //   })
-    // );
-    
-    //logout
-    this.app.get('/logout', (req, res) => {
-      req.logout();
-      res.redirect('/login');
-    });
-    
-    //register a new user
-    this.app.post('/register', async (req, res) => {
-      try {
-        const { name, email, password } = req.body;
-        const user = await self.db.createUser(name, email, password);
-        // res.send(JSON.stringify(user));
-        res.status(200);
-      } catch (err) {
-        res.status(500).send(err);
-      }
-    });
-    
+
     //return user
     this.app.get('/getUserbyId', async (req, res) => {
       try {
