@@ -58,22 +58,6 @@ const save = document.getElementById("save"),
     create = document.getElementById("create");
 
 //disable buttons accordingly 
-if (ename.innerHTML === "" && etime.innerHTML === "" && edetails.innerHTML === "") {
-    //disable edit button
-    save.disabled = true;
-    create.disabled = false;
-    // disable links
-    // save_link.href = '';
-    // create_link.href = 'map.html';
-
-} else {
-    //disable create button
-    create.disabled = true;
-    save.disabled = false;
-    // disable link
-    // create_link = '';
-    // save_link = 'map.html';
-}
 
 save.addEventListener("click", async (e) => {
     await updateEvent(ename.value, etime.value, edetails.value);
