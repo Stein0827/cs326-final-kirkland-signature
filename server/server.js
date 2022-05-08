@@ -18,8 +18,8 @@ class UMapServer {
     const sessionConfig = {
       // set this encryption key in Heroku config (never in GitHub)!
       secret: process.env.SECRET || 'SECRET',
-      // resave: false,
-      // saveUninitialized: false,
+      resave: false,
+      saveUninitialized: false,
       cookie: {maxAge: 60000}
     };
 
@@ -54,8 +54,7 @@ class UMapServer {
     // // Handle post data from the login.html form.
     this.app.post('/login', async function(req, res){
       const {email, password} = req.body;
-      //const count = await self.db.findUserbyEmail(req.email).count();
-      //const pw_count = await self.db.validateLogin(req.email, req.password).count();
+      console.log(req.body);
       if (await self.db.findUserCount(email)){
         console.log('wrong email');
         res.redirect('/login');
@@ -64,8 +63,7 @@ class UMapServer {
         res.redirect('/login');
       } else {
         let user = await self.db.findUserbyEmail(email);
-        console.log(user);
-        req.session.user = user.user_name;
+        req.session.user = await self.db.readUser(user._id).user_name;
         console.log(req.session.user);
         res.redirect('/map');
       }
