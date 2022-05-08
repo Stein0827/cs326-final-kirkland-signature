@@ -54,7 +54,6 @@ class UMapServer {
     // // Handle post data from the login.html form.
     this.app.post('/login', async function(req, res){
       const {email, password} = req.body;
-      console.log(req.body);
       if (!(await self.db.findUserCount(email))){
         console.log('wrong email');
         res.redirect('/login');
@@ -65,7 +64,6 @@ class UMapServer {
         let user = await self.db.findUserbyEmail(email);
         req.session.user_name = (await self.db.readUser(user._id)).user_name;
         req.session.user_id = user._id;
-        console.log(req.session);
         res.redirect('/map');
       }
     });
@@ -90,10 +88,10 @@ class UMapServer {
         res.sendFile('client/map.html', { root: __dirname });
       }
     });
+
     //register a new user
     this.app.post('/register', async (req, res) => {
-        const { first_name, last_name, email, password } = req.body;
-        const name = first_name + ' ' + last_name;
+        const { name, email, password } = req.body;
         //if user with same email already exists
         if (!(await self.db.createUser(name, email, password))){
           console.log("User with same email already exists");
@@ -137,18 +135,6 @@ class UMapServer {
     this.app.get('/logout', (req, res) => {
       req.logout();
       res.redirect('/login');
-    });
-    
-    //register a new user
-    this.app.post('/register', async (req, res) => {
-      try {
-        const { name, email, password } = req.body;
-        const user = await self.db.createUser(name, email, password);
-        // res.send(JSON.stringify(user));
-        res.status(200);
-      } catch (err) {
-        res.status(500).send(err);
-      }
     });
     
     //return user

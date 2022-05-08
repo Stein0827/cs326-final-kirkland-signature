@@ -28,7 +28,11 @@ async function createEvent(name, time, desc){
     try{
         const response = await fetch('/createEvent', {
             method: 'POST',
-            body: JSON.stringify({event_name: name, event_time: time, event_desc: desc, event_location: coordinates, attendees: [], is_event: true}),
+            headers: {
+                'Content-Type': 'application/json',
+              },
+            //body: {event_name: name, event_time: time, event_desc: desc, event_location: coordinates, attendees: []}
+            body: JSON.stringify({event_name: "name", event_time: "time", event_desc: "desc", event_location: "coordinates", attendees: []})
         });
     }
     catch(err){
@@ -40,7 +44,7 @@ async function updateEvent(name, time, desc){
     try{
         const response = await fetch('/editEvent', {
             method: 'PUT',
-            body: JSON.stringify({event_name: name, event_time: time, event_desc: desc, event_location: coordinates, attendees: attendees, is_event: true}),
+            body: JSON.stringify({event_name: name, event_time: time, event_desc: desc, event_location: coordinates, attendees: attendees})
         });
         const data = await response.json();
         return data;
@@ -76,13 +80,13 @@ if (ename.innerHTML === "" && etime.innerHTML === "" && edetails.innerHTML === "
 }
 
 save.addEventListener("click", async (e)=>{
-    await createEvent(ename.value, etime.value, edetails.value);
+    await updateEvent(ename.value, etime.value, edetails.value);
     localStorage.removeItem("event");
 });
 
 
 create.addEventListener("click", async (e)=>{
-    await updateEvent(ename.value, etime.value, edetails.value);
+    await createEvent(ename.value, etime.value, edetails.value);
     localStorage.removeItem("event");
 });
 
