@@ -59,4 +59,4 @@ let events = await readMyEvents();
 await displayDiv();
 
 //logout function
-const logout_button = document.getElementById('logout');
+//const logout_button = document.getElementById('logout');
