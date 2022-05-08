@@ -16,30 +16,31 @@
   </head>
 
   <body class="text-center" data-new-gr-c-s-check-loaded="8.896.0" data-gr-ext-installed="">
-    <form class="form-signin">      
+    <form class="form-signin" action="/login" method="post">      
+      
       <div class = "website-logo">
         <svg xmlns="http://www.w3.org/2000/svg" width="74" height="74" fill="currentColor" class="bi bi-compass" viewBox="0 0 16 16">
-            <path d="M8 16.016a7.5 7.5 0 0 0 1.962-14.74A1 1 0 0 0 9 0H7a1 1 0 0 0-.962 1.276A7.5 7.5 0 0 0 8 16.016zm6.5-7.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
-            <path d="m6.94 7.44 4.95-2.83-2.83 4.95-4.949 2.83 2.828-4.95z"/>
-          </svg>
+          <path d="M8 16.016a7.5 7.5 0 0 0 1.962-14.74A1 1 0 0 0 9 0H7a1 1 0 0 0-.962 1.276A7.5 7.5 0 0 0 8 16.016zm6.5-7.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+          <path d="m6.94 7.44 4.95-2.83-2.83 4.95-4.949 2.83 2.828-4.95z"/>
+        </svg>
         <heading>UMaps</heading>
       </div>
-      
       
       <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
  
       <div class="container bg-light rounded pt-3">
-
+      
       <div class="form-floating mb-3 ">
-        <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-        <label for="floatingInput">Email address</label>
+        <input type="email" class="form-control" id="email" name='email' placeholder="name@example.com">
+        <label for="email">Email address</label>
       </div>
       <div class="form-floating">
-        <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-        <label for="floatingPassword">Password</label>
+        <input type="password" class="form-control" id="password" name='password' placeholder="Password">
+        <label for="password">Password</label>
       </div>
       
-      <button class="btn  btn-primary btn-block mb-3" onclick="location.href = '/map';" type="button" id="signIn">Sign-In</button>
+      
+      <input type="submit" class="btn  btn-primary btn-block mb-3" id="signIn" value="Sign In"/>
       <button class="btn  btn-secondary btn-block mb-3" onclick="location.href = '/register';" type="button" id="register">Register New User</button>
       
       </div>

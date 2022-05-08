@@ -9,14 +9,14 @@
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <script type="module" src="sign_up.js" defer></script>
+    <!-- <script type="module" src="sign_up.js" defer></script> -->
 
     <!-- Custom styles for this template -->
     <link href="log_in.css" rel="stylesheet">
   </head>
 
   <body class="text-center" data-new-gr-c-s-check-loaded="8.896.0" data-gr-ext-installed="">
-    <form class="form-signin">      
+    <form class="form-signup" action="/register" method="post">      
       <div class = "website-logo">
         <svg xmlns="http://www.w3.org/2000/svg" width="74" height="74" fill="currentColor" class="bi bi-compass" viewBox="0 0 16 16">
             <path d="M8 16.016a7.5 7.5 0 0 0 1.962-14.74A1 1 0 0 0 9 0H7a1 1 0 0 0-.962 1.276A7.5 7.5 0 0 0 8 16.016zm6.5-7.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
@@ -30,21 +30,21 @@
 
       <div class="container bg-light rounded">
 
-      <div class="input-group mb-3 pt-3">
-        <!-- <span class="input-group-text">First and last name</span> -->
-        <input type="text" aria-label="First name" class="form-control" id="first-name" placeholder="First Name">
-        <input type="text" aria-label="Last name" class="form-control" id="last-name" placeholder="Last Name">
-      </div>
+        <div class="input-group mb-3 pt-3">
+          <!-- <span class="input-group-text">First and last name</span> -->
+          <input type="text" aria-label="First name" name="first_name" class="form-control" id="first-name" placeholder="First Name" required>
+          <input type="text" aria-label="Last name" name="last_name" class="form-control" id="last-name" placeholder="Last Name" required>
+        </div>
 
-      <div class="form-group mb-3">
-        <input type="email" class="form-control" id="form-email" placeholder="Email address">
-      </div>
-      <div class="form-group">
-        <input type="password" class="form-control" id="form-password" placeholder="Password">
-      </div>
-      
-      <button class="btn  btn-primary btn-block mb-3" type="button" onclick="location.href = '/map';" id="signUp">Sign-up</button>
-      <button class="btn  btn-secondary btn-block mb-3" type="button" onclick="location.href = '/login';" id="login">Login</button>
+        <div class="form-group mb-3">
+          <input type="email" class="form-control" id="form-email" name="email" placeholder="Email address" required>
+        </div>
+        <div class="form-group mb-2">
+          <input type="password" class="form-control" id="form-password" name="password" placeholder="Password" required>
+        </div>
+        
+        <input type="submit" class="btn  btn-primary btn-block mb-2" id="signUp" value="Register"/>
+        <button class="btn  btn-secondary btn-block mb-2" type="button" onclick="location.href = '/login';" id="login">Login</button>
 
       </div>
 
