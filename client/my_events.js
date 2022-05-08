@@ -7,7 +7,7 @@
 // }
 
 async function readMyEvents() {
-    const response = await fetch(`/dumpEvents`, {
+    const response = await fetch(`/getEventByUser`, {
       method: 'GET',
     });
     const data = await response.json();
