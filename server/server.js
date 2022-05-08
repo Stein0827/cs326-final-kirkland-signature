@@ -29,8 +29,6 @@ class UMapServer {
     this.app.use(express.urlencoded({extended: true}));
     this.app.use('/', express.static('./client'));
     this.app.use(cookieParser());
-    // this.app.use(passport.initialize());
-    // this.app.use(passport.session());
   }
 
   //check if we are logged in
