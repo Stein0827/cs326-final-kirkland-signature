@@ -50,14 +50,14 @@ export class MapDatabase {
   // }
 
     // CREATE a user in the database.
-  async createEvent(event) {
+  async createEvent(event, host_id) {
 
-    let user = await this.readUser(event.host_id);
+    let user = await this.readUser(host_id);
     let collision = await this.events.find({'event_name': event.event_name}).toArray();
     if (collision.length > 0) {
       return false;
     }
-    const res = await this.events.insertOne({'host_id': event.host_id,  'host_name' : user[0].user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
+    const res = await this.events.insertOne({'host_id': host_id,  'host_name' : user[0].user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
     'event_location' : event.event_location, 'event_time' : event.event_time, 'attendees' : event.attendees});
     
     user[0].events.push(res);
@@ -97,7 +97,7 @@ export class MapDatabase {
   // READ an event from the database
   async readEvent(id) {
     const res = await this.events.find({ '_id': ObjectId(id) }).toArray();
-    return res;
+    return res[0];
   }
 
   // UPDATE a user in the database
@@ -110,8 +110,8 @@ export class MapDatabase {
   }
 
   // UPDATE an event in the database.
-  async updateEvent(event) {
-    const user = await this.readUser(event.host_id);
+  async updateEvent(event, host_id) {
+    const user = await this.readUser(host_id);
     const res = await this.events.updateOne(
       { _id: event._id },
       { $set: {'host_id': event.host_id,  'host_name' : user[0].user_name, 'event_name': event.event_name, event_desc : 'event.event_ desc',
@@ -143,6 +143,12 @@ export class MapDatabase {
 
   async dumpEvent() {
     const res = await this.events.find().toArray();
+    return res;
+  }
+
+
+  async readEventByUser(user_id) {
+    const res = await this.events.find({"host_id": user_id}).toArray();
     return res;
   }
     

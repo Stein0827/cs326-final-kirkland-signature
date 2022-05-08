@@ -45,17 +45,26 @@ class UMapServer {
     }
     );
 
-    this.app.get('/event-editor/:eventID', (req, res) =>
-      res.sendFile('client/event_creator.html', { root: __dirname })
-    );
+    this.app.get('/event-editor', (req, res) =>{
+      if(req.session.user_id){
+        res.sendFile('client/event_creator.html', { root: __dirname })
+      } else{
+        res.sendFile('client/map.html', { root: __dirname });
+      }
+    });
 
-    this.app.get('/my-events/:userID', (req, res) =>
-      res.sendFile('client/my_events.html', { root: __dirname })
-    );
+    this.app.get('/my-events', (req, res) => {
+      if(req.session.user_id){
+        res.sendFile('client/my_events.html', { root: __dirname })
+      } else{
+        res.sendFile('client/map.html', { root: __dirname });
+      }
+    });
     
     this.app.get('/event-viewer', (req, res) =>
       res.sendFile('client/event_viewer.html', { root: __dirname })
     );
+
 
     // this.app.post('/login', auth.authenticate('local', {
     //     successRedirect: '/map',
@@ -96,7 +105,7 @@ class UMapServer {
     this.app.post('/createEvent', async (req, res) => {
       try {
         const { event } = req.body;
-        const evt = await self.db.createUser(event);
+        const evt = await self.db.createEvent(event, req.session.user_id,);
         res.send(JSON.stringify(evt));
       } catch (err) {
         res.status(500).send(err);
@@ -107,7 +116,7 @@ class UMapServer {
     this.app.put('/editEvent', async (req, res) => {
       try {
         const { event } = req.body;
-        const evt = await self.db.updateEvent(event);
+        const evt = await self.db.updateEvent(event, req.session.user_id);
         res.send(JSON.stringify(evt));
       } catch (err) {
         res.status(500).send(err);
@@ -164,7 +173,7 @@ class UMapServer {
       try {
         // const { event } = req.body;
         const event_id = req.body.event_id;
-        const uid = req.session.user;
+        const uid = req.session.user_id;
         const evt = await self.db.updateRSVP(event_id, uid);
         res.send(JSON.stringify(evt));
       } catch (err) {
@@ -175,6 +184,16 @@ class UMapServer {
     this.app.get('/dumpEvents', async (req, res) => {
       try {
         const evt = await self.db.dumpEvent();
+        res.send(JSON.stringify(evt));
+      } catch (err) {
+        res.status(500).send(err);
+      }
+    });
+
+
+    this.app.get('/getEventByUser', async (req, res) => {
+      try {
+        const evt = await self.db.readEventByUser(req.session.user_id);
         res.send(JSON.stringify(evt));
       } catch (err) {
         res.status(500).send(err);
