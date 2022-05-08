@@ -77,6 +77,7 @@ const cancel = document.getElementById("cancel"),
     ename = document.getElementById("event-name"),
     etime = document.getElementById("event-time"),
     edetails = document.getElementById("event-details"),
+    attend = document.getElementById("attend"),
     rsvp = document.getElementById("rsvp");
 
 //disable buttons accordingly 
@@ -113,7 +114,6 @@ rsvp.addEventListener("click", async (e)=>{
     const response = await fetch(`/attendEvent`, {
         method: 'PUT',
         body: {
-            user_id: curr_event,
             event_id: curr_event
         }
       });
@@ -124,9 +124,11 @@ rsvp.addEventListener("click", async (e)=>{
 edetails.value = data.event_desc;
 ename.value = data.event_name;
 etime.value = data.event_time;
+attend.value = data.attendees.length()
 edetails.readOnly = "true";
 ename.readOnly = "true";
 etime.readOnly = "true";
+attend.readOnly = "true";
 
 
 
