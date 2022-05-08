@@ -1,29 +1,41 @@
 import express from 'express';
+import expressSession from 'express-session';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { MapDatabase } from './mongodb.js';
+import cookieParser from 'cookie-parser';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
 
-const sessionConfig = {
-  // set this encryption key in Heroku config (never in GitHub)!
-  secret: process.env.SECRET || 'SECRET',
-  resave: false,
-  saveUninitialized: false,
-};
 
 class UMapServer {
   constructor() {
     this.dburi = process.env.MONGODB_URI || "mongodb+srv://UMap:YkDlq6WGWezfWagM@cluster0.pbgzv.mongodb.net/UMAP-database?retryWrites=true&w=majority";
+
     this.app = express();
-    // app.use(logger('dev'));
+
+    const sessionConfig = {
+      // set this encryption key in Heroku config (never in GitHub)!
+      secret: process.env.SECRET || 'SECRET',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {maxAge: 60000}
+    };
+
+    //setup session 
+    this.app.use(expressSession(sessionConfig));
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({extended: true}));
     this.app.use('/', express.static('./client'));
+    this.app.use(cookieParser());
+    // this.app.use(passport.initialize());
+    // this.app.use(passport.session());
   }
 
   //check if we are logged in
   checkLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
+    if (req.session.user()) {
       // If we are authenticated, run the next route.
       next();
     } else {
@@ -39,11 +51,60 @@ class UMapServer {
       res.sendFile('client/log_in.html', { root: __dirname })
     );
 
-    this.app.get('/map', async (req, res) => {
-      //const id = await self.db.testEvent();
-      res.sendFile('client/map.html', { root: __dirname });
-    }
+    // // Handle post data from the login.html form.
+    this.app.post('/login', async function(req, res){
+      const {email, password} = req.body;
+      console.log(req.body);
+      if (!(await self.db.findUserCount(email))){
+        console.log('wrong email');
+        res.redirect('/login');
+      } else if (!(await self.db.validateLogin(email, password))){
+        console.log('check your password');
+        res.redirect('/login');
+      } else {
+        let user = await self.db.findUserbyEmail(email);
+        req.session.user_name = (await self.db.readUser(user._id)).user_name;
+        req.session.user_id = user._id;
+        console.log(req.session);
+        res.redirect('/map');
+      }
+    });
+
+    // Handle logging out (takes us back to the login page).
+    this.app.get('/logout', function(req, res){
+      req.session.destroy(function(){
+         console.log("user logged out.")
+      });
+      res.redirect('/login');
+   });
+    
+    //go to register landing page
+    this.app.get('/register', (req, res) =>
+      res.sendFile('client/sign_up.html', { root: __dirname })
     );
+
+    //register a new user
+    this.app.post('/register', async (req, res) => {
+        const { first_name, last_name, email, password } = req.body;
+        const name = first_name + ' ' + last_name;
+        //if user with same email already exists
+        if (!(await self.db.createUser(name, email, password))){
+          console.log("User with same email already exists");
+          res.redirect('/sign_up');
+        } else {
+          const user = await self.db.createUser(name, email, password);
+          console.log(user);
+          req.session.user = await self.db.readUser(user.insertedId).user_name;
+          console.log(req.session.user); 
+          res.redirect('/map'); 
+        }
+    
+    });
+
+    this.app.get('/map', (req, res) => {
+      // await self.db.testEvent();
+      res.sendFile('client/map.html', { root: __dirname });
+    });
 
     this.app.get('/event-editor/:eventID', (req, res) =>
       res.sendFile('client/event_creator.html', { root: __dirname })
@@ -57,36 +118,13 @@ class UMapServer {
       res.sendFile('client/event_viewer.html', { root: __dirname })
     );
 
-    // this.app.post('/login', auth.authenticate('local', {
-    //     successRedirect: '/map',
-    //     failureRedirect: '/login',
-    //   })
-    // );
-    
-    //logout
-    this.app.get('/logout', (req, res) => {
-      req.logout();
-      res.redirect('/login');
-    });
-    
-    //register a new user
-    this.app.post('/register', async (req, res) => {
-      try {
-        const { name, email, password } = req.body;
-        const user = await self.db.createUser(name, email, password);
-        // res.send(JSON.stringify(user));
-        res.status(200);
-      } catch (err) {
-        res.status(500).send(err);
-      }
-    });
-    
+
     //return user
     this.app.get('/getUserbyId', async (req, res) => {
       try {
         const { id } = req.body;
         const user = await self.db.readUser(id);
-        res.send(JSON.stringify(user));
+        res.status(200).send(JSON.stringify(user));
       } catch (err) {
         res.status(500).send(err);
       }
@@ -97,7 +135,7 @@ class UMapServer {
       try {
         const { event } = req.body;
         const evt = await self.db.createUser(event);
-        res.send(JSON.stringify(evt));
+        res.status(200).send(JSON.stringify(evt));
       } catch (err) {
         res.status(500).send(err);
       }
@@ -118,7 +156,7 @@ class UMapServer {
       try {
         const { id } = req.body;
         const user = await self.db.deleteUser(id);
-        res.send(JSON.stringify(person));
+        res.status(200).send(JSON.stringify(person));
       } catch (err) {
         res.status(500).send(err);
       }
@@ -129,7 +167,7 @@ class UMapServer {
       try {
         const { id } = req.body;
         const person = await self.db.deletePerson(id);
-        res.send(JSON.stringify(person));
+        res.status(200).send(JSON.stringify(person));
       } catch (err) {
         res.status(500).send(err);
       }
@@ -153,7 +191,7 @@ class UMapServer {
         let temp = await self.db.readEvent(id);
         temp = JSON.stringify(temp);
         const attendees = temp.attendees;
-        res.send(JSON.stringify(attendees));
+        res.status(200).send(JSON.stringify(attendees));
       } catch (err) {
         res.status(500).send(err);
       }
@@ -175,7 +213,7 @@ class UMapServer {
     this.app.get('/dumpEvents', async (req, res) => {
       try {
         const evt = await self.db.dumpEvent();
-        res.send(JSON.stringify(evt));
+        res.status(200).send(JSON.stringify(evt));
       } catch (err) {
         res.status(500).send(err);
       }
