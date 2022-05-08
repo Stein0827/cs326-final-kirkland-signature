@@ -1,7 +1,8 @@
 # Part 1: Database implementation
 
+We used MongoDB for database.
 
-**Event Object** - 7 fields: Host ID, Host Name, Event ID, Event Title, Description, Location, Time, Images, List of attendees  
+**Event Object** - 8 fields: Host ID, Host Name, Event ID, Event Title, Description, Location, Time, List of attendees  
 ```
 //event object structure  
 let event = {  
@@ -11,40 +12,38 @@ let event = {
     event_name: "",  
     event_desc: "",  
     event_location: "",  
-    event_time: "",  
-    images: "",  
-    attendees: [],  
-    is_event: true  
+    event_time: "",   
+    attendees: [],
 }  
 ```
-Event ID is a random number between 0 and 10,000 assigned to each event. This and the is_event=true boolean tag are what is used to uniquely identify an event.
+Event ID is generated via MongoDB.
 
-**User Object** - 6 fields: User ID, Name, UMass Email, Password, List of events created  
+**User Object** - 6 fields: User ID, first name, last name, UMass Email, Password, List of events created  
 ```
 //user object structure
 let user = {
     user_id: "",
-    user_name: "",
+    first_name: "",
+    last_name: "",
     user_email: "",
     password: "",
     events: [], //array of event ids
-    is_event: false
 };
 ```
-User ID is a random number between 0 and 10,000 assigned to each User. This and the is_event=false boolean tag are what is used to uniquely identify a user.
+User ID is generated via MongODB.
 
 **Created** - Relationship between an event and a user, belongs to User. Contains event ID and User ID.  
 **RSVPed** - Relationship between an event and a user, belongs to Event. Contains event ID and User ID.  
 
 
 # Breakdown of Division of Labor
-- Rishab:
+- Rishab: Worked on authentication and the CRUD functions of MongoDB integration, worked on front end integration.
 
 
-- Paul:
+- Paul: Worked on documentation and CRUD functions of MongoDB integration.
 
 
-- Alex:
+- Alex: Worked on authentication and CRUD functions of MongoDB integration.
 
 
-- Suyash:
+- Suyash: Worked on authentication and CRUD functions of MongoDB integration, worked on documentation.
