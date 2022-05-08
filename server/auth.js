@@ -1,6 +1,7 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import { MapDatabase } from './mongodb.js';
+// import { MapDatabase } from './mongodb.js';
+import users from './users.js';
 
 const { Strategy } = passportLocal;
 
@@ -9,11 +10,11 @@ const { Strategy } = passportLocal;
 // password credentials from the client. The LocalStrategy object is used to
 // authenticate a user using a username and password.
 const strategy = new Strategy(async (email, password, done) => {
-  if (!MapDatabase.findUserbyEmail(email)) {
+  if (!users.findUserbyEmail(email)) {
     // no such user
     return done(null, false, { message: 'Wrong email' });
   }
-  if (!MapDatabase.validatePassword(email, password)) {
+  if (!users.validatePassword(email, password)) {
     // invalid password
     // should disable logins after N messages
     // delay return to rate-limit brute-force attacks
@@ -31,7 +32,7 @@ const strategy = new Strategy(async (email, password, done) => {
 passport.use(strategy);
 
 // Convert user object to a unique identifier.
-passport.serializeUser((MapDatabase, done) => {
+passport.serializeUser((user, done) => {
   done(null, user);
 });
 

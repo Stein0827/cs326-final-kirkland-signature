@@ -4,10 +4,10 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { MapDatabase } from './mongodb.js';
 import auth from './auth.js';
+import users from './users.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(dirname(__filename));
-
 
 class UMapServer {
   constructor() {
@@ -25,7 +25,7 @@ class UMapServer {
     //setup session 
     this.app.use(expressSession(sessionConfig));
     this.app.use(express.json());
-    this.app.use(express.urlencoded({extended: false}));
+    this.app.use(express.urlencoded({extended: true}));
     this.app.use('/', express.static('./client'));
     auth.configure(this.app);
   }
@@ -51,11 +51,11 @@ class UMapServer {
     // Handle post data from the login.html form.
     this.app.post(
       '/login',
-      auth.authenticate('local', {
-        // use username/password authentication
-        successRedirect: '/map', // when we login, go to /private
-        failureRedirect: '/login', // otherwise, back to login
-      })
+        auth.authenticate('local', {
+          // use username/password authentication
+          successRedirect: '/map', // when we login, go to /private
+          failureRedirect: '/login', // otherwise, back to login
+        })
     );
 
     // Handle logging out (takes us back to the login page).
@@ -73,11 +73,20 @@ class UMapServer {
     this.app.post('/register', async (req, res) => {
       try {
         const { first_name, last_name, email, password } = req.body;
-        const user = await self.db.createUser(first_name, last_name, email, password);
-        res.redirect('/login'); // go back to login page
+        // const user = await self.db.createUser(first_name, last_name, email, password);
+        // if(user) {
+        //   res.redirect('/login');
+        // } else {
+        //   res.redirect('/register');
+        // }
+        if (users.addUser(first_name, last_name, email, password)) {
+          res.redirect('/login');
+        } else {
+          res.redirect('/register');
+        }
       } catch (err) {
         console.log(err);
-        //res.redirect('/register'); //stay on register page
+        res.redirect('/register'); //stay on register page
       }
     });
 
@@ -90,37 +99,17 @@ class UMapServer {
       res.sendFile('client/event_creator.html', { root: __dirname })
     );
 
-    this.app.get('/my-events/:userID', (req, res) =>
+    this.app.get('/my-events', this.checkLoggedIn, (req, res) => {
+      res.redirect('/my-events/' + req.user);
+    });
+
+    this.app.get('/my-events/:userID', this.checkLoggedIn, (req, res) =>
       res.sendFile('client/my_events.html', { root: __dirname })
     );
     
     this.app.get('/event-viewer', (req, res) =>
       res.sendFile('client/event_viewer.html', { root: __dirname })
     );
-
-    // this.app.post('/login', auth.authenticate('local', {
-    //     successRedirect: '/map',
-    //     failureRedirect: '/login',
-    //   })
-    // );
-    
-    //logout
-    this.app.get('/logout', (req, res) => {
-      req.logout();
-      res.redirect('/login');
-    });
-    
-    //register a new user
-    this.app.post('/register', async (req, res) => {
-      try {
-        const { name, email, password } = req.body;
-        const user = await self.db.createUser(name, email, password);
-        // res.send(JSON.stringify(user));
-        res.status(200);
-      } catch (err) {
-        res.status(500).send(err);
-      }
-    });
     
     //return user
     this.app.get('/getUserbyId', async (req, res) => {
@@ -176,7 +165,7 @@ class UMapServer {
       }
     });
     
-    //read an event
+    //read an event <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< WORK ON THIS
     this.app.get('/getEventbyId/:eventID', async (req, res) => {
       try {
         const id = req.params.eventID;
@@ -200,7 +189,7 @@ class UMapServer {
       }
     });
     
-    //RSVP to an event
+    //RSVP to an event <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< WORK ON THIS
     this.app.put('/attendEvent', async (request, response) => {
       try {
         const { event } = req.body;

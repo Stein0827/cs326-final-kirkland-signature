@@ -23,17 +23,13 @@
   "license": "ISC",
   "homepage": "https://github.com/Stein0827/cs326-final-kirkland-signature/docs/milestone2.md",
   "dependencies": {
-    "connect-ensure-login": "^0.1.1",
     "dotenv": "^16.0.0",
     "export": "^0.1.337",
-    "express": "^4.17.3",
+    "express": "^4.18.1",
     "express-session": "^1.17.2",
     "mongodb": "^4.5.0",
-    "mongoose": "^6.3.2",
-    "morgan": "^1.10.0",
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^7.0.0",
     "pg": "^8.7.3"
   },
   "devDependencies": {

@@ -1,29 +1,39 @@
-//mongoose schema model for users
-import mongoose from 'mongoose';
-//import passportLocalMongoose from 'passport-local-mongoose';
-
-const Schema = mongoose.Schema;
-
-const userSchema = new Schema({
-  first_name: {
-    type: String,
-    required: true
-  },
-  last_name: {
-    type: String, 
-    required: true
-  },
-  email: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-});
-
-//User.plugin(passportLocalMongoose);
-
-export const User = mongoose.model('User', userSchema);
+class Users {
+    constructor() {
+      // we use an in-memory "database"; this isn't persistent but is easy
+      // default user
+      this.users = {};
+    }
+  
+    // Returns true iff the user exists.
+    findUser(email) {
+      if (!this.users[email]) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  
+    // Returns true iff the password is the one we have stored (in plaintext = bad
+    // but easy).
+    validatePassword(email, pwd) {
+      if (!this.findUser(email)) {
+        return false;
+      }
+      if (this.users[email].pwd !== pwd) {
+        return false;
+      }
+      return true;
+    }
+  
+    // Add a user to the "database".
+    addUser(first_name, last_name, email, password) {
+      if (this.findUser(email)) {
+        return false;
+      }
+      this.users[email] = {fname: first_name, lname: last_name, pwd: password};
+      return true;
+    }
+  }
+  
+  export default new Users();
