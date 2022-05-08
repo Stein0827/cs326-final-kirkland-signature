@@ -29,8 +29,6 @@ class UMapServer {
     this.app.use(express.urlencoded({extended: true}));
     this.app.use('/', express.static('./client'));
     this.app.use(cookieParser());
-    // this.app.use(passport.initialize());
-    // this.app.use(passport.session());
   }
 
   //check if we are logged in
@@ -91,17 +89,18 @@ class UMapServer {
 
     //register a new user
     this.app.post('/register', async (req, res) => {
-        const { name, email, password } = req.body;
+        const { first_name, last_name, email, password } = req.body;
+        const name = first_name + last_name;
         //if user with same email already exists
         if (!(await self.db.createUser(name, email, password))){
           console.log("User with same email already exists");
-          res.redirect('/sign_up');
+          res.redirect('/register');
         } else {
           const user = await self.db.createUser(name, email, password);
           console.log(user);
           req.session.user = await self.db.readUser(user.insertedId).user_name;
           console.log(req.session.user); 
-          res.redirect('/map'); 
+          res.redirect('/login');
         }
     
     });
