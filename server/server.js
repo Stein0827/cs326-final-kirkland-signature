@@ -89,7 +89,8 @@ class UMapServer {
 
     //register a new user
     this.app.post('/register', async (req, res) => {
-        const { name, email, password } = req.body;
+        const { first_name, last_name, email, password } = req.body;
+        const name = first_name + last_name;
         //if user with same email already exists
         if (!(await self.db.createUser(name, email, password))){
           console.log("User with same email already exists");
