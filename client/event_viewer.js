@@ -10,7 +10,6 @@ async function readEvent(id) {
 let curr_event = JSON.parse(localStorage.getItem("details"));
 
 let data = await readEvent(curr_event);
-data = data[0];
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicndtZWh0YSIsImEiOiJjbDEycmM0MDAwNGJiM2tvMGV5cDF4cXZmIn0.6eUqwB8FMxRQOVqH5ymQ4Q';
 const map = new mapboxgl.Map({
@@ -124,10 +123,11 @@ rsvp.addEventListener("click", async (e)=>{
 edetails.value = data.event_desc;
 ename.value = data.event_name;
 etime.value = data.event_time;
-attend.value = data.attendees.length()
+
 edetails.readOnly = "true";
 ename.readOnly = "true";
 etime.readOnly = "true";
+attend.value = data.attendees.length()
 attend.readOnly = "true";
 
 

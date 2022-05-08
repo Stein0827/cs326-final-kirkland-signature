@@ -96,10 +96,7 @@ class UMapServer {
           console.log("User with same email already exists");
           res.redirect('/register');
         } else {
-          const user = await self.db.createUser(name, email, password);
-          console.log(user);
-          req.session.user = await self.db.readUser(user.insertedId).user_name;
-          console.log(req.session.user); 
+          await self.db.createUser(name, email, password);
           res.redirect('/login');
         }
     
@@ -150,8 +147,8 @@ class UMapServer {
     //add event to user's profile
     this.app.post('/createEvent', async (req, res) => {
       try {
-        const { event } = req.body;
-        const evt = await self.db.createEvent(event, req.session.user_id,);
+        const event = req.body;
+        const evt = await self.db.createEvent(event, req.session.user_id);
         res.send(JSON.stringify(evt));
       } catch (err) {
         res.status(500).send(err);

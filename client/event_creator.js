@@ -28,7 +28,25 @@ async function createEvent(name, time, desc) {
     try {
         const response = await fetch('/createEvent', {
             method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({ event_name: name, event_time: time, event_desc: desc, event_location: coordinates, attendees: [] }),
+        });
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
+async function deleteEvent(id) {
+    try {
+        const response = await fetch('/deleteEvent', {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id: id }),
         });
     }
     catch (err) {
@@ -55,25 +73,11 @@ const save = document.getElementById("save"),
     edetails = document.getElementById("event-details"),
     save_link = document.getElementById("save-event-link"),
     create_link = document.getElementById("create-event-link"),
-    create = document.getElementById("create");
+    create = document.getElementById("create"),
+    dlt = document.getElementById("dlt"),
+    cancel = document.getElementById("cancel");
 
 //disable buttons accordingly 
-if (ename.innerHTML === "" && etime.innerHTML === "" && edetails.innerHTML === "") {
-    //disable edit button
-    save.disabled = true;
-    create.disabled = false;
-    // disable links
-    // save_link.href = '';
-    // create_link.href = 'map.html';
-
-} else {
-    //disable create button
-    create.disabled = true;
-    save.disabled = false;
-    // disable link
-    // create_link = '';
-    // save_link = 'map.html';
-}
 
 save.addEventListener("click", async (e) => {
     await updateEvent(ename.value, etime.value, edetails.value);
@@ -83,6 +87,15 @@ save.addEventListener("click", async (e) => {
 
 create.addEventListener("click", async (e) => {
     await createEvent(ename.value, etime.value, edetails.value);
+    localStorage.removeItem("event");
+});
+
+dlt.addEventListener("click", async (e) => {
+    await deleteEvent(localStorage.getItem("event")._id);
+    localStorage.removeItem("event");
+});
+
+cancel.addEventListener("click", async (e) => {
     localStorage.removeItem("event");
 });
 
