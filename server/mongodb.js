@@ -33,12 +33,12 @@ export class MapDatabase {
   }
 
   // CREATE a user in the database.
-  async createUser(name, email, password) {
+  async createUser(first_name, last_name, email, password) {
     let collision = await this.users.find({'user_email': email}).toArray();
     if (collision.length > 0) {
       return false;
     }
-    const res = await this.users.insertOne({user_name: name, user_email: email, password: password, events: []});
+    const res = await this.users.insertOne({first_name: first_name, last_name: last_name, user_email: email, password: password, events: []});
     return res;
   }
 
