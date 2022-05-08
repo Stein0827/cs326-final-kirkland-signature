@@ -200,9 +200,11 @@ class UMapServer {
     //RSVP to an event
     this.app.put('/attendEvent', async (request, response) => {
       try {
-        const { event } = req.body;
-        const evt = await self.db.updateRSVP(event);
-        res.status(200).send(JSON.stringify(evt));
+        // const { event } = req.body;
+        const event_id = req.body.event_id;
+        const uid = req.session.user;
+        const evt = await self.db.updateRSVP(event_id, uid);
+        res.send(JSON.stringify(evt));
       } catch (err) {
         res.status(500).send(err);
       }
