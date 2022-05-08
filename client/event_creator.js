@@ -28,6 +28,9 @@ async function createEvent(name, time, desc) {
     try {
         const response = await fetch('/createEvent', {
             method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify({ event_name: name, event_time: time, event_desc: desc, event_location: coordinates, attendees: [] }),
         });
     }
