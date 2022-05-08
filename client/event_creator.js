@@ -39,6 +39,21 @@ async function createEvent(name, time, desc) {
     }
 }
 
+async function deleteEvent(id) {
+    try {
+        const response = await fetch('/deleteEvent', {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id: id }),
+        });
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+
 async function updateEvent(name, time, desc) {
     try {
         const response = await fetch('/editEvent', {
@@ -58,7 +73,9 @@ const save = document.getElementById("save"),
     edetails = document.getElementById("event-details"),
     save_link = document.getElementById("save-event-link"),
     create_link = document.getElementById("create-event-link"),
-    create = document.getElementById("create");
+    create = document.getElementById("create"),
+    dlt = document.getElementById("dlt"),
+    cancel = document.getElementById("cancel");
 
 //disable buttons accordingly 
 
@@ -70,6 +87,15 @@ save.addEventListener("click", async (e) => {
 
 create.addEventListener("click", async (e) => {
     await createEvent(ename.value, etime.value, edetails.value);
+    localStorage.removeItem("event");
+});
+
+dlt.addEventListener("click", async (e) => {
+    await deleteEvent(localStorage.getItem("event")._id);
+    localStorage.removeItem("event");
+});
+
+cancel.addEventListener("click", async (e) => {
     localStorage.removeItem("event");
 });
 

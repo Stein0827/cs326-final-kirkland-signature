@@ -96,10 +96,7 @@ class UMapServer {
           console.log("User with same email already exists");
           res.redirect('/register');
         } else {
-          const user = await self.db.createUser(name, email, password);
-          console.log(user);
-          req.session.user = await self.db.readUser(user.insertedId).user_name;
-          console.log(req.session.user); 
+          await self.db.createUser(name, email, password);
           res.redirect('/login');
         }
     
